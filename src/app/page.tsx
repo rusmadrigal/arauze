@@ -4,6 +4,7 @@ import { useState } from "react";
 import BottomCTA from "./components/ui/BottomCTA";
 import HeroHeader from "./components/home/HeroHeader";
 import TopNav from "./components/ui/TopNav";
+import SearchForm from "./components/home/SearchForm";
 
 export default function HomePage() {
   const r = useRouter();
@@ -18,6 +19,7 @@ export default function HomePage() {
 
         {/* Hero */}
         <HeroHeader />
+        <SearchForm />
 
         {/* Come funziona */}
         <section className="mt-10">
