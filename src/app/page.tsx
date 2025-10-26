@@ -106,7 +106,15 @@ export default function HomePage() {
 }
 
 /* ---------- Componenti UI interni ---------- */
-function Step({ icon, title, subtitle }: { icon: string; title: string; subtitle?: string }) {
+function Step({
+  icon,
+  title,
+  subtitle,
+}: {
+  icon: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
     <div className="rounded-xl border bg-white p-5 flex items-center gap-4">
       <div className="h-10 w-10 flex items-center justify-center text-lg rounded-full bg-surface">
@@ -114,23 +122,41 @@ function Step({ icon, title, subtitle }: { icon: string; title: string; subtitle
       </div>
       <div>
         <div className="font-semibold">{title}</div>
-        {subtitle ? <div className="text-sm text-gray-500">{subtitle}</div> : null}
+        {subtitle ? (
+          <div className="text-sm text-gray-500">{subtitle}</div>
+        ) : null}
       </div>
     </div>
   );
 }
 
 function Th({ children }: { children: React.ReactNode }) {
-  return <th className="px-4 py-3 text-xs font-medium uppercase tracking-wide">{children}</th>;
+  return (
+    <th className="px-4 py-3 text-xs font-medium uppercase tracking-wide">
+      {children}
+    </th>
+  );
 }
 
-function Badge({ tone, children }: { tone: "ALTA" | "BASSA" | "RITIRATA"; children: React.ReactNode }) {
+function Badge({
+  tone,
+  children,
+}: {
+  tone: "ALTA" | "BASSA" | "RITIRATA";
+  children: React.ReactNode;
+}) {
   const map: Record<string, string> = {
     ALTA: "bg-rose-100 text-rose-700",
     BASSA: "bg-amber-100 text-amber-700",
     RITIRATA: "bg-emerald-100 text-emerald-700",
   };
-  return <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${map[tone]}`}>{children}</span>;
+  return (
+    <span
+      className={`px-2.5 py-1 rounded-md text-xs font-semibold ${map[tone]}`}
+    >
+      {children}
+    </span>
+  );
 }
 
 function Row({
@@ -150,7 +176,9 @@ function Row({
         <div className="font-semibold text-base leading-tight">{code}</div>
         <div className="text-xs text-gray-500">{sender}</div>
       </td>
-      <td className="px-4 py-3"><Badge tone={urgency}>{urgency}</Badge></td>
+      <td className="px-4 py-3">
+        <Badge tone={urgency}>{urgency}</Badge>
+      </td>
       <td className="px-4 py-3 font-semibold">{state}</td>
       <td className="px-4 py-3 text-right">
         <button className="text-gray-400 hover:text-gray-600">›</button>
@@ -169,7 +197,9 @@ function FaqItem({ q, children }: { q: string; children: React.ReactNode }) {
     >
       <summary className="list-none cursor-pointer select-none px-5 py-4 flex items-center justify-between">
         <span className="font-medium">{q}</span>
-        <span className="text-gray-400 group-open:rotate-180 transition">⌄</span>
+        <span className="text-gray-400 group-open:rotate-180 transition">
+          ⌄
+        </span>
       </summary>
       <div className="px-5 pb-5 text-gray-600 text-sm">{children}</div>
     </details>
