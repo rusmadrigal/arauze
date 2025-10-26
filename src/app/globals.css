@@ -1,0 +1,59 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+
+/* --------------------------
+   Global resets & defaults
+---------------------------*/
+
+:root {
+  color-scheme: light;
+  --font-inter: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #F5F7FA; /* surface color */
+  color: #111827; /* gray-900 */
+  font-family: var(--font-inter);
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.7;
+  color: #4B5563; /* gray-600 */
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Scrollbar limpio */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
