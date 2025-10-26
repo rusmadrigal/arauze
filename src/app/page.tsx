@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import BottomCTA from "./components/ui/BottomCTA";
+import HeroHeader from "./components/home/HeroHeader";
+import TopNav from "./components/ui/TopNav";
 
 export default function HomePage() {
   const r = useRouter();
@@ -11,65 +13,11 @@ export default function HomePage() {
     <main className="mx-auto max-w-5xl px-4">
       {/* Card principal */}
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
-        {/* Header simple */}
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-          <span className="font-semibold text-gray-800">Arauze.com</span>
-          <nav className="space-x-6">
-            <a className="hover:text-gray-700" href="#">
-              Privacy
-            </a>
-            <a className="hover:text-gray-700" href="#">
-              Termini
-            </a>
-            <a className="hover:text-gray-700" href="#">
-              Contatti
-            </a>
-          </nav>
-        </div>
+        {/* Header semplice */}
+        <TopNav />
 
         {/* Hero */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
-          <div>
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-              Controlla subito la tua <br />
-              <span className="text-brand-600">Raccomandata Online</span>
-            </h1>
-            <p className="mt-3 text-gray-600">
-              Scopri chi ti ha inviato la comunicazione e se richiede un’azione
-              urgente.
-            </p>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!code.trim()) return;
-                r.push(`/raccomandata/${code.trim()}`);
-              }}
-              className="mt-6 flex gap-3"
-            >
-              <input
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="Inserisci il codice..."
-                className="flex-1 rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-4 focus:ring-brand-50"
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 font-semibold transition"
-              >
-                Cerca
-              </button>
-            </form>
-          </div>
-
-          {/* Ilustración ligera (placeholder) */}
-          <div className="hidden md:block">
-            <div className="mx-auto h-48 w-72 rounded-xl bg-brand-50/60 relative">
-              <div className="absolute right-6 top-6 h-28 w-44 bg-white rounded-lg shadow-card" />
-              <div className="absolute left-8 bottom-8 h-10 w-10 rounded-full bg-brand-500/90" />
-            </div>
-          </div>
-        </section>
+        <HeroHeader />
 
         {/* Come funziona */}
         <section className="mt-10">
