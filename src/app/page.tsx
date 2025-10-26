@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import BottomCTA from "./components/ui/BottomCTA";
 
 export default function HomePage() {
   const r = useRouter();
@@ -124,21 +125,8 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-
-      {/* Barra CTA inferior */}
-      <div className="mx-auto mt-6 max-w-5xl">
-        <div className="rounded-xl2 bg-linear-to-r from-brand-600 to-brand-500 text-white px-6 py-5 shadow-card flex flex-col md:flex-row items-center justify-between">
-          <span className="text-lg font-semibold mb-3 md:mb-0">
-            Insericciuto una raccomandata?
-          </span>
-          <button
-            onClick={() => r.push(`/raccomandata/${code || ""}`)}
-            className="rounded-lg bg-white/90 text-brand-700 px-5 py-3 font-semibold hover:bg-white transition"
-          >
-            Inserisci il codice
-          </button>
-        </div>
-      </div>
+      {/* Footer CTA */}
+      <BottomCTA />
     </main>
   );
 }

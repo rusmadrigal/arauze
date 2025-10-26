@@ -12,11 +12,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={inter.variable}>
+    <html lang="it" className={inter.variable} suppressHydrationWarning>
       <body className="bg-surface text-gray-900">
-        <div className="min-h-dvh py-8">
-          {children}
-        </div>
+        <div className="min-h-dvh py-8">{children}</div>
       </body>
     </html>
   );
