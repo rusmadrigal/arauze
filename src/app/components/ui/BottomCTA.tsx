@@ -8,7 +8,7 @@ export default function BottomCTA() {
 
   return (
     <div className="mx-auto mt-12 max-w-6xl">
-      <div className="rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 text-white px-8 py-8 shadow-card flex flex-col md:flex-row items-center justify-between">
+      <div className="rounded-2xl bg-linear-to-r from-brand-600 to-brand-500 text-white px-8 py-8 shadow-card flex flex-col md:flex-row items-center justify-between">
         <span className="text-lg font-semibold mb-4 md:mb-0">
           Insericciuto una raccomandata?
         </span>
