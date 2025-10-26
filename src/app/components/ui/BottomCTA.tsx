@@ -3,29 +3,48 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function BottomCTA() {
-  const r = useRouter();
+  const router = useRouter();
   const [code, setCode] = useState("");
 
+  const submit = () => {
+    if (!code.trim()) return;
+    router.push(`/raccomandata/${code.trim()}`);
+  };
+
   return (
-    <div className="mx-auto mt-12 max-w-6xl">
-      <div className="rounded-2xl bg-linear-to-r from-brand-600 to-brand-500 text-white px-8 py-8 shadow-card flex flex-col md:flex-row items-center justify-between">
-        <span className="text-lg font-semibold mb-4 md:mb-0">
+    /**
+     * Sangrado lateral e inferior para que el CTA
+     * ocupe todo el ancho del card y toque el borde redondeado.
+     */
+    <div className="-mx-6 md:-mx-10 -mb-6 md:-mb-10">
+      <div className="w-full rounded-b-2xl bg-gradient-to-r from-[#2F66D5] to-[#2552AD] text-white px-6 md:px-8 py-6 md:py-7 shadow-card flex flex-col md:flex-row items-center justify-between gap-4">
+        <span className="text-lg font-semibold text-center md:text-left">
           Insericciuto una raccomandata?
         </span>
 
-        <div className="flex items-center gap-3 w-full md:w-auto">
+        <div className="flex w-full md:w-auto items-center gap-3">
           <input
             type="text"
             placeholder="Inserisci il codice..."
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            className="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white/70 w-full md:w-64"
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            className="
+              w-full md:w-72
+              rounded-lg
+              border-2 border-white/80
+              bg-white/10
+              px-4 py-3
+              text-white placeholder-white/80
+              outline-none
+              focus:border-white focus:ring-0
+            "
           />
           <button
-            onClick={() => r.push(`/raccomandata/${code || ""}`)}
-            className="rounded-lg bg-blue-500 text-white px-6 py-3 font-semibold hover:bg-blue-600 transition w-full md:w-auto"
+            onClick={submit}
+            className="rounded-lg bg-white text-[#2552AD] px-6 py-3 font-semibold hover:bg-white/90 transition"
           >
-            Inserisci il codice
+            Cerca codice
           </button>
         </div>
       </div>

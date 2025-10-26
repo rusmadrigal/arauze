@@ -15,9 +15,15 @@ export default function HomePage() {
         <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
           <span className="font-semibold text-gray-800">Arauze.com</span>
           <nav className="space-x-6">
-            <a className="hover:text-gray-700" href="#">Privacy</a>
-            <a className="hover:text-gray-700" href="#">Termini</a>
-            <a className="hover:text-gray-700" href="#">Contatti</a>
+            <a className="hover:text-gray-700" href="#">
+              Privacy
+            </a>
+            <a className="hover:text-gray-700" href="#">
+              Termini
+            </a>
+            <a className="hover:text-gray-700" href="#">
+              Contatti
+            </a>
           </nav>
         </div>
 
@@ -29,7 +35,8 @@ export default function HomePage() {
               <span className="text-brand-600">Raccomandata Online</span>
             </h1>
             <p className="mt-3 text-gray-600">
-              Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.
+              Scopri chi ti ha inviato la comunicazione e se richiede un’azione
+              urgente.
             </p>
 
             <form
@@ -76,7 +83,9 @@ export default function HomePage() {
 
         {/* Ultime Raccomandate Analizzate */}
         <section className="mt-10">
-          <h3 className="text-base font-semibold mb-3">Ultime Raccomandate Analizzate</h3>
+          <h3 className="text-base font-semibold mb-3">
+            Ultime Raccomandate Analizzate
+          </h3>
           <div className="overflow-hidden rounded-xl border">
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-50 text-gray-600">
@@ -88,9 +97,24 @@ export default function HomePage() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                <Row code="573" sender="AGENZIA DEI…" urgency="ALTA" state="IN ATTESA" />
-                <Row code="573" sender="AGENZIA DEI…" urgency="BASSA" state="IN ATTESA" />
-                <Row code="573" sender="AGENZIA DEI…" urgency="RITIRATA" state="RITIRATA" />
+                <Row
+                  code="573"
+                  sender="AGENZIA DEI…"
+                  urgency="ALTA"
+                  state="IN ATTESA"
+                />
+                <Row
+                  code="573"
+                  sender="AGENZIA DEI…"
+                  urgency="BASSA"
+                  state="IN ATTESA"
+                />
+                <Row
+                  code="573"
+                  sender="AGENZIA DEI…"
+                  urgency="RITIRATA"
+                  state="RITIRATA"
+                />
               </tbody>
             </table>
           </div>
@@ -102,8 +126,9 @@ export default function HomePage() {
             Che cos’è una raccomandata market, AR o 697?
           </h3>
           <p className="text-gray-600">
-            Una samandata da pesta o movio direttament/li-comandanti e di luco-di degettre a luito.
-            Riconoscee ita e un denominare tipol una raccomandata strate il-mètelo ala in macchiking.
+            Una samandata da pesta o movio direttament/li-comandanti e di
+            luco-di degettre a luito. Riconoscee ita e un denominare tipol una
+            raccomandata strate il-mètelo ala in macchiking.
           </p>
         </section>
 
@@ -124,9 +149,10 @@ export default function HomePage() {
             </FaqItem>
           </div>
         </section>
+        <div className="mt-10">
+          <BottomCTA />
+        </div>
       </div>
-      {/* Footer CTA */}
-      <BottomCTA />
     </main>
   );
 }
