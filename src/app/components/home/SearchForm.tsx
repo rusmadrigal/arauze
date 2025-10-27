@@ -8,21 +8,42 @@ export default function SearchForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!code.trim()) return;
-    r.push(`/raccomandata/${code.trim()}`);
+    const v = code.trim();
+    if (!v) return;
+    r.push(`/raccomandata/${v}`);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3">
+    <form onSubmit={handleSubmit} className="relative mt-3">
+      {/* Input ancho (wide) */}
       <input
+        aria-label="Codice raccomandata"
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder="Inserisci il codice..."
-        className="flex-1 rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-4 focus:ring-brand-50"
+        className="
+          w-full h-12 md:h-14
+          rounded-2xl
+          border border-slate-200
+          bg-white
+          px-4 pr-28
+          text-slate-700 placeholder-slate-400
+          outline-none
+          shadow-sm
+          focus:border-brand-300 focus:ring-4 focus:ring-brand-50
+        "
       />
+
+      {/* Botón superpuesto a la derecha */}
       <button
         type="submit"
-        className="rounded-lg bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 font-semibold transition"
+        className="absolute right-2 top-1/2 -translate-y-1/2
+             h-10 md:h-12 px-5 md:px-6
+             rounded-xl border border-slate-200
+             bg-blue-500 text-white
+             hover:bg-blue-600
+             font-semibold shadow-sm
+             focus:outline-none focus:ring-4 focus:ring-brand-50"
       >
         Cerca
       </button>
