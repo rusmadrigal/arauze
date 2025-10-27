@@ -5,6 +5,7 @@ import BottomCTA from "./components/ui/BottomCTA";
 import HeroHeader from "./components/home/HeroHeader";
 import TopNav from "./components/ui/TopNav";
 import SearchForm from "./components/home/SearchForm";
+import ComeFunziona from "./components/home/ComeFunziona";
 
 export default function HomePage() {
   const r = useRouter();
@@ -22,15 +23,7 @@ export default function HomePage() {
         <SearchForm />
 
         {/* Come funziona */}
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold mb-4">Come funziona</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Step icon="🔎" title="Inserisci" subtitle="il codice" />
-            <Step icon="⚙️" title="Analisi" subtitle="" />
-            <Step icon="ℹ️" title="Risultato" subtitle="" />
-          </div>
-        </section>
-
+        <ComeFunziona />
         {/* Ultime Raccomandate Analizzate */}
         <section className="mt-10">
           <h3 className="text-base font-semibold mb-3">
