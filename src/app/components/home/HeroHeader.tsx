@@ -27,7 +27,7 @@ export default function HeroHeader() {
         {/* Imagen ilustrativa */}
         <div className="hidden md:flex justify-end relative pr-2">
           {/* óvalo de fondo suave detrás */}
-          <div className="absolute -z-10 w-[20rem] h-[20rem] bg-brand-50/60 rounded-full top-2 right-0" />
+          <div className="absolute -z-10 w-[20rem] h-80 bg-brand-50/60 rounded-full top-2 right-0" />
           <Image
             src="/images/hero-envelope.webp"
             alt="Illustrazione di una raccomandata online"
