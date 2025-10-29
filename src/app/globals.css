@@ -8,7 +8,7 @@
 
 :root {
   color-scheme: light;
-  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -16,23 +16,27 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: #F5F7FA; /* surface color */
+  background-color: #f4f3f2; /* surface color */
   color: #111827; /* gray-900 */
   font-family: var(--font-inter);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   line-height: 1.2;
   font-weight: 700;
 }
 
 p {
   line-height: 1.7;
-  color: #4B5563; /* gray-600 */
+  color: #4b5563; /* gray-600 */
 }
 
 button {
@@ -56,4 +60,9 @@ table {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.5);
+}
+
+/* Card shadow */
+.shadow-card {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.03);
 }
