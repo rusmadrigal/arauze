@@ -7,15 +7,23 @@ export default function ComeFunziona() {
         Come funziona
       </h2>
 
-      {/* Grid responsive — 1 columna en mobile, 3 en desktop */}
+      {/* Responsive grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 md:gap-16">
         <StepItem
           icon={<IconSearch />}
           title="Inserisci"
-          subtitle="il codice"
+          subtitle="il codice della tua raccomandata"
         />
-        <StepItem icon={<IconGear />} title="Analisi" />
-        <StepItem icon={<IconInfo />} title="Risultato" />
+        <StepItem
+          icon={<IconGear />}
+          title="Analisi"
+          subtitle="elaboriamo i dati per identificare il mittente"
+        />
+        <StepItem
+          icon={<IconInfo />}
+          title="Risultato"
+          subtitle="visualizzi chi ha inviato la raccomandata"
+        />
       </div>
     </section>
   );
@@ -44,7 +52,6 @@ function StepItem({
           flex-shrink-0
         "
       >
-        {/* Inner gradient ring */}
         <div className="absolute inset-2 rounded-full bg-gradient-to-b from-[#7FB3FF] to-[#3F7BFA] opacity-[.15]" />
         <div className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-gradient-to-b from-[#7FB3FF] to-[#3F7BFA] flex items-center justify-center text-white shadow-[0_3px_8px_rgba(63,123,250,0.35)]">
           {icon}
@@ -57,7 +64,9 @@ function StepItem({
           {title}
         </div>
         {subtitle && (
-          <div className="text-sm text-slate-500 leading-snug">{subtitle}</div>
+          <div className="text-sm text-slate-500 leading-snug mt-1">
+            {subtitle}
+          </div>
         )}
       </div>
     </div>
