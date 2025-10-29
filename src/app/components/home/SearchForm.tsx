@@ -15,7 +15,7 @@ export default function SearchForm() {
 
   return (
     <form onSubmit={handleSubmit} className="relative mt-3">
-      {/* Input ancho (wide) */}
+      {/* Input with smooth latency animation */}
       <input
         aria-label="Codice raccomandata"
         value={code}
@@ -23,27 +23,29 @@ export default function SearchForm() {
         placeholder="Inserisci il codice..."
         className="
           w-full h-12 md:h-14
-          rounded-2xl
-          border border-slate-200
-          bg-white
+          rounded-2xl border border-slate-200 bg-white
           px-4 pr-28
           text-slate-700 placeholder-slate-400
-          outline-none
-          shadow-sm
-          focus:border-brand-300 focus:ring-4 focus:ring-brand-50
+          outline-none shadow-sm
+          transition-all duration-500 ease-in-out
+          focus:scale-[1.025] focus:shadow-[0_0_0_5px_rgba(63,123,250,0.12)]
+          focus:border-brand-300 focus:ring-0
         "
       />
 
-      {/* Botón superpuesto a la derecha */}
+      {/* Button with gentle press effect */}
       <button
         type="submit"
-        className="absolute right-2 top-1/2 -translate-y-1/2
-             h-10 md:h-12 px-5 md:px-6
-             rounded-xl border border-slate-200
-             bg-blue-500 text-white
-             hover:bg-blue-600
-             font-semibold shadow-sm
-             focus:outline-none focus:ring-4 focus:ring-brand-50"
+        className="
+          absolute right-2 top-1/2 -translate-y-1/2
+          h-10 md:h-12 px-5 md:px-6
+          rounded-xl border border-slate-200
+          bg-blue-500 text-white font-semibold shadow-sm
+          transition-all duration-400 ease-in-out
+          hover:scale-[1.05] active:scale-[0.95]
+          hover:bg-blue-600
+          focus:outline-none focus:ring-4 focus:ring-brand-50
+        "
       >
         Cerca
       </button>
