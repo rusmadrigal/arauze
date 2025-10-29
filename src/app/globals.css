@@ -66,3 +66,19 @@ table {
 .shadow-card {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.03);
 }
+
+/* Logo */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* Applies the "pulse" animation only on hover */
+.logo-pulse:hover {
+  animation: pulse-slow 1.5s ease-in-out infinite;
+}
