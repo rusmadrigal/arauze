@@ -6,6 +6,7 @@ import HeroHeader from "./components/home/HeroHeader";
 import TopNav from "./components/ui/TopNav";
 import SearchForm from "./components/home/SearchForm";
 import ComeFunziona from "./components/home/ComeFunziona";
+import UltimeRaccomandateAnalizzate from "./components/home/UltimeAnalizzate";
 
 export default function HomePage() {
   const r = useRouter();
@@ -25,43 +26,28 @@ export default function HomePage() {
         {/* Come funziona */}
         <ComeFunziona />
         {/* Ultime Raccomandate Analizzate */}
-        <section className="mt-10">
-          <h3 className="text-base font-semibold mb-3">
-            Ultime Raccomandate Analizzate
-          </h3>
-          <div className="overflow-hidden rounded-xl border">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50 text-gray-600">
-                <tr>
-                  <Th>Regumatlada</Th>
-                  <Th>Urgenza</Th>
-                  <Th>Stato</Th>
-                  <Th>{null}</Th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                <Row
-                  code="573"
-                  sender="AGENZIA DEI…"
-                  urgency="ALTA"
-                  state="IN ATTESA"
-                />
-                <Row
-                  code="573"
-                  sender="AGENZIA DEI…"
-                  urgency="BASSA"
-                  state="IN ATTESA"
-                />
-                <Row
-                  code="573"
-                  sender="AGENZIA DEI…"
-                  urgency="RITIRATA"
-                  state="RITIRATA"
-                />
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <UltimeRaccomandateAnalizzate
+          items={[
+            {
+              code: "573",
+              sender: "AGENZIA DEI…",
+              urgency: "ALTA",
+              state: "IN ATTESA",
+            },
+            {
+              code: "573",
+              sender: "AGENZIA DEI…",
+              urgency: "BASSA",
+              state: "IN ATTESA",
+            },
+            {
+              code: "573",
+              sender: "AGENZIA DEI…",
+              urgency: "RITIRATA",
+              state: "RITIRATA",
+            },
+          ]}
+        />
 
         {/* Blocco informativo */}
         <section className="mt-12">
