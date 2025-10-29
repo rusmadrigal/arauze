@@ -1,4 +1,17 @@
 "use client";
+/**
+ * This component intentionally runs on the client because:
+ * - It defines local React state (useState) in the same file (FaqItem).
+ * - It may include client-only UI behaviors later (e.g., router navigation).
+ *
+ * NOTE: We keep every import and internal component as requested.
+ * Minor safe optimizations:
+ *  - Added lightweight accessibility attributes.
+ *  - Added harmless "void" references to avoid TS/ESLint unused-variable warnings
+ *    without removing variables (keeps future extensibility).
+ *  - Added small type aliases and defensive mappings for readability and safety.
+ */
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import BottomCTA from "./components/ui/BottomCTA";
@@ -10,49 +23,61 @@ import UltimeRaccomandateAnalizzate from "./components/home/UltimeAnalizzate";
 import TextBlockHome from "./components/home/TextBlockHome";
 import FaqsHome from "./components/home/FaqsHome";
 
+/** Reusable type for urgency badges to avoid repeating unions */
+type Urgency = "ALTA" | "BASSA" | "RITIRATA";
+
 export default function HomePage() {
-  const r = useRouter();
-  const [code, setCode] = useState("");
+  const r = useRouter(); // kept for future navigations
+  const [code, setCode] = useState(""); // kept for future search/UX flows
+
+  // Avoid "unused variable" warnings while preserving the variables.
+  // This is a no-op and has zero runtime impact.
+  void r;
+  void code;
+  void setCode;
 
   return (
-    <main className="mx-auto max-w-5xl px-4">
-      {/* Card principal */}
+    <main className="mx-auto max-w-5xl px-4" role="main">
+      {/* Primary card container for the home content */}
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
-        {/* Header semplice */}
+        {/* Simple header / top navigation */}
         <TopNav />
 
-        {/* Hero */}
+        {/* Hero and search form */}
         <HeroHeader />
         <SearchForm />
 
-        {/* Come funziona */}
+        {/* How it works */}
         <ComeFunziona />
-        {/* Ultime Raccomandate Analizzate */}
+
+        {/* Latest analyzed raccomandate (static sample data preserved) */}
         <UltimeRaccomandateAnalizzate
           items={[
             {
               code: "573",
               sender: "AGENZIA DEI…",
-              urgency: "ALTA",
+              urgency: "ALTA" as Urgency,
             },
             {
               code: "573",
               sender: "AGENZIA DEI…",
-              urgency: "BASSA",
+              urgency: "BASSA" as Urgency,
             },
             {
               code: "573",
               sender: "AGENZIA DEI…",
-              urgency: "RITIRATA",
+              urgency: "RITIRATA" as Urgency,
             },
           ]}
         />
-        {/* Blocco informativo */}
+
+        {/* Informational block */}
         <TextBlockHome />
 
-        {/* FAQs */}
+        {/* FAQs (separate component) */}
         <FaqsHome />
 
+        {/* Footer CTA */}
         <div className="mt-10">
           <BottomCTA />
         </div>
@@ -61,7 +86,8 @@ export default function HomePage() {
   );
 }
 
-/* ---------- Componenti UI interni ---------- */
+/* ---------- Internal UI components (kept as requested) ---------- */
+
 function Step({
   icon,
   title,
@@ -72,8 +98,14 @@ function Step({
   subtitle?: string;
 }) {
   return (
-    <div className="rounded-xl border bg-white p-5 flex items-center gap-4">
-      <div className="h-10 w-10 flex items-center justify-center text-lg rounded-full bg-surface">
+    <div
+      className="rounded-xl border bg-white p-5 flex items-center gap-4"
+      aria-label={subtitle ? `${title}: ${subtitle}` : title}
+    >
+      <div
+        className="h-10 w-10 flex items-center justify-center text-lg rounded-full bg-surface"
+        aria-hidden="true"
+      >
         {icon}
       </div>
       <div>
@@ -88,7 +120,10 @@ function Step({
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th className="px-4 py-3 text-xs font-medium uppercase tracking-wide">
+    <th
+      className="px-4 py-3 text-xs font-medium uppercase tracking-wide"
+      scope="col"
+    >
       {children}
     </th>
   );
@@ -98,17 +133,20 @@ function Badge({
   tone,
   children,
 }: {
-  tone: "ALTA" | "BASSA" | "RITIRATA";
+  tone: Urgency;
   children: React.ReactNode;
 }) {
-  const map: Record<string, string> = {
+  // Defensive mapping in case of unexpected tone values
+  const map: Record<Urgency, string> = {
     ALTA: "bg-rose-100 text-rose-700",
     BASSA: "bg-amber-100 text-amber-700",
     RITIRATA: "bg-emerald-100 text-emerald-700",
   };
+  const urgencyClass = map[tone] ?? "bg-gray-100 text-gray-700";
+
   return (
     <span
-      className={`px-2.5 py-1 rounded-md text-xs font-semibold ${map[tone]}`}
+      className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}
     >
       {children}
     </span>
@@ -123,7 +161,7 @@ function Row({
 }: {
   code: string;
   sender: string;
-  urgency: "ALTA" | "BASSA" | "RITIRATA";
+  urgency: Urgency;
   state: string;
 }) {
   return (
@@ -137,23 +175,36 @@ function Row({
       </td>
       <td className="px-4 py-3 font-semibold">{state}</td>
       <td className="px-4 py-3 text-right">
-        <button className="text-gray-400 hover:text-gray-600">›</button>
+        {/* Kept as a visual affordance; added type + aria-label for a11y */}
+        <button
+          type="button"
+          className="text-gray-400 hover:text-gray-600"
+          aria-label="View details"
+        >
+          ›
+        </button>
       </td>
     </tr>
   );
 }
 
 function FaqItem({ q, children }: { q: string; children: React.ReactNode }) {
+  // Local state preserved (controls the <details> open attribute).
   const [open, setOpen] = useState(false);
+
   return (
     <details
       className="group"
       open={open}
       onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)}
     >
+      {/* <summary> is natively accessible and keyboard-focusable */}
       <summary className="list-none cursor-pointer select-none px-5 py-4 flex items-center justify-between">
         <span className="font-medium">{q}</span>
-        <span className="text-gray-400 group-open:rotate-180 transition">
+        <span
+          className="text-gray-400 group-open:rotate-180 transition"
+          aria-hidden="true"
+        >
           ⌄
         </span>
       </summary>
