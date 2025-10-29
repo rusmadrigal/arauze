@@ -7,6 +7,8 @@ import TopNav from "./components/ui/TopNav";
 import SearchForm from "./components/home/SearchForm";
 import ComeFunziona from "./components/home/ComeFunziona";
 import UltimeRaccomandateAnalizzate from "./components/home/UltimeAnalizzate";
+import TextBlockHome from "./components/home/TextBlockHome";
+import FaqsHome from "./components/home/FaqsHome";
 
 export default function HomePage() {
   const r = useRouter();
@@ -32,52 +34,25 @@ export default function HomePage() {
               code: "573",
               sender: "AGENZIA DEI…",
               urgency: "ALTA",
-              state: "IN ATTESA",
             },
             {
               code: "573",
               sender: "AGENZIA DEI…",
               urgency: "BASSA",
-              state: "IN ATTESA",
             },
             {
               code: "573",
               sender: "AGENZIA DEI…",
               urgency: "RITIRATA",
-              state: "RITIRATA",
             },
           ]}
         />
-
         {/* Blocco informativo */}
-        <section className="mt-12">
-          <h3 className="text-2xl font-semibold mb-2">
-            Che cos’è una raccomandata market, AR o 697?
-          </h3>
-          <p className="text-gray-600">
-            Una samandata da pesta o movio direttament/li-comandanti e di
-            luco-di degettre a luito. Riconoscee ita e un denominare tipol una
-            raccomandata strate il-mètelo ala in macchiking.
-          </p>
-        </section>
+        <TextBlockHome />
 
-        {/* FAQ */}
-        <section className="mt-10">
-          <h3 className="text-xl font-semibold mb-3">
-            Hai ricevuto una raccomandata? Scoprilo ora.
-          </h3>
-          <div className="rounded-xl border divide-y">
-            <FaqItem q="Come capire ima raccomandata? 3">
-              Testo di esempio per la risposta.
-            </FaqItem>
-            <FaqItem q="Cosa significa raccomandata market 573?">
-              Testo di esempio per la risposta.
-            </FaqItem>
-            <FaqItem q="Come ritirare una raccomandata?">
-              Testo di esempio per la risposta.
-            </FaqItem>
-          </div>
-        </section>
+        {/* FAQs */}
+        <FaqsHome />
+
         <div className="mt-10">
           <BottomCTA />
         </div>

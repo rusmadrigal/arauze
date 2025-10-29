@@ -1,13 +1,11 @@
 import React from "react";
 
 type Urgency = "ALTA" | "BASSA" | "RITIRATA";
-type Stato = "IN ATTESA" | "RITIRATA" | "RECAPITATA" | string;
 
 export type RaccomandataItem = {
   code: string;
   sender: string;
   urgency: Urgency;
-  state: Stato;
 };
 
 type Props = {
@@ -23,18 +21,19 @@ export default function UltimeRaccomandateAnalizzate({
     <section className="mt-10">
       <h3 className="text-base font-semibold mb-3">{title}</h3>
 
-      <div className="overflow-hidden rounded-xl border">
+      {/* Quitar borde exterior y mantener estructura */}
+      <div className="overflow-hidden rounded-xl shadow-sm">
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
               <Th>Regumatlada</Th>
               <Th>Urgenza</Th>
-              <Th>Stato</Th>
               <Th>{null}</Th>
             </tr>
           </thead>
 
-          <tbody className="divide-y">
+          {/* Líneas internas en gris claro */}
+          <tbody className="divide-y divide-gray-200">
             {items.map((it, i) => (
               <Row key={`${it.code}-${i}`} item={it} index={i} />
             ))}
@@ -56,7 +55,7 @@ function Td({ children }: { children: React.ReactNode }) {
 }
 
 function Row({ item, index }: { item: RaccomandataItem; index: number }) {
-  const { code, sender, urgency, state } = item;
+  const { code, sender, urgency } = item;
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
@@ -69,10 +68,6 @@ function Row({ item, index }: { item: RaccomandataItem; index: number }) {
 
       <Td>
         <UrgencyBadge urgency={urgency} index={index} />
-      </Td>
-
-      <Td>
-        <StateBadge state={state} />
       </Td>
 
       <Td>
@@ -90,8 +85,8 @@ function Row({ item, index }: { item: RaccomandataItem; index: number }) {
 
 /**
  * UrgencyBadge
- * - ALTA: rojo con pulso y latencia escalonada por fila (index)
- * - BASSA: verde suave, sin animación
+ * - ALTA: rojo con pulso y latencia escalonada
+ * - BASSA: verde suave
  * - RITIRATA: gris
  */
 function UrgencyBadge({ urgency, index }: { urgency: Urgency; index: number }) {
@@ -101,7 +96,6 @@ function UrgencyBadge({ urgency, index }: { urgency: Urgency; index: number }) {
       dot: "bg-red-500",
       text: "text-red-700",
       ring: "bg-red-400",
-      // Latencia escalonada: 0ms, 180ms, 360ms, ...
       delayMs: index * 180,
     },
     BASSA: {
@@ -127,7 +121,6 @@ function UrgencyBadge({ urgency, index }: { urgency: Urgency; index: number }) {
       className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full ${cfg.bg} ${cfg.text} relative`}
     >
       <span className="relative flex h-2.5 w-2.5">
-        {/* Círculo de pulso detrás: solo para ALTA */}
         {urgency === "ALTA" && (
           <span
             className={`absolute inline-flex h-full w-full rounded-full ${cfg.ring} opacity-75 motion-safe:animate-ping`}
@@ -135,40 +128,11 @@ function UrgencyBadge({ urgency, index }: { urgency: Urgency; index: number }) {
             aria-hidden
           />
         )}
-        {/* Punto sólido al frente */}
-        <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${cfg.dot}`} />
+        <span
+          className={`relative inline-flex h-2.5 w-2.5 rounded-full ${cfg.dot}`}
+        />
       </span>
       <span className="font-medium">{urgency}</span>
     </span>
   );
 }
-
-function StateBadge({ state }: { state: Stato }) {
-  const normalized = state.toUpperCase();
-
-  const styles =
-    normalized === "IN ATTESA"
-      ? "bg-amber-50 text-amber-700"
-      : normalized === "RECAPITATA"
-      ? "bg-emerald-50 text-emerald-700"
-      : normalized === "RITIRATA"
-      ? "bg-gray-100 text-gray-700"
-      : "bg-slate-100 text-slate-700";
-
-  return (
-    <span className={`inline-flex items-center px-2.5 py-1 rounded-full ${styles}`}>
-      <span className="h-1.5 w-1.5 rounded-full bg-current/60 mr-2" />
-      <span className="font-medium">{state}</span>
-    </span>
-  );
-}
-
-/* ---------- Ejemplo de uso ---------- */
-// Coloca esto donde renderices la sección:
-// <UltimeRaccomandateAnalizzate
-//   items={[
-//     { code: "573", sender: "AGENZIA DEI…", urgency: "ALTA",   state: "IN ATTESA" },
-//     { code: "573", sender: "AGENZIA DEI…", urgency: "BASSA",  state: "IN ATTESA" },
-//     { code: "573", sender: "AGENZIA DEI…", urgency: "RITIRATA", state: "RITIRATA" },
-//   ]}
-// />
