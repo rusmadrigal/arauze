@@ -6,7 +6,7 @@ export default function NewsletterCTA() {
   const [accepted, setAccepted] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
 
