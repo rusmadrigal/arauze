@@ -37,15 +37,16 @@ export default function SearchForm() {
       <button
         type="submit"
         className="
-          absolute right-2 top-1/2 -translate-y-1/2
-          h-10 md:h-12 px-5 md:px-6
-          rounded-xl border border-slate-200
-          bg-blue-500 text-white font-semibold shadow-sm
-          transition-all duration-400 ease-in-out
-          hover:scale-[1.05] active:scale-[0.95]
-          hover:bg-blue-600
-          focus:outline-none focus:ring-4 focus:ring-brand-50
-        "
+    absolute right-2 top-1/2 -translate-y-1/2
+    h-10 md:h-12 px-5 md:px-6
+    rounded-xl
+    bg-linear-to-r from-[#2F66D5] to-[#2552AD]
+    text-white font-semibold
+    shadow-card
+    transition-all duration-300 ease-in-out
+    hover:scale-[1.05] active:scale-[0.95]
+    focus:outline-none focus:ring-4 focus:ring-blue-200
+  "
       >
         Cerca
       </button>
