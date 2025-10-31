@@ -14,7 +14,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import BottomCTA from "./components/ui/BottomCTA";
 import HeroHeader from "./components/home/HeroHeader";
 import TopNav from "./components/ui/TopNav";
 import SearchForm from "./components/home/SearchForm";
@@ -22,6 +21,7 @@ import ComeFunziona from "./components/home/ComeFunziona";
 import UltimeRaccomandateAnalizzate from "./components/home/UltimeAnalizzate";
 import TextBlockHome from "./components/home/TextBlockHome";
 import FaqsHome from "./components/home/FaqsHome";
+import NewsletterCTA from "./components/ui/NewsletterCTA";
 
 /** Reusable type for urgency badges to avoid repeating unions */
 type Urgency = "ALTA" | "BASSA" | "RITIRATA";
@@ -79,7 +79,7 @@ export default function HomePage() {
 
         {/* Footer CTA */}
         <div className="mt-10">
-          <BottomCTA />
+          <NewsletterCTA />
         </div>
       </div>
     </main>
