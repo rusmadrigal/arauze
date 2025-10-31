@@ -34,7 +34,7 @@ export default function NewsletterCTA() {
   return (
     // Mantén el sangrado si lo necesitas para que toque el borde del card padre
     <div className="-mx-6 md:-mx-10 -mb-6 md:-mb-10">
-      <div className="w-full rounded-b-2xl bg-gradient-to-r from-[#2F66D5] to-[#2552AD] text-white px-6 md:px-8 py-7 shadow-card">
+      <div className="w-full rounded-b-2xl bg-linear-to-r from-[#2F66D5] to-[#2552AD] text-white px-6 md:px-8 py-7 shadow-card">
         {/* header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
           <div className="text-center md:text-left">
