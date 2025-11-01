@@ -4,18 +4,20 @@ import Link from "next/link";
 
 export default function HeroRaccomandata() {
   return (
-    <section className="text-center md:text-left">
+    <section className="mt-4 md:mt-6 text-center md:text-left">
       {/* Breadcrumb */}
-      <div className="text-sm text-gray-400 mb-3">
+      <nav
+        aria-label="breadcrumb"
+        className="text-sm text-gray-400 mb-3 md:mb-4"
+      >
         <Link href="/" className="hover:underline">
           Home
         </Link>{" "}
-        /{" "}
-        <span className="text-gray-500">Raccomandata Market 697</span>
-      </div>
+        / <span className="text-gray-500">Raccomandata Market 697</span>
+      </nav>
 
       {/* Título principal */}
-      <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
+      <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight">
         Raccomandata Market 697: Guida Completa e Cosa Fare
       </h1>
 
