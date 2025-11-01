@@ -1,6 +1,6 @@
 // app/raccomandata/[code]/page.tsx
 import React from "react";
-import TopNav from "@/components/ui/TopNav"; // mismo nav del home
+import TopNav from "@/components/ui/TopNav";
 
 import HeroRaccomandata from "@/components/raccomandata/HeroRaccomandata";
 import InfoBoxRaccomandata from "@/components/raccomandata/InfoBoxRaccomandata";
@@ -14,40 +14,24 @@ import AdditionalInfoBanner from "@/components/raccomandata/AdditionalInfoBanner
 
 export default function RaccomandataPage() {
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
-      {/* Card principal (igual al home) */}
+    // Igual que el home → sin py extra (el layout ya tiene py-8)
+    <main className="mx-auto max-w-5xl px-4" role="main">
+      {/* Contenedor principal idéntico al home */}
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
-        {/* NAV Igual al home, dentro de la tarjeta */}
-        <TopNav />
+        {/* Mismo orden y ritmo vertical */}
+        <div className="space-y-8 md:space-y-10">
+          <TopNav />
 
-        {/* Hero */}
-        <HeroRaccomandata />
-
-        {/* Key info */}
-        <div className="mt-10">
+          <HeroRaccomandata />
           <InfoBoxRaccomandata />
+          <AuthorBox />
+          <StepsRaccomandata />
+          <DetailsSection />
+          <AlertBox />
+          <AssistenzaSection />
+          <FAQSection />
+          <AdditionalInfoBanner />
         </div>
-
-        {/* Autor */}
-        <AuthorBox />
-
-        {/* Pasos */}
-        <StepsRaccomandata />
-
-        {/* Detalles */}
-        <DetailsSection />
-
-        {/* Alerta */}
-        <AlertBox />
-
-        {/* Asistencia */}
-        <AssistenzaSection />
-
-        {/* FAQ */}
-        <FAQSection />
-
-        {/* CTA final */}
-        <AdditionalInfoBanner />
       </div>
     </main>
   );
