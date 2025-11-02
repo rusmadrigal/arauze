@@ -14,10 +14,10 @@
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "sanity/*": ["./sanity/*"],
-      "@/sanity/*": ["./sanity/*"]
+      "sanity/*": ["./sanity/*"]
     }
   },
   "include": [
@@ -25,9 +25,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    "src/components/ui/NewsletterCTA.tsx"
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }
