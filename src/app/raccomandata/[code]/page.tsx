@@ -23,7 +23,7 @@ export default function RaccomandataPage() {
           <TopNav />
 
           <HeroRaccomandata />
-          <InfoBoxRaccomandata />
+          <InfoBoxRaccomandata urgency="ALTA"/>
           <AuthorBox />
           <StepsRaccomandata />
           <DetailsSection />
