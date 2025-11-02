@@ -1,6 +1,7 @@
 // components/raccomandata/InfoBoxRaccomandata.tsx
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import CheckAvvisoModal from "@/components/raccomandata/CheckAvvisoModal";
 
 type Urgency = "ALTA" | "BASSA" | "RITIRATA" | "NONE";
 
@@ -19,6 +20,8 @@ export default function InfoBoxRaccomandata({
   stato = "In attesa di ritiro",
   urgency = "NONE",
 }: Props) {
+  const [openCheck, setOpenCheck] = useState(false);
+
   const keyInfo = [
     { label: "Codice", value: code },
     { label: "Mittente", value: mittente },
@@ -41,8 +44,6 @@ export default function InfoBoxRaccomandata({
             >
               <span className="absolute inline-flex h-3 w-3 rounded-full bg-rose-500 opacity-60 animate-ping" />
               <span className="relative inline-flex h-3 w-3 rounded-full bg-rose-600" />
-
-              {/* Tooltip */}
               <span
                 className="pointer-events-none absolute right-6 top-[-4px] rounded-md bg-white px-2 py-1 text-xs font-medium text-[#2552AD] shadow-md whitespace-nowrap
                            opacity-0 translate-y-1 transition
@@ -89,15 +90,19 @@ export default function InfoBoxRaccomandata({
           ))}
         </ul>
 
-        {/* CTA */}
+        {/* CTA → abre modal */}
         <div className="mt-5 sm:mt-6">
-          <a
-            href="#"
+          <button
+            type="button"
+            onClick={() => setOpenCheck(true)}
             className="inline-block bg-white text-[#2552AD] font-semibold px-5 py-3 rounded-xl text-[0.95rem] md:text-base transition-transform duration-200 hover:scale-[1.03] focus:outline-none focus:ring-4 focus:ring-white/30"
           >
             Hai ricevuto un avviso?
-          </a>
+          </button>
         </div>
+
+        {/* Modal funcional (consulta /api/check-codice) */}
+        <CheckAvvisoModal open={openCheck} onClose={() => setOpenCheck(false)} />
       </div>
     </section>
   );
