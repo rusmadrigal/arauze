@@ -13,6 +13,8 @@ type OfficialFound = {
   stato: string;
   confidence?: number;
   reportsCount?: number;
+  sources?: string[];
+  updatedAt?: string;
 };
 
 type OfficialNotFound = {
@@ -56,7 +58,9 @@ export default function CheckAvvisoModal({
 
     setLoading(true);
     try {
-      const r = await fetch(`/api/check-codice?code=${encodeURIComponent(trimmed)}`);
+      const r = await fetch(
+        `/api/check-codice?code=${encodeURIComponent(trimmed)}`
+      );
       const data: CheckResponse = await r.json();
       setRes(data);
     } catch {
@@ -118,19 +122,65 @@ export default function CheckAvvisoModal({
           {/* Caso: encontrado */}
           {res && res.ok && res.found && (
             <div className="mt-3 rounded-lg border border-gray-200 p-3 text-sm text-gray-800">
-              <div className="font-semibold text-gray-900 mb-1">
+              <div className="font-semibold text-gray-900 mb-2">
                 Codice {res.code} — risultato
               </div>
-              <div className="space-y-1">
-                <p>
-                  <span className="text-gray-500">Mittente:</span> {res.mittente}
-                </p>
-                <p>
-                  <span className="text-gray-500">Tipologia:</span> {res.tipologia}
-                </p>
-                <p>
-                  <span className="text-gray-500">Stato:</span> {res.stato}
-                </p>
+
+              <div className="grid grid-cols-1 gap-y-2">
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Mittente</span>
+                  <span className="font-medium text-right">{res.mittente}</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Tipologia</span>
+                  <span className="font-medium text-right">
+                    {res.tipologia}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Stato</span>
+                  <span className="font-medium text-right">{res.stato}</span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Confidence (0–1)</span>
+                  <span className="font-medium text-right">
+                    {typeof res.confidence === "number"
+                      ? new Intl.NumberFormat("it-IT", {
+                          maximumFractionDigits: 2,
+                        }).format(res.confidence)
+                      : "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Reports Count</span>
+                  <span className="font-medium text-right">
+                    {typeof res.reportsCount === "number"
+                      ? res.reportsCount
+                      : "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Sources</span>
+                  <span className="font-medium text-right">
+                    {Array.isArray(res.sources) && res.sources.length > 0
+                      ? res.sources.join(", ")
+                      : "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Updated At</span>
+                  <span className="font-medium text-right">
+                    {res.updatedAt
+                      ? new Date(res.updatedAt).toLocaleString("it-IT", {
+                          year: "numeric",
+                          month: "long",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "—"}
+                  </span>
+                </div>
               </div>
             </div>
           )}

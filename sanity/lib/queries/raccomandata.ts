@@ -11,6 +11,7 @@ export const CODE_BY_NUMBER = groq`
   stato,
   confidence,
   reportsCount,
+  sources,
   updatedAt
 }
 `;
