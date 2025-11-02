@@ -16,7 +16,7 @@ export default defineType({
     defineField({ name: "stato", title: "Stato", type: "string" }),
     defineField({
       name: "confidence",
-      title: "Confidence (0–1)",
+      title: "Confidence (0–10)",
       type: "number",
       initialValue: 0.6,
     }),

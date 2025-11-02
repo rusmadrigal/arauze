@@ -1,6 +1,10 @@
+// src/app/api/check-codice/route.ts
 import { NextResponse } from "next/server";
 import { sanityClient } from "sanity/lib/client";
-import { CODE_BY_NUMBER, REPORTS_BY_CODE } from "sanity/lib/queries/raccomandata";
+import {
+  CODE_BY_NUMBER,
+  REPORTS_BY_CODE,
+} from "sanity/lib/queries/raccomandata";
 
 type OfficialDoc = {
   code: string;
@@ -10,6 +14,7 @@ type OfficialDoc = {
   confidence?: number;
   reportsCount?: number;
   updatedAt?: string;
+  sources?: string[];
 } | null;
 
 export async function GET(req: Request) {
@@ -17,7 +22,6 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const code = (searchParams.get("code") || "").trim();
 
-    // Validación rápida (3–6 dígitos)
     if (!code || !/^\d{3,6}$/.test(code)) {
       return NextResponse.json(
         { ok: false, error: "Codice non valido o mancante." },
@@ -25,11 +29,17 @@ export async function GET(req: Request) {
       );
     }
 
-    // Fetch paralelo (parametrizado) + defaults seguros
-    const [official, reportsCount] = await Promise.all([
+    const [official, crowdCount] = await Promise.all([
       sanityClient.fetch<OfficialDoc>(CODE_BY_NUMBER, { code }),
       sanityClient.fetch<number>(REPORTS_BY_CODE, { code }),
     ]);
+
+    const finalReports =
+      (typeof official?.reportsCount === "number"
+        ? official.reportsCount
+        : undefined) ??
+      (typeof crowdCount === "number" ? crowdCount : undefined) ??
+      0;
 
     if (!official) {
       return NextResponse.json(
@@ -39,7 +49,7 @@ export async function GET(req: Request) {
           code,
           suggestion:
             "Nessun dato ufficiale trovato. Invia una segnalazione per aiutarci ad aggiornare il database.",
-          reportsCount: reportsCount ?? 0,
+          reportsCount: finalReports,
         },
         { status: 200 }
       );
@@ -50,7 +60,7 @@ export async function GET(req: Request) {
         ok: true,
         found: true,
         ...official,
-        reportsCount: reportsCount ?? 0,
+        reportsCount: finalReports,
       },
       { status: 200 }
     );

@@ -142,7 +142,7 @@ export default function CheckAvvisoModal({
                   <span className="font-medium text-right">{res.stato}</span>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Confidence (0–1)</span>
+                  <span className="text-gray-500">Confidence (0–10)</span>
                   <span className="font-medium text-right">
                     {typeof res.confidence === "number"
                       ? new Intl.NumberFormat("it-IT", {
