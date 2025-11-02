@@ -163,7 +163,10 @@ export default function CheckAvvisoModal({
                   <span className="text-gray-500">Sources</span>
                   <span className="font-medium text-right">
                     {Array.isArray(res.sources) && res.sources.length > 0
-                      ? res.sources.join(", ")
+                      ? res.sources
+                          .map((s) => s.trim())
+                          .filter((s) => s.length > 0)
+                          .join(", ")
                       : "—"}
                   </span>
                 </div>
