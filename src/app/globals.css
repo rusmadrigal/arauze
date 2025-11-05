@@ -1,0 +1,115 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+
+/* --------------------------
+   Global resets & defaults
+---------------------------*/
+
+:root {
+  color-scheme: light;
+  --font-inter: "Inter", system-ui, sans-serif;
+  scroll-behavior: smooth;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #f4f3f2; /* surface color */
+  color: #111827; /* gray-900 */
+  font-family: var(--font-inter);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.7;
+  color: #4b5563; /* gray-600 */
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Scrollbar limpio */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+/* Card shadow */
+.shadow-card {
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.05),
+    0 6px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Logo */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* Applies the "pulse" animation only on hover */
+.logo-pulse:hover {
+  animation: pulse-slow 1.5s ease-in-out infinite;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Code report */
+
+input,
+textarea,
+select {
+  color: #111827; /* gris oscuro */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gris medio */
+  opacity: 1; /* asegura visibilidad en Safari */
+}
