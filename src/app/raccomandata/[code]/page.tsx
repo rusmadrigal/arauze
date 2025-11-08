@@ -19,14 +19,18 @@ import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+// ✅ Tipo actualizado
 type RaccomandataPageDoc = {
   code: string;
   heroTitleSuffix?: string;
   heroSubtitle?: string;
-  // InfoBox fields (unificado en raccomandataPage)
   mittente?: string;
   tipologia?: string;
   stato?: string;
+  steps?: {
+    title: string;
+    description: string;
+  }[]; // 👈 array opcional
 } | null;
 
 // Next 15: params es Promise
@@ -39,7 +43,10 @@ export async function generateMetadata(
   const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
-    { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
+    {
+      cache: "no-store",
+      next: { revalidate: 0, tags: [`raccomandata:${code}`] },
+    }
   );
 
   const titleBase = code ? `Raccomandata ${code}` : "Raccomandata";
@@ -62,7 +69,10 @@ export default async function RaccomandataPage(
   const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
-    { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
+    {
+      cache: "no-store",
+      next: { revalidate: 0, tags: [`raccomandata:${code}`] },
+    }
   );
 
   if (!page) {
@@ -92,7 +102,7 @@ export default async function RaccomandataPage(
           />
 
           <AuthorBox />
-          <StepsRaccomandata />
+          <StepsRaccomandata steps={page?.steps} />
           <DetailsSection />
           <AlertBox />
           <AssistenzaSection />

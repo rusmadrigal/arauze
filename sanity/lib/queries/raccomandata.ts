@@ -7,7 +7,7 @@ export const RACCOMANDATA_BY_CODE = groq`
   _type == "raccomandataPage" &&
   string(code) == string($code)
 ][0]{
-  // clave
+  // Clave
   code,
 
   // HERO
@@ -17,7 +17,10 @@ export const RACCOMANDATA_BY_CODE = groq`
   // INFOBOX
   mittente,
   tipologia,
-  stato
+  stato,
+
+  // STEPS
+  steps[]{ title, description }
 }
 `;
 
