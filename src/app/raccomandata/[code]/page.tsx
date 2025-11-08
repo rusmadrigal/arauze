@@ -27,10 +27,8 @@ type RaccomandataPageDoc = {
   mittente?: string;
   tipologia?: string;
   stato?: string;
-  steps?: {
-    title: string;
-    description: string;
-  }[]; // 👈 array opcional
+  steps?: { title: string; description: string }[];
+  details?: { title: string; body: string }[];   // <- añade esta línea
 } | null;
 
 // Next 15: params es Promise
@@ -103,7 +101,7 @@ export default async function RaccomandataPage(
 
           <AuthorBox />
           <StepsRaccomandata steps={page?.steps} />
-          <DetailsSection />
+          <DetailsSection details={page?.details} />
           <AlertBox />
           <AssistenzaSection />
           <FAQSection />

@@ -1,4 +1,3 @@
-// sanity/schemas/raccomandataPage.ts
 import { defineType, defineField } from "sanity";
 import { List } from "phosphor-react";
 
@@ -25,27 +24,16 @@ export default defineType({
       type: "text",
       rows: 3,
     }),
-    defineField({
-      name: "mittente",
-      title: "Mittente",
-      type: "string",
-    }),
-    defineField({
-      name: "tipologia",
-      title: "Tipologia",
-      type: "string",
-    }),
-    defineField({
-      name: "stato",
-      title: "Stato",
-      type: "string",
-    }),
+    defineField({ name: "mittente", title: "Mittente", type: "string" }),
+    defineField({ name: "tipologia", title: "Tipologia", type: "string" }),
+    defineField({ name: "stato", title: "Stato", type: "string" }),
 
-    // 🆕 Nuevo campo
+    // Steps (Cosa fare)
     defineField({
       name: "steps",
       title: "Passaggi (Steps – Cosa Fare)",
-      description: "Lista di passaggi mostrati nella sezione 'Cosa Fare Passo per Passo'.",
+      description:
+        "Lista di passaggi mostrati nella sezione 'Cosa Fare Passo per Passo'.",
       type: "array",
       of: [
         {
@@ -72,6 +60,45 @@ export default defineType({
               return {
                 title,
                 subtitle: subtitle ? subtitle.slice(0, 50) + "…" : "",
+                media: List,
+              };
+            },
+          },
+        },
+      ],
+    }),
+
+    // Details (sezione testo)
+    defineField({
+      name: "details",
+      title: "Dettagli (Sezione Testo)",
+      description: "Blocchi di testo per 'Motivo', 'Tempi', ecc.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "detailBlock",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Titolo",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "body",
+              title: "Corpo del testo",
+              type: "text",
+              rows: 5,
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "body" },
+            prepare({ title, subtitle }) {
+              return {
+                title,
+                subtitle: subtitle ? `${subtitle.slice(0, 60)}…` : "",
                 media: List,
               };
             },

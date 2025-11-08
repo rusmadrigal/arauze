@@ -1,7 +1,6 @@
-// src/lib/queries/raccomandata.js
 import { groq } from "next-sanity";
 
-// 🔹 Un único fetch: HERO + INFOBOX (todo vive en `raccomandataPage`)
+// 🔹 Un único fetch: HERO + INFOBOX + DETAILS + STEPS (todo vive en `raccomandataPage`)
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
@@ -18,6 +17,9 @@ export const RACCOMANDATA_BY_CODE = groq`
   mittente,
   tipologia,
   stato,
+
+  // DETAILS
+  details[]{ title, body },
 
   // STEPS
   steps[]{ title, description }
