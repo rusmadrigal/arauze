@@ -106,6 +106,42 @@ export default defineType({
         },
       ],
     }),
+
+    // Alert Box (Avviso)
+    defineField({
+      name: "alertBox",
+      title: "Alert Box (Avviso)",
+      type: "object",
+      fields: [
+        defineField({
+          name: "enabled",
+          title: "Mostrare il blocco?",
+          type: "boolean",
+          initialValue: true,
+        }),
+        defineField({
+          name: "title",
+          title: "Titolo",
+          type: "string",
+          initialValue: "Attenzione ai Termini di Ritiro",
+        }),
+        defineField({
+          name: "body",
+          title: "Testo",
+          type: "text",
+          rows: 4,
+          initialValue:
+            "Se non ritiri la raccomandata entro 30 giorni, potrebbe essere considerata come notificata per “compiuta giacenza”. In tal caso, eventuali comunicazioni fiscali o multe saranno comunque valide anche senza la tua firma di ritiro.",
+        }),
+        defineField({
+          name: "icon",
+          title: "Icona (Lucide)",
+          type: "string",
+          description: "Esempi: AlertTriangle, Info, Bell…",
+          initialValue: "AlertTriangle",
+        }),
+      ],
+    }),
   ],
 
   preview: {

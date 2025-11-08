@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-// 🔹 Un único fetch: HERO + INFOBOX + DETAILS + STEPS (todo vive en `raccomandataPage`)
+// 🔹 Un único fetch: HERO + INFOBOX + DETAILS + STEPS + ALERTBOX (todo vive en `raccomandataPage`)
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
@@ -22,7 +22,15 @@ export const RACCOMANDATA_BY_CODE = groq`
   details[]{ title, body },
 
   // STEPS
-  steps[]{ title, description }
+  steps[]{ title, description },
+
+  // ALERT BOX
+  alertBox{
+    enabled,
+    title,
+    body,
+    icon
+  }
 }
 `;
 

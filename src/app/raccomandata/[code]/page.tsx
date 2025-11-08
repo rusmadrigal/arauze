@@ -28,7 +28,8 @@ type RaccomandataPageDoc = {
   tipologia?: string;
   stato?: string;
   steps?: { title: string; description: string }[];
-  details?: { title: string; body: string }[];   // <- añade esta línea
+  details?: { title: string; body: string }[];
+  alertBox?: { enabled?: boolean; title?: string; body?: string; icon?: string };
 } | null;
 
 // Next 15: params es Promise
@@ -102,7 +103,7 @@ export default async function RaccomandataPage(
           <AuthorBox />
           <StepsRaccomandata steps={page?.steps} />
           <DetailsSection details={page?.details} />
-          <AlertBox />
+          <AlertBox data={page?.alertBox} />
           <AssistenzaSection />
           <FAQSection />
           <AdditionalInfoBanner />
