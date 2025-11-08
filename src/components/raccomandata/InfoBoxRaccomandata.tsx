@@ -1,5 +1,6 @@
-// components/raccomandata/InfoBoxRaccomandata.tsx
+// src/components/raccomandata/InfoBoxRaccomandata.tsx
 "use client";
+
 import React, { useState } from "react";
 import CheckAvvisoModal from "@/components/raccomandata/CheckAvvisoModal";
 import { CheckCircle2 } from "lucide-react";
@@ -14,6 +15,11 @@ interface Props {
   urgency?: Urgency;
 }
 
+/**
+ * ✅ InfoBoxRaccomandata
+ * Muestra la información principal (mittente, tipologia, stato)
+ * proveniente del documento `raccomandataPage` en Sanity.
+ */
 export default function InfoBoxRaccomandata({
   code = "697",
   mittente = "Agenzia delle Entrate (probabile)",
@@ -23,7 +29,6 @@ export default function InfoBoxRaccomandata({
 }: Props) {
   const [openCheck, setOpenCheck] = useState(false);
 
-  // Key info pairs for the list
   const keyInfo = [
     { label: "Codice", value: code },
     { label: "Mittente", value: mittente },
@@ -31,7 +36,6 @@ export default function InfoBoxRaccomandata({
     { label: "Stato", value: stato },
   ];
 
-  // Urgency helpers
   const isUrgent = urgency === "ALTA";
   const urgencyLabel =
     urgency === "ALTA"
@@ -44,23 +48,25 @@ export default function InfoBoxRaccomandata({
 
   return (
     <section className="text-sm">
-      {/* Card container */}
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-[#2F66D5]/20
                    bg-gradient-to-r from-[#2F66D5] to-[#2552AD] text-white
                    px-5 py-6 sm:px-6 md:px-8 md:py-7
                    shadow-[0_4px_20px_-4px_rgba(0,0,0,0.25)]"
       >
-        {/* Corner icon for visual identity */}
+        {/* Fondo decorativo */}
         <div className="absolute -top-5 -right-4 opacity-10 pointer-events-none">
           <CheckCircle2 className="h-20 w-20 text-white" aria-hidden="true" />
         </div>
 
-        {/* Urgency badge + pulsating dot (accessible) */}
+        {/* Indicador de urgencia */}
         {urgencyLabel && (
           <div className="absolute right-4 top-4 flex items-center gap-2">
             {isUrgent && (
-              <span className="relative inline-flex h-3 w-3 items-center justify-center" aria-hidden="true">
+              <span
+                className="relative inline-flex h-3 w-3 items-center justify-center"
+                aria-hidden="true"
+              >
                 <span className="absolute inline-flex h-3 w-3 rounded-full bg-rose-500 opacity-60 animate-ping" />
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-rose-600" />
               </span>
@@ -79,7 +85,7 @@ export default function InfoBoxRaccomandata({
           </div>
         )}
 
-        {/* Title */}
+        {/* Título */}
         <h2 className="flex items-center gap-2 text-base sm:text-lg md:text-xl font-semibold mb-4 leading-tight">
           <svg
             className="h-5 w-5 shrink-0 text-white/90"
@@ -98,7 +104,7 @@ export default function InfoBoxRaccomandata({
           Informazioni Chiave — Codice {code}
         </h2>
 
-        {/* Key list */}
+        {/* Lista de datos clave */}
         <ul className="divide-y divide-white/15 rounded-xl bg-white/5 ring-1 ring-white/10">
           {keyInfo.map((item, i) => (
             <li
@@ -111,7 +117,7 @@ export default function InfoBoxRaccomandata({
           ))}
         </ul>
 
-        {/* CTA → open modal */}
+        {/* Modal */}
         <div className="mt-5 sm:mt-6">
           <button
             type="button"
@@ -128,7 +134,6 @@ export default function InfoBoxRaccomandata({
           </button>
         </div>
 
-        {/* Modal (fetches /api/check-codice) */}
         <CheckAvvisoModal open={openCheck} onClose={() => setOpenCheck(false)} />
       </div>
     </section>

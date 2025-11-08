@@ -2,39 +2,44 @@ import { defineType, defineField } from "sanity";
 
 export default defineType({
   name: "raccomandataCode",
-  title: "Raccomandata Code (Official)",
+  title: "Raccomandata – Code",
   type: "document",
   fields: [
     defineField({
       name: "code",
-      title: "Code",
+      title: "Codice",
       type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({ name: "mittente", title: "Mittente", type: "string" }),
-    defineField({ name: "tipologia", title: "Tipologia", type: "string" }),
-    defineField({ name: "stato", title: "Stato", type: "string" }),
-    defineField({
-      name: "confidence",
-      title: "Confidence (0–10)",
-      type: "number",
-      initialValue: 0.6,
+      description: "Solo números (3–6 dígitos), ej. 697",
+      validation: (r) =>
+        r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
     }),
     defineField({
-      name: "reportsCount",
-      title: "Reports Count",
-      type: "number",
-      initialValue: 0,
+      name: "mittente",
+      title: "Mittente",
+      type: "string",
+      // opcional: valores por defecto para nuevos docs
+      initialValue: "Agenzia delle Entrate (probabile)",
+      validation: (r) => r.required(),
     }),
     defineField({
-      name: "sources",
-      title: "Sources",
-      type: "array",
-      of: [{ type: "string" }],
+      name: "tipologia",
+      title: "Tipologia",
+      type: "string",
+      initialValue: "Raccomandata Market",
+      validation: (r) => r.required(),
     }),
-    defineField({ name: "updatedAt", title: "Updated At", type: "datetime" }),
+    defineField({
+      name: "stato",
+      title: "Stato",
+      type: "string",
+      initialValue: "In attesa di ritiro",
+      validation: (r) => r.required(),
+    }),
   ],
   preview: {
     select: { title: "code", subtitle: "mittente" },
+    prepare({ title, subtitle }) {
+      return { title, subtitle: subtitle || "—" };
+    },
   },
 });

@@ -1,4 +1,4 @@
-// app/raccomandata/[code]/page.tsx
+// src/app/raccomandata/[code]/page.tsx
 import React from "react";
 import TopNav from "@/components/ui/TopNav";
 import HeroRaccomandata from "@/components/raccomandata/HeroRaccomandata";
@@ -19,20 +19,24 @@ import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-type RaccomandataPageMeta = {
+type RaccomandataPageDoc = {
   code: string;
   heroTitleSuffix?: string;
   heroSubtitle?: string;
+  // InfoBox fields (unificado en raccomandataPage)
+  mittente?: string;
+  tipologia?: string;
+  stato?: string;
 } | null;
 
+// Next 15: params es Promise
 export async function generateMetadata(
   { params }: { params: Promise<{ code?: string }> }
 ): Promise<Metadata> {
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
-  // Podés decidir no bloquear el build si no existe; dejamos metadatos básicos
-  const pageMeta = await sanityClient.fetch<RaccomandataPageMeta>(
+  const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
     { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
@@ -40,11 +44,11 @@ export async function generateMetadata(
 
   const titleBase = code ? `Raccomandata ${code}` : "Raccomandata";
   return {
-    title: pageMeta?.heroTitleSuffix
-      ? `${titleBase} – ${pageMeta.heroTitleSuffix}`
+    title: page?.heroTitleSuffix
+      ? `${titleBase} – ${page.heroTitleSuffix}`
       : titleBase,
     description:
-      pageMeta?.heroSubtitle ??
+      page?.heroSubtitle ??
       (code ? `Dettagli per il codice ${code}` : "Dettagli raccomandata"),
   };
 }
@@ -55,25 +59,38 @@ export default async function RaccomandataPage(
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
-  // 🔎 Verificación de existencia
-  const pageMeta = await sanityClient.fetch<RaccomandataPageMeta>(
+  const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
     { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
   );
 
-  if (!pageMeta) {
-    // 👉 Si no hay doc en Sanity, devolvemos 404
+  if (!page) {
     notFound();
   }
+
+  // Usamos el code del doc si existe; así “Codice” sale del CMS
+  const codice = (page?.code ?? code).trim();
 
   return (
     <main className="mx-auto max-w-5xl px-4" role="main">
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
         <div className="space-y-8 md:space-y-10">
           <TopNav />
-          <HeroRaccomandata code={code} pageMeta={pageMeta} />
-          <InfoBoxRaccomandata urgency="ALTA" />
+
+          {/* Hero (usa code + hero fields del mismo doc) */}
+          <HeroRaccomandata code={codice} pageMeta={page} />
+
+          {/* InfoBox (recibe todo desde el doc unificado) */}
+          <InfoBoxRaccomandata
+            code={codice}
+            mittente={page?.mittente}
+            tipologia={page?.tipologia}
+            stato={page?.stato}
+            // urgency opcional: si querés derivarla desde `stato`, hazlo aquí
+            // urgency={/ritiro|giacenza/i.test(page?.stato ?? "") ? "ALTA" : "NONE"}
+          />
+
           <AuthorBox />
           <StepsRaccomandata />
           <DetailsSection />
