@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { sanityClient } from "sanity/lib/client";
 import {
-  CODE_BY_NUMBER,
+  RACCOMANDATA_BY_CODE as CODE_BY_NUMBER,
   REPORTS_BY_CODE,
 } from "sanity/lib/queries/raccomandata";
 
@@ -11,6 +11,7 @@ type OfficialDoc = {
   mittente?: string;
   tipologia?: string;
   stato?: string;
+  priority?: "ALTA" | "MEDIA" | "BASSA";
   confidence?: number;
   reportsCount?: number;
   updatedAt?: string;
