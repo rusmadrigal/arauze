@@ -1,25 +1,19 @@
-// components/raccomandata/FAQSection.tsx
-"use client";
 import React from "react";
-import FaqItem from "./FaqItem";
 import { HelpCircle } from "lucide-react";
+import FaqItem from "./FaqItem";
 
-export default function FAQSection() {
-  // FAQ data
-  const faqs = [
-    {
-      q: "Cosa significa Raccomandata Market 697?",
-      a: "È una comunicazione ufficiale, spesso inviata da enti pubblici come l’Agenzia delle Entrate, relativa a pratiche fiscali o amministrative.",
-    },
-    {
-      q: "Quanto tempo ho per ritirarla?",
-      a: "Hai 30 giorni di tempo dalla data del primo tentativo di consegna per ritirare la raccomandata.",
-    },
-    {
-      q: "Posso delegare qualcun altro al ritiro?",
-      a: "Sì, è possibile delegare un familiare o altra persona munita di delega e documento di identità valido.",
-    },
-  ];
+export type FAQData = {
+  title?: string;
+  items?: {
+    q?: string;
+    a?: string;
+  }[];
+};
+
+export default function FAQSection({ data }: { data?: FAQData }) {
+  if (!data?.items?.length) return null;
+
+  const sectionTitle = data.title || "Domande Frequenti (FAQ)";
 
   return (
     <section className="mt-12">
@@ -29,7 +23,7 @@ export default function FAQSection() {
           <HelpCircle className="h-5 w-5" aria-hidden="true" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-gray-900">
-          Domande Frequenti (FAQ)
+          {sectionTitle}
         </h2>
       </div>
 
@@ -38,8 +32,8 @@ export default function FAQSection() {
         className="rounded-2xl border border-slate-200 bg-white/80 backdrop-blur-sm
                    shadow-[0_1px_0_#0000000d,0_8px_16px_-8px_rgba(0,0,0,0.15)] divide-y divide-slate-100"
       >
-        {faqs.map((item, index) => (
-          <FaqItem key={index} q={item.q}>
+        {data.items.map((item, index) => (
+          <FaqItem key={index} q={item.q ?? ""}>
             {item.a}
           </FaqItem>
         ))}

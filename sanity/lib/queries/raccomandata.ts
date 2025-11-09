@@ -1,6 +1,5 @@
 import { groq } from "next-sanity";
 
-// 🔹 Un único fetch: HERO + INFOBOX + DETAILS + STEPS + ALERTBOX (todo vive en `raccomandataPage`)
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
@@ -40,15 +39,15 @@ export const RACCOMANDATA_BY_CODE = groq`
       title,
       description
     }
+  },
+
+  // FAQs
+  faq{
+    title,
+    items[]{
+      q,
+      a
+    }
   }
 }
-`;
-
-// 🔹 (Opcional) Conteo de reportes crowd si sigues usando `raccomandataReport`
-export const REPORTS_BY_CODE = groq`
-count(*[
-  _type == "raccomandataReport" &&
-  string(code) == string($code) &&
-  status != "rejected"
-])
 `;

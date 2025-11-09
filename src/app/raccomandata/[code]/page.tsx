@@ -34,6 +34,8 @@ type RaccomandataPageDoc = {
     title?: string;
     cards?: { icon?: string; title?: string; description?: string }[];
   };
+  faq?: { title?: string; items?: { q?: string; a?: string }[] };
+
 } | null;
 
 // Next 15: params es Promise
@@ -109,7 +111,7 @@ export default async function RaccomandataPage(
           <DetailsSection details={page?.details} />
           <AlertBox data={page?.alertBox} />
           <AssistenzaSection data={page?.assistenza} />
-          <FAQSection />
+          <FAQSection data={page?.faq} />
           <AdditionalInfoBanner />
         </div>
       </div>
