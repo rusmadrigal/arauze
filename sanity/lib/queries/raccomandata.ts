@@ -30,6 +30,16 @@ export const RACCOMANDATA_BY_CODE = groq`
     title,
     body,
     icon
+  },
+
+  // ASSISTENZA
+  assistenza{
+    title,
+    cards[]{
+      icon,
+      title,
+      description
+    }
   }
 }
 `;

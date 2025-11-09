@@ -30,6 +30,10 @@ type RaccomandataPageDoc = {
   steps?: { title: string; description: string }[];
   details?: { title: string; body: string }[];
   alertBox?: { enabled?: boolean; title?: string; body?: string; icon?: string };
+  assistenza?: {
+    title?: string;
+    cards?: { icon?: string; title?: string; description?: string }[];
+  };
 } | null;
 
 // Next 15: params es Promise
@@ -96,15 +100,15 @@ export default async function RaccomandataPage(
             mittente={page?.mittente}
             tipologia={page?.tipologia}
             stato={page?.stato}
-            // urgency opcional: si querés derivarla desde `stato`, hazlo aquí
-            // urgency={/ritiro|giacenza/i.test(page?.stato ?? "") ? "ALTA" : "NONE"}
+          // urgency opcional: si querés derivarla desde `stato`, hazlo aquí
+          // urgency={/ritiro|giacenza/i.test(page?.stato ?? "") ? "ALTA" : "NONE"}
           />
 
           <AuthorBox />
           <StepsRaccomandata steps={page?.steps} />
           <DetailsSection details={page?.details} />
           <AlertBox data={page?.alertBox} />
-          <AssistenzaSection />
+          <AssistenzaSection data={page?.assistenza} />
           <FAQSection />
           <AdditionalInfoBanner />
         </div>

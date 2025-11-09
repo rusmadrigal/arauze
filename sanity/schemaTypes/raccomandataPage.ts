@@ -142,6 +142,65 @@ export default defineType({
         }),
       ],
     }),
+
+    // Assistenza e Contatti
+    defineField({
+      name: "assistenza",
+      title: "Assistenza e Contatti Utili",
+      type: "object",
+      fields: [
+        defineField({
+          name: "title",
+          title: "Titolo Sezione",
+          type: "string",
+          initialValue: "Assistenza e Contatti Utili",
+        }),
+        defineField({
+          name: "cards",
+          title: "Schede di Contatto",
+          type: "array",
+          of: [
+            defineField({
+              name: "card",
+              title: "Scheda",
+              type: "object",
+              fields: [
+                defineField({
+                  name: "icon",
+                  title: "Icona (Lucide)",
+                  type: "string",
+                  description: "Esempi: MapPin, Phone, Mail, HelpCircle…",
+                  initialValue: "MapPin",
+                }),
+                defineField({
+                  name: "title",
+                  title: "Titolo",
+                  type: "string",
+                  validation: (r) => r.required(),
+                }),
+                defineField({
+                  name: "description",
+                  title: "Descrizione",
+                  type: "text",
+                  rows: 3,
+                  validation: (r) => r.required(),
+                }),
+              ],
+              preview: {
+                select: { title: "title", subtitle: "description" },
+                prepare({ title, subtitle }) {
+                  return {
+                    title,
+                    subtitle: subtitle ? subtitle.slice(0, 50) + "…" : "",
+                    media: List,
+                  };
+                },
+              },
+            }),
+          ],
+        }),
+      ],
+    }),
   ],
 
   preview: {
