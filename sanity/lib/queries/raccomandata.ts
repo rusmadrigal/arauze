@@ -7,10 +7,8 @@ export const RACCOMANDATA_BY_CODE = groq`
   _type == "raccomandataPage" &&
   string(code) == string($code)
 ][0]{
-  // CLAVE
+  // META/SEO
   code,
-
-  // SEO
   metaTitle,
   metaDescription,
 
@@ -34,18 +32,17 @@ export const RACCOMANDATA_BY_CODE = groq`
   alertBox{ enabled, title, body, icon },
 
   // ASSISTENZA
-  assistenza{
-    title,
-    cards[]{ icon, title, description }
-  },
+  assistenza{ title, cards[]{ icon, title, description } },
 
   // FAQS
-  faq{
-    title,
-    items[]{ q, a }
-  }
+  faq{ title, items[]{ q, a } },
+
+  // FECHAS PARA SCHEMA
+  _createdAt,
+  _updatedAt
 }
 `;
+
 
 
 // (Opcional) Conteo de reportes crowd si sigues usando raccomandataReport
