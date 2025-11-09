@@ -34,6 +34,23 @@ export default defineType({
     defineField({ name: "tipologia", title: "Tipologia", type: "string" }),
     defineField({ name: "stato", title: "Stato", type: "string" }),
 
+    // ===== SEO =====
+    defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+      description: "Título SEO (ideal 50–60, máximo 65 caracteres).",
+      validation: (r) => r.max(65),
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Descripción SEO (ideal 140–155, máximo 160 caracteres).",
+      validation: (r) => r.max(160),
+    }),
+
     // ===== Priorità (para el ping en UI) =====
     defineField({
       name: "priority",

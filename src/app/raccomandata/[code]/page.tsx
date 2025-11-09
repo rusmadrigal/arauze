@@ -19,16 +19,25 @@ import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// ✅ Tipo actualizado (incluye priority)
+// ✅ Tipo actualizado (incluye SEO + priority)
 type Priority = "ALTA" | "MEDIA" | "BASSA";
 type RaccomandataPageDoc = {
   code: string;
+  // SEO
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+
+  // HERO
   heroTitleSuffix?: string;
   heroSubtitle?: string;
+
+  // INFOBOX
   mittente?: string;
   tipologia?: string;
   stato?: string;
-  priority?: Priority; // 👈 nuevo
+  priority?: Priority;
+
+  // SECTIONS
   steps?: { title: string; description: string }[];
   details?: { title: string; body: string }[];
   alertBox?: { enabled?: boolean; title?: string; body?: string; icon?: string };
@@ -52,10 +61,41 @@ export async function generateMetadata(
     { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
   );
 
-  const titleBase = code ? `Raccomandata ${code}` : "Raccomandata";
+  const codice = (page?.code ?? code).trim();
+  const titleBase = codice ? `Raccomandata ${codice}` : "Raccomandata";
+
+  const title =
+    page?.metaTitle && page.metaTitle.trim().length > 0
+      ? page.metaTitle
+      : page?.heroTitleSuffix
+        ? `${titleBase} – ${page.heroTitleSuffix}`
+        : titleBase;
+
+  const description =
+    page?.metaDescription && page.metaDescription.trim().length > 0
+      ? page.metaDescription
+      : page?.heroSubtitle
+        ? page.heroSubtitle
+        : (codice ? `Dettagli per il codice ${codice}` : "Dettagli raccomandata");
+
+  // ✅ Canonical relativo; Next lo hará absoluto usando metadataBase en app/layout.tsx
+  const canonical = `/raccomandata/${codice}`;
+
   return {
-    title: page?.heroTitleSuffix ? `${titleBase} – ${page.heroTitleSuffix}` : titleBase,
-    description: page?.heroSubtitle ?? (code ? `Dettagli per il codice ${code}` : "Dettagli raccomandata"),
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 
@@ -73,7 +113,6 @@ export default async function RaccomandataPage(
 
   if (!page) notFound();
 
-  // Usamos el code del doc si existe; así “Codice” sale del CMS
   const codice = (page?.code ?? code).trim();
 
   return (
@@ -81,21 +120,14 @@ export default async function RaccomandataPage(
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
         <div className="space-y-8 md:space-y-10">
           <TopNav />
-
-          {/* Hero (usa code + hero fields del mismo doc) */}
           <HeroRaccomandata code={codice} pageMeta={page} />
-
-          {/* InfoBox (recibe todo desde el doc unificado) */}
           <InfoBoxRaccomandata
             code={codice}
             mittente={page?.mittente}
             tipologia={page?.tipologia}
             stato={page?.stato}
             priority={page?.priority as Priority | undefined}
-          // Si quisieras forzar urgencia por "stato":
-          // urgency={/ritiro|giacenza/i.test(page?.stato ?? "") ? "ALTA" : "NONE"}
           />
-
           <AuthorBox />
           <StepsRaccomandata steps={page?.steps} />
           <DetailsSection details={page?.details} />

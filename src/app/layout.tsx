@@ -2,14 +2,43 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Footer from "@/components/ui/Footer"; // ✅ Import global footer
+import Footer from "@/components/ui/Footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+// Dominio base (prod) con fallback a localhost en dev
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
+  (process.env.NODE_ENV === "production" ? "https://arauze.com" : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  // Base para construir canónicos absolutos desde rutas relativas
+  metadataBase: new URL(siteUrl),
+
   title: "Arauze.com – Controlla la tua Raccomandata Online",
   description:
     "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+
+  // (Opcional) Defaults útiles para redes
+  openGraph: {
+    siteName: "Arauze.com",
+    type: "website",
+    url: "/",
+    title: "Arauze.com – Controlla la tua Raccomandata Online",
+    description:
+      "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Arauze.com – Controlla la tua Raccomandata Online",
+    description:
+      "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+  },
+  // (Opcional) Robots por defecto
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
