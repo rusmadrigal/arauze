@@ -1,3 +1,4 @@
+// /sanity/schemas/raccomandataPage.ts
 import { defineType, defineField } from "sanity";
 import { List } from "phosphor-react";
 
@@ -32,6 +33,24 @@ export default defineType({
     defineField({ name: "mittente", title: "Mittente", type: "string" }),
     defineField({ name: "tipologia", title: "Tipologia", type: "string" }),
     defineField({ name: "stato", title: "Stato", type: "string" }),
+
+    // ===== Priorità (para el ping en UI) =====
+    defineField({
+      name: "priority",
+      title: "Priorità",
+      type: "string",
+      description: "Define el nivel de urgencia/visibilidad del aviso.",
+      options: {
+        list: [
+          { title: "Alta", value: "ALTA" },   // rojo
+          { title: "Media", value: "MEDIA" }, // naranja
+          { title: "Bassa", value: "BASSA" }, // verde
+        ],
+        layout: "radio",
+      },
+      initialValue: "BASSA",
+      validation: (r) => r.required(),
+    }),
 
     // ===== Steps (Cosa fare) =====
     defineField({
@@ -276,6 +295,17 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: "code", subtitle: "mittente" },
+    select: { title: "code", mittente: "mittente", priority: "priority" },
+    prepare({ title, mittente, priority }) {
+      const tag =
+        priority === "ALTA" ? "🔴 Alta" :
+          priority === "MEDIA" ? "🟠 Media" :
+            priority === "BASSA" ? "🟢 Bassa" :
+              "—";
+      return {
+        title,
+        subtitle: mittente ? `${mittente} · ${tag}` : tag,
+      };
+    },
   },
 });

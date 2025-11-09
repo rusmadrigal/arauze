@@ -19,7 +19,8 @@ import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// ✅ Tipo actualizado
+// ✅ Tipo actualizado (incluye priority)
+type Priority = "ALTA" | "MEDIA" | "BASSA";
 type RaccomandataPageDoc = {
   code: string;
   heroTitleSuffix?: string;
@@ -27,6 +28,7 @@ type RaccomandataPageDoc = {
   mittente?: string;
   tipologia?: string;
   stato?: string;
+  priority?: Priority; // 👈 nuevo
   steps?: { title: string; description: string }[];
   details?: { title: string; body: string }[];
   alertBox?: { enabled?: boolean; title?: string; body?: string; icon?: string };
@@ -35,7 +37,6 @@ type RaccomandataPageDoc = {
     cards?: { icon?: string; title?: string; description?: string }[];
   };
   faq?: { title?: string; items?: { q?: string; a?: string }[] };
-
 } | null;
 
 // Next 15: params es Promise
@@ -48,20 +49,13 @@ export async function generateMetadata(
   const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
-    {
-      cache: "no-store",
-      next: { revalidate: 0, tags: [`raccomandata:${code}`] },
-    }
+    { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
   );
 
   const titleBase = code ? `Raccomandata ${code}` : "Raccomandata";
   return {
-    title: page?.heroTitleSuffix
-      ? `${titleBase} – ${page.heroTitleSuffix}`
-      : titleBase,
-    description:
-      page?.heroSubtitle ??
-      (code ? `Dettagli per il codice ${code}` : "Dettagli raccomandata"),
+    title: page?.heroTitleSuffix ? `${titleBase} – ${page.heroTitleSuffix}` : titleBase,
+    description: page?.heroSubtitle ?? (code ? `Dettagli per il codice ${code}` : "Dettagli raccomandata"),
   };
 }
 
@@ -74,15 +68,10 @@ export default async function RaccomandataPage(
   const page = await sanityClient.fetch<RaccomandataPageDoc>(
     RACCOMANDATA_BY_CODE,
     { code },
-    {
-      cache: "no-store",
-      next: { revalidate: 0, tags: [`raccomandata:${code}`] },
-    }
+    { cache: "no-store", next: { revalidate: 0, tags: [`raccomandata:${code}`] } }
   );
 
-  if (!page) {
-    notFound();
-  }
+  if (!page) notFound();
 
   // Usamos el code del doc si existe; así “Codice” sale del CMS
   const codice = (page?.code ?? code).trim();
@@ -102,7 +91,8 @@ export default async function RaccomandataPage(
             mittente={page?.mittente}
             tipologia={page?.tipologia}
             stato={page?.stato}
-          // urgency opcional: si querés derivarla desde `stato`, hazlo aquí
+            priority={page?.priority as Priority | undefined}
+          // Si quisieras forzar urgencia por "stato":
           // urgency={/ritiro|giacenza/i.test(page?.stato ?? "") ? "ALTA" : "NONE"}
           />
 

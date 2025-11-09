@@ -5,29 +5,60 @@ import React, { useState } from "react";
 import CheckAvvisoModal from "@/components/raccomandata/CheckAvvisoModal";
 import { CheckCircle2 } from "lucide-react";
 
-type Urgency = "ALTA" | "BASSA" | "RITIRATA" | "NONE";
+type Urgency = "ALTA" | "MEDIA" | "BASSA" | "NONE";
 
 interface Props {
   code?: string;
   mittente?: string;
   tipologia?: string;
   stato?: string;
-  urgency?: Urgency;
+  urgency?: Urgency; // ← seguirá funcionando si ya la usabas
+  priority?: Urgency; // ← preferimos esta si viene de Sanity
 }
 
-/**
- * ✅ InfoBoxRaccomandata
- * Muestra la información principal (mittente, tipologia, stato)
- * proveniente del documento `raccomandataPage` en Sanity.
- */
+const PRIORITY_STYLES: Record<
+  Exclude<Urgency, "NONE">,
+  { ping: string; dot: string; badge: string }
+> = {
+  ALTA: {
+    ping: "bg-rose-500",
+    dot: "bg-rose-600",
+    badge: "bg-white/10 text-white ring-white/30",
+  },
+  MEDIA: {
+    ping: "bg-orange-500",
+    dot: "bg-orange-600",
+    badge: "bg-white/10 text-white/90 ring-white/20",
+  },
+  BASSA: {
+    ping: "bg-emerald-500",
+    dot: "bg-emerald-600",
+    badge: "bg-white/10 text-white/80 ring-white/20",
+  },
+};
+
+function PingDot({ level }: { level: Exclude<Urgency, "NONE"> }) {
+  const styles = PRIORITY_STYLES[level];
+  return (
+    <span className="relative inline-flex h-3.5 w-3.5 items-center justify-center" aria-hidden="true">
+      <span className={`absolute inline-flex h-3.5 w-3.5 rounded-full opacity-60 animate-ping ${styles.ping}`} />
+      <span className={`relative inline-flex h-3.5 w-3.5 rounded-full ${styles.dot}`} />
+    </span>
+  );
+}
+
 export default function InfoBoxRaccomandata({
   code = "697",
   mittente = "Agenzia delle Entrate (probabile)",
   tipologia = "Raccomandata Market",
   stato = "In attesa di ritiro",
   urgency = "NONE",
+  priority, // ← viene de Sanity
 }: Props) {
   const [openCheck, setOpenCheck] = useState(false);
+
+  // Preferimos `priority` (Sanity). Si no viene, cae a `urgency` legacy.
+  const level: Urgency = priority ?? urgency ?? "NONE";
 
   const keyInfo = [
     { label: "Codice", value: code },
@@ -36,15 +67,17 @@ export default function InfoBoxRaccomandata({
     { label: "Stato", value: stato },
   ];
 
-  const isUrgent = urgency === "ALTA";
-  const urgencyLabel =
-    urgency === "ALTA"
-      ? "Urgenza Alta"
-      : urgency === "BASSA"
-      ? "Urgenza Bassa"
-      : urgency === "RITIRATA"
-      ? "Ritirata"
-      : null;
+  const priorityLabel =
+    level === "ALTA" ? "Urgenza Alta" :
+      level === "MEDIA" ? "Urgenza Media" :
+        level === "BASSA" ? "Urgenza Bassa" :
+          null;
+
+  // Badge styles según nivel
+  const badgeClass =
+    level !== "NONE"
+      ? PRIORITY_STYLES[(level as Exclude<Urgency, "NONE">)].badge
+      : "bg-white/10 text-white/80 ring-white/20";
 
   return (
     <section className="text-sm">
@@ -59,28 +92,14 @@ export default function InfoBoxRaccomandata({
           <CheckCircle2 className="h-20 w-20 text-white" aria-hidden="true" />
         </div>
 
-        {/* Indicador de urgencia */}
-        {urgencyLabel && (
+        {/* Indicador de prioridad */}
+        {priorityLabel && (
           <div className="absolute right-4 top-4 flex items-center gap-2">
-            {isUrgent && (
-              <span
-                className="relative inline-flex h-3 w-3 items-center justify-center"
-                aria-hidden="true"
-              >
-                <span className="absolute inline-flex h-3 w-3 rounded-full bg-rose-500 opacity-60 animate-ping" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-rose-600" />
-              </span>
-            )}
+            <PingDot level={level as Exclude<Urgency, "NONE">} />
             <span
-              className={`rounded-md px-2 py-1 text-[11px] font-semibold ring-1 ring-inset ${
-                urgency === "ALTA"
-                  ? "bg-white/10 text-white ring-white/30"
-                  : urgency === "BASSA"
-                  ? "bg-white/10 text-white/90 ring-white/20"
-                  : "bg-white/10 text-white/80 ring-white/20"
-              }`}
+              className={`rounded-md px-2 py-1 text-[11px] font-semibold ring-1 ring-inset ${badgeClass}`}
             >
-              {urgencyLabel}
+              {priorityLabel}
             </span>
           </div>
         )}

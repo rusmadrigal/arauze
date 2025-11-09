@@ -1,3 +1,4 @@
+// /sanity/lib/queries/raccomandata.ts
 import { groq } from "next-sanity";
 
 export const RACCOMANDATA_BY_CODE = groq`
@@ -5,7 +6,7 @@ export const RACCOMANDATA_BY_CODE = groq`
   _type == "raccomandataPage" &&
   string(code) == string($code)
 ][0]{
-  // Clave
+  // CLAVE
   code,
 
   // HERO
@@ -16,12 +17,19 @@ export const RACCOMANDATA_BY_CODE = groq`
   mittente,
   tipologia,
   stato,
+  priority,
 
   // DETAILS
-  details[]{ title, body },
+  details[]{ 
+    title, 
+    body 
+  },
 
   // STEPS
-  steps[]{ title, description },
+  steps[]{ 
+    title, 
+    description 
+  },
 
   // ALERT BOX
   alertBox{
@@ -41,7 +49,7 @@ export const RACCOMANDATA_BY_CODE = groq`
     }
   },
 
-  // FAQs
+  // FAQS
   faq{
     title,
     items[]{
