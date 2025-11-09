@@ -3,7 +3,6 @@
 import React from "react";
 import Script from "next/script";
 
-// ——— Tipos de datos que trae tu página desde Sanity ———
 type Step = { title?: string | null; description?: string | null };
 type FAQItem = { q?: string | null; a?: string | null };
 type FAQBlock = { items?: (FAQItem | null)[] | null };
@@ -25,17 +24,15 @@ export type RaccomandataPage = {
 
 type Props = {
   page: RaccomandataPage | null | undefined;
-  code: string; // parámetro dinámico del route
-  scriptId?: string; // opcional para controlar el id del <Script>
+  code: string;
+  scriptId?: string;
 };
 
-// ——— Helpers ———
 const clean = (v?: string | null) => (v ?? "").trim();
 const hasText = (v?: string | null) => clean(v).length > 0;
 const arr = <T,>(v: (T | null | undefined)[] | null | undefined): T[] =>
   Array.isArray(v) ? (v.filter(Boolean) as T[]) : [];
 
-// Mantiene exactamente tu lógica para siteUrl
 function getSiteUrl(): string {
   return (
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
@@ -61,11 +58,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
   // HowTo
   const howToSteps = arr<Step>(page?.steps)
     .filter((s) => hasText(s?.title) || hasText(s?.description))
-    .map((s) => ({
-      "@type": "HowToStep",
-      name: clean(s?.title),
-      text: clean(s?.description),
-    }));
+    .map((s) => ({ "@type": "HowToStep", name: clean(s?.title), text: clean(s?.description) }));
 
   // FAQ
   const faqEntities = arr<FAQItem>(page?.faq?.items)
@@ -86,22 +79,14 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
           itemListElement: details.map((d, idx) => ({
             "@type": "ListItem",
             position: idx + 1,
-            item: {
-              "@type": "WebPageElement",
-              name: clean(d?.title),
-              text: clean(d?.body),
-            },
+            item: { "@type": "WebPageElement", name: clean(d?.title), text: clean(d?.body) },
           })),
         }
       : undefined;
 
-  // About del WebApplication
-  const about = [
-    {
-      "@type": "DefinedTerm",
-      name: `Raccomandata ${code}`,
-      termCode: code,
-    },
+  // Términos relacionados al CONTENIDO (los movemos al WebPage.about)
+  const pageDefinedTerms = [
+    { "@type": "DefinedTerm", name: `Raccomandata ${code}`, termCode: code },
     hasText(page?.mittente)
       ? {
           "@type": "DefinedTerm",
@@ -111,27 +96,16 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       : null,
   ].filter(Boolean);
 
-  // hasPart condicional (HowTo, FAQ, Details)
   const parts = [
     howToSteps.length
-      ? {
-          "@type": "HowTo",
-          "@id": `${pageUrl}#howto`,
-          name: `Cosa fare con la raccomandata ${code}`,
-          step: howToSteps,
-        }
+      ? { "@type": "HowTo", "@id": `${pageUrl}#howto`, name: `Cosa fare con la raccomandata ${code}`, step: howToSteps }
       : null,
-    faqEntities.length
-      ? {
-          "@type": "FAQPage",
-          "@id": `${pageUrl}#faq`,
-          mainEntity: faqEntities,
-        }
-      : null,
+    faqEntities.length ? { "@type": "FAQPage", "@id": `${pageUrl}#faq`, mainEntity: faqEntities } : null,
     detailsList ?? null,
   ].filter(Boolean);
 
-  const jsonLd = {
+  // 1) WebPage (con ABOUT aquí)
+  const webPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "@id": `${pageUrl}#webpage`,
@@ -143,7 +117,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     isPartOf: { "@id": `${siteUrl}#website` },
     ...(hasText(page?._createdAt) ? { datePublished: clean(page?._createdAt) } : {}),
     ...(hasText(page?._updatedAt) ? { dateModified: clean(page?._updatedAt) } : {}),
-
+    about: pageDefinedTerms, // 👈 ahora el about vive en WebPage (CreativeWork)
     mainEntity: {
       "@type": "WebApplication",
       "@id": `${pageUrl}#app`,
@@ -152,53 +126,50 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web",
       url: pageUrl,
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "EUR",
-        availability: "https://schema.org/InStock",
-      },
-      provider: { "@type": "Organization", "@id": `${siteUrl}#organization` },
-      about,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", availability: "https://schema.org/InStock" },
+      // Referencia limpia al Organization
+      provider: { "@id": `${siteUrl}#org` },
     },
-
     ...(parts.length ? { hasPart: parts } : {}),
-
-    // ✅ Breadcrumb como objetos con @id y name
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      "@id": `${pageUrl}#breadcrumb`,
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          item: { "@id": `${siteUrl}/`, name: "Home" },
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          item: { "@id": `${siteUrl}/raccomandata`, name: "Raccomandata" },
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          item: { "@id": pageUrl, name: `Codice ${code}` },
-        },
-      ],
-    },
   } as const;
 
-  return jsonLd;
+  // 2) BreadcrumbList
+  const breadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${pageUrl}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 2, name: "Raccomandata", item: `${siteUrl}/raccomandata` },
+      { "@type": "ListItem", position: 3, name: `Codice ${code}`, item: pageUrl },
+    ],
+  } as const;
+
+  // 3) Organization raíz con NUEVO @id (#org) y SIN 'about'
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteUrl}#org`,
+    name: "Arauze",
+    url: siteUrl,
+    // logo: `${siteUrl}/logo.png`,
+  } as const;
+
+  return [webPage, breadcrumbList, organization] as const;
 }
 
-// ——— Componente SEOJsonLd ———
 function SEOJsonLd({ page, code, scriptId = "raccomandata-jsonld" }: Props) {
   const data = buildJsonLd(page, code);
   return (
     <Script
       id={scriptId}
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{
+        __html:
+          process.env.NODE_ENV === "development"
+            ? JSON.stringify(data, null, 2)
+            : JSON.stringify(data),
+      }}
     />
   );
 }
