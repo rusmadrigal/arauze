@@ -115,9 +115,8 @@ textarea::placeholder {
 }
 
 /* Drak mode styles */
-/* globals.css */
 :root {
-  --surface: #ffffff;
+  --surface: #f4f3f2;
   --text: #0f172a;
 }
 

@@ -15,7 +15,7 @@ const config: Config = {
           600: "#2552AD",
           700: "#1D3E82",
         },
-        surface: "#F5F7FA",
+        surface: "#070a0eff",
       },
       boxShadow: {
         card: "0 6px 20px rgba(16,24,40,.08)",

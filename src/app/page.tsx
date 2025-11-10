@@ -1,16 +1,4 @@
 "use client";
-/**
- * This component intentionally runs on the client because:
- * - It defines local React state (useState) in the same file (FaqItem).
- * - It may include client-only UI behaviors later (e.g., router navigation).
- *
- * NOTE: We keep every import and internal component as requested.
- * Minor safe optimizations:
- *  - Added lightweight accessibility attributes.
- *  - Added harmless "void" references to avoid TS/ESLint unused-variable warnings
- *    without removing variables (keeps future extensibility).
- *  - Added small type aliases and defensive mappings for readability and safety.
- */
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";

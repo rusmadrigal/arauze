@@ -68,7 +68,7 @@ export default function RootLayout({
         {/* Script para aplicar el tema antes de la carga visual */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="bg-surface text-gray-900 dark:text-gray-100 flex flex-col min-h-dvh transition-colors duration-200">
+      <body className="bg-surface text-gray-900 dark:text-gray-600 flex flex-col min-h-dvh transition-colors duration-200">
         {/* Contenido principal */}
         <main className="flex-1 py-8">{children}</main>
 
