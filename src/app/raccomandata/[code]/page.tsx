@@ -54,6 +54,7 @@ type RaccomandataPageDoc = {
     cards?: { icon?: string | null; title?: string | null; description?: string | null }[] | null;
   } | null;
   faq?: { title?: string | null; items?: FAQItemDoc[] | null } | null;
+  authorBox?: { name?: string; avatarUrl?: string; updatedAt?: string };
 
   _createdAt?: string | null;
   _updatedAt?: string | null;
@@ -234,7 +235,7 @@ export default async function RaccomandataPage(
             stato={page.stato ?? undefined}
             priority={page.priority ?? undefined}
           />
-          <AuthorBox />
+          <AuthorBox data={page?.authorBox} />
           <StepsRaccomandata steps={uiSteps} />
           <DetailsSection details={uiDetails} />
           <AlertBox data={page.alertBox ?? undefined} />

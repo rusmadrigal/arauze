@@ -254,6 +254,39 @@ export default defineType({
       ],
     }),
 
+    defineField({
+      name: "authorBox",
+      title: "Author Box",
+      type: "object",
+      options: { collapsible: true, collapsed: true },
+      fields: [
+        defineField({
+          name: "name",
+          title: "Nombre del autor",
+          type: "string",
+          validation: (r) => r.required().max(80),
+          initialValue: "Lorenzo Sposti",
+        }),
+        defineField({
+          name: "avatarUrl",
+          title: "Avatar URL (Next/Image)",
+          type: "url",
+          description: "URL absoluta o ruta pública (p.ej. /images/author.jpg).",
+          validation: (r) => r.uri({ allowRelative: true }),
+          initialValue: "/images/author.jpg",
+        }),
+        defineField({
+          name: "updatedAt",
+          title: "Fecha de actualización",
+          type: "datetime",
+          description: "Se mostrará como 'Aggiornato il …' en it-IT.",
+          validation: (r) => r.required(),
+          initialValue: () => new Date().toISOString(),
+        }),
+      ],
+    }),
+
+
     // ===== FAQ =====
     defineField({
       name: "faq",

@@ -37,6 +37,13 @@ export const RACCOMANDATA_BY_CODE = groq`
   // FAQS
   faq{ title, items[]{ q, a } },
 
+  // AUTHOR BOX
+  authorBox{
+    name,
+    avatarUrl,
+    updatedAt
+  },
+
   // FECHAS PARA SCHEMA
   _createdAt,
   _updatedAt
