@@ -113,3 +113,18 @@ textarea::placeholder {
   color: #9ca3af; /* gris medio */
   opacity: 1; /* asegura visibilidad en Safari */
 }
+
+/* Drak mode styles */
+/* globals.css */
+:root {
+  --surface: #ffffff;
+  --text: #0f172a;
+}
+
+.dark {
+  --surface: #0b1220;
+  --text: #e5e7eb;
+}
+
+.bg-surface { background-color: var(--surface); }
+.text-default { color: var(--text); }
