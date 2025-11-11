@@ -1,7 +1,7 @@
 // /sanity/lib/queries/raccomandata.ts
 import { groq } from "next-sanity";
 
-// ✅ Query completa para renderizar la página /raccomandata/[code]
+// ✅ Query de detalle por código (ya existente)
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
@@ -50,13 +50,26 @@ export const RACCOMANDATA_BY_CODE = groq`
 }
 `;
 
-
-
-// (Opcional) Conteo de reportes crowd si sigues usando raccomandataReport
+// (Opcional) Conteo de reportes crowd (ya existente)
 export const REPORTS_BY_CODE = groq`
 count(*[
   _type == "raccomandataReport" &&
   string(code) == string($code) &&
   status != "rejected"
 ])
+`;
+
+// ✅ NUEVO: últimas páginas analizadas para la tabla del home
+// Campos que necesitas en la UI: code (#573), mittente (AGENZIA DEI…), priority (ALTA|BASSA|RITIRATA)
+// El texto "Dettaglio →" lo armamos en Next.js, y el href = /raccomandata/${code}
+export const ULTIME_ANALIZZATE_PAGES = groq`
+*[
+  _type == "raccomandataPage" && defined(code) && defined(mittente)
+]
+| order(coalesce(authorBox.updatedAt, _updatedAt) desc)[0...6]{
+  "code": string(code),
+  "sender": mittente,
+  "urgency": priority,
+  "state": stato
+}
 `;

@@ -1,41 +1,75 @@
+// src/app/components/home/UltimeAnalizzate.tsx
 import React from "react";
+import { ArrowRight } from "lucide-react";
 
-type Urgency = "ALTA" | "BASSA" | "RITIRATA";
+export type Urgency = "ALTA" | "BASSA" | "RITIRATA";
 
 export type RaccomandataItem = {
   code: string;
   sender: string;
   urgency: Urgency;
-};
-
-type Props = {
-  items: RaccomandataItem[];
-  title?: string;
+  /** Texto opcional para la 3ra columna (p.ej. "Dettaglio →") */
+  state?: string;
+  /** URL opcional para el CTA de detalle */
+  href?: string;
 };
 
 export default function UltimeRaccomandateAnalizzate({
   items,
-  title = "Ultime Raccomandate Analizzate",
-}: Props) {
+}: {
+  items: RaccomandataItem[];
+}) {
   return (
     <section className="mt-10">
-      <h3 className="text-base font-semibold mb-3">{title}</h3>
-
-      {/* Quitar borde exterior y mantener estructura */}
-      <div className="overflow-hidden rounded-xl shadow-sm">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600">
+      <h3 className="text-lg font-semibold mb-4">Ultime Raccomandate Analizzate</h3>
+      <div className="overflow-hidden rounded-xl border border-gray-200">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50">
             <tr>
-              <Th>Regumatlada</Th>
-              <Th>Urgenza</Th>
-              <Th>{null}</Th>
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">Raccomandata</th>
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">Urgenza</th>
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide"> </th>
+              <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide"> </th>
             </tr>
           </thead>
-
-          {/* Líneas internas en gris claro */}
-          <tbody className="divide-y divide-gray-200">
+          <tbody>
             {items.map((it, i) => (
-              <Row key={`${it.code}-${i}`} item={it} index={i} />
+              <tr key={i} className="hover:bg-gray-50/70">
+                <td className="px-4 py-3">
+                  <div className="font-semibold text-base leading-tight">#{it.code}</div>
+                  <div className="text-xs text-gray-500">{it.sender}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <Badge tone={it.urgency}>{it.urgency}</Badge>
+                </td>
+                <td className="px-4 py-3 font-semibold">
+                  {it.href ? (
+                    <a href={it.href} className="text-[#2F66D5] hover:underline">
+                      {it.state ?? "Dettaglio →"}
+                    </a>
+                  ) : (
+                    it.state ?? "Dettaglio →"
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right">
+                  {it.href ? (
+                    <a
+                      href={it.href}
+                      className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
+                      aria-label={`Vedi dettagli per ${it.code}`}
+                    >
+                      <span className="text-sm font-medium">{it.state ?? "Dettaglio"}</span>
+                      <ArrowRight
+                        className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                        strokeWidth={2.2}
+                      />
+                    </a>
+                  ) : (
+                    <span className="text-gray-400">{it.state ?? "—"}</span>
+                  )}
+                </td>
+
+              </tr>
             ))}
           </tbody>
         </table>
@@ -44,95 +78,22 @@ export default function UltimeRaccomandateAnalizzate({
   );
 }
 
-/* ---------- Subcomponents ---------- */
-
-function Th({ children }: { children: React.ReactNode }) {
-  return <th className="px-4 py-3 font-medium">{children}</th>;
-}
-
-function Td({ children }: { children: React.ReactNode }) {
-  return <td className="px-4 py-3 align-middle">{children}</td>;
-}
-
-function Row({ item, index }: { item: RaccomandataItem; index: number }) {
-  const { code, sender, urgency } = item;
-
+function Badge({
+  tone,
+  children,
+}: {
+  tone: Urgency;
+  children: React.ReactNode;
+}) {
+  const map: Record<Urgency, string> = {
+    ALTA: "bg-rose-100 text-rose-700",
+    BASSA: "bg-amber-100 text-amber-700",
+    RITIRATA: "bg-emerald-100 text-emerald-700",
+  };
+  const urgencyClass = map[tone] ?? "bg-gray-100 text-gray-700";
   return (
-    <tr className="hover:bg-gray-50 transition-colors">
-      <Td>
-        <div className="flex items-center gap-2">
-          <span className="font-medium tabular-nums">#{code}</span>
-          <span className="text-gray-500">{sender}</span>
-        </div>
-      </Td>
-
-      <Td>
-        <UrgencyBadge urgency={urgency} index={index} />
-      </Td>
-
-      <Td>
-        <button
-          type="button"
-          className="text-blue-600 hover:text-blue-700 font-medium"
-          aria-label="Apri dettaglio"
-        >
-          Dettaglio →
-        </button>
-      </Td>
-    </tr>
-  );
-}
-
-/**
- * UrgencyBadge
- * - ALTA: rojo con pulso y latencia escalonada
- * - BASSA: verde suave
- * - RITIRATA: gris
- */
-function UrgencyBadge({ urgency, index }: { urgency: Urgency; index: number }) {
-  const map = {
-    ALTA: {
-      bg: "bg-red-100",
-      dot: "bg-red-500",
-      text: "text-red-700",
-      ring: "bg-red-400",
-      delayMs: index * 180,
-    },
-    BASSA: {
-      bg: "bg-emerald-100",
-      dot: "bg-emerald-500",
-      text: "text-emerald-700",
-      ring: "bg-emerald-400",
-      delayMs: 0,
-    },
-    RITIRATA: {
-      bg: "bg-gray-100",
-      dot: "bg-gray-400",
-      text: "text-gray-700",
-      ring: "bg-gray-300",
-      delayMs: 0,
-    },
-  } as const;
-
-  const cfg = map[urgency];
-
-  return (
-    <span
-      className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full ${cfg.bg} ${cfg.text} relative`}
-    >
-      <span className="relative flex h-2.5 w-2.5">
-        {urgency === "ALTA" && (
-          <span
-            className={`absolute inline-flex h-full w-full rounded-full ${cfg.ring} opacity-75 motion-safe:animate-ping`}
-            style={{ animationDelay: `${cfg.delayMs}ms` }}
-            aria-hidden
-          />
-        )}
-        <span
-          className={`relative inline-flex h-2.5 w-2.5 rounded-full ${cfg.dot}`}
-        />
-      </span>
-      <span className="font-medium">{urgency}</span>
+    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}>
+      {children}
     </span>
   );
 }

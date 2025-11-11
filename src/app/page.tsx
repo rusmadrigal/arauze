@@ -6,7 +6,8 @@ import HeroHeader from "../components/home/HeroHeader";
 import TopNav from "../components/ui/TopNav";
 import SearchForm from "../components/home/SearchForm";
 import ComeFunziona from "../components/home/ComeFunziona";
-import UltimeRaccomandateAnalizzate from "../components/home/UltimeAnalizzate";
+// ⬇️ reemplazo: usamos el contenedor dinámico
+import UltimeAnalizzateDynamic from "../components/home/UltimeAnalizzateDynamic";
 import TextBlockHome from "../components/home/TextBlockHome";
 import FaqsHome from "../components/home/FaqsHome";
 import NewsletterCTA from "../components/ui/NewsletterCTA";
@@ -38,26 +39,8 @@ export default function HomePage() {
         {/* How it works */}
         <ComeFunziona />
 
-        {/* Latest analyzed raccomandate (static sample data preserved) */}
-        <UltimeRaccomandateAnalizzate
-          items={[
-            {
-              code: "573",
-              sender: "AGENZIA DEI…",
-              urgency: "ALTA" as Urgency,
-            },
-            {
-              code: "573",
-              sender: "AGENZIA DEI…",
-              urgency: "BASSA" as Urgency,
-            },
-            {
-              code: "573",
-              sender: "AGENZIA DEI…",
-              urgency: "RITIRATA" as Urgency,
-            },
-          ]}
-        />
+        {/* Latest analyzed raccomandate (dinámico desde Sanity) */}
+        <UltimeAnalizzateDynamic />
 
         {/* Informational block */}
         <TextBlockHome />
