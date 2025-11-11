@@ -26,31 +26,32 @@ export default function UltimeRaccomandateAnalizzate({
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">Raccomandata</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">Urgenza</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide"> </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide"> </th>
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                Raccomandata
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                Urgenza
+              </th>
+              <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide">
+                Azione
+              </th>
             </tr>
           </thead>
           <tbody>
             {items.map((it, i) => (
-              <tr key={i} className="hover:bg-gray-50/70">
+              <tr key={i} className="hover:bg-gray-50/70 transition">
+                {/* Columna 1: código + mittente */}
                 <td className="px-4 py-3">
                   <div className="font-semibold text-base leading-tight">#{it.code}</div>
                   <div className="text-xs text-gray-500">{it.sender}</div>
                 </td>
+
+                {/* Columna 2: nivel de urgencia */}
                 <td className="px-4 py-3">
                   <Badge tone={it.urgency}>{it.urgency}</Badge>
                 </td>
-                <td className="px-4 py-3 font-semibold">
-                  {it.href ? (
-                    <a href={it.href} className="text-[#2F66D5] hover:underline">
-                      {it.state ?? "Dettaglio →"}
-                    </a>
-                  ) : (
-                    it.state ?? "Dettaglio →"
-                  )}
-                </td>
+
+                {/* Columna 3: acción (Dettaglio → con flecha animada) */}
                 <td className="px-4 py-3 text-right">
                   {it.href ? (
                     <a
@@ -58,17 +59,18 @@ export default function UltimeRaccomandateAnalizzate({
                       className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
                       aria-label={`Vedi dettagli per ${it.code}`}
                     >
-                      <span className="text-sm font-medium">{it.state ?? "Dettaglio"}</span>
+                      <span className="text-sm font-medium">
+                        {it.state ? "Dettaglio →" : "Dettaglio"}
+                      </span>
                       <ArrowRight
                         className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
                         strokeWidth={2.2}
                       />
                     </a>
                   ) : (
-                    <span className="text-gray-400">{it.state ?? "—"}</span>
+                    <span className="text-gray-400">›</span>
                   )}
                 </td>
-
               </tr>
             ))}
           </tbody>
@@ -78,6 +80,7 @@ export default function UltimeRaccomandateAnalizzate({
   );
 }
 
+/* ---------- Badge ---------- */
 function Badge({
   tone,
   children,
@@ -91,8 +94,11 @@ function Badge({
     RITIRATA: "bg-emerald-100 text-emerald-700",
   };
   const urgencyClass = map[tone] ?? "bg-gray-100 text-gray-700";
+
   return (
-    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}>
+    <span
+      className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}
+    >
       {children}
     </span>
   );
