@@ -60,7 +60,7 @@ export default function UltimeRaccomandateAnalizzate({
                       aria-label={`Vedi dettagli per ${it.code}`}
                     >
                       <span className="text-sm font-medium">
-                        {it.state ? "Dettaglio →" : "Dettaglio"}
+                        {it.state ? "Dettaglio" : "Dettaglio"}
                       </span>
                       <ArrowRight
                         className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
