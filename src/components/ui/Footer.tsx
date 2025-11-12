@@ -47,10 +47,10 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/chi-siamo"
+                                    href="/termini"
                                     className="text-slate-600 hover:text-[#2552AD] transition"
                                 >
-                                    Chi Siamo
+                                    Termini
                                 </Link>
                             </li>
                             <li>
