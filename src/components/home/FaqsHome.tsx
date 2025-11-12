@@ -1,4 +1,3 @@
-// src/components/home/FaqsHome.tsx
 import React from "react";
 
 type FaqItemProps = {
@@ -6,78 +5,52 @@ type FaqItemProps = {
   children: React.ReactNode;
 };
 
+function FaqItem({ q, children }: FaqItemProps) {
+  // sin useState para que sea Server Component compatible
+  return (
+    <details className="group border-b border-gray-100 last:border-0">
+      <summary className="list-none cursor-pointer select-none px-5 py-4 flex items-center justify-between">
+        <span className="font-medium text-gray-800">{q}</span>
+        <span
+          className="text-gray-400 group-open:rotate-180 transition-transform"
+          aria-hidden="true"
+        >
+          ⌄
+        </span>
+      </summary>
+      <div className="px-5 pb-4 text-gray-600 text-sm leading-relaxed">
+        {children}
+      </div>
+    </details>
+  );
+}
+
 export default function FaqsHome() {
   return (
     <section className="mt-10">
-      <h3 className="text-xl font-semibold mb-3">
-        Hai ricevuto una raccomandata? Scoprilo ora.
-      </h3>
+      <h2 className="text-xl font-semibold mb-4 px-5">Domande frequenti</h2>
+      <div className="divide-y divide-gray-100 rounded-xl border border-gray-100 bg-white">
+        <FaqItem q="Cos’è Arauze.com?">
+          Arauze è una piattaforma che ti aiuta a capire chi ti ha inviato una
+          raccomandata o una comunicazione importante, semplicemente inserendo
+          il codice presente sull’avviso.
+        </FaqItem>
 
-      {/* Sin borde, sombra suave y divisores gris claro */}
-      <div className="rounded-xl shadow-sm overflow-hidden">
-        <ul className="divide-y divide-gray-200">
-          <li>
-            <FaqItem q="Come capire ima raccomandata? 3">
-              Testo di esempio per la risposta.
-            </FaqItem>
-          </li>
-          <li>
-            <FaqItem q="Cosa significa raccomandata market 573?">
-              Testo di esempio per la risposta.
-            </FaqItem>
-          </li>
-          <li>
-            <FaqItem q="Come ritirare una raccomandata?">
-              Testo di esempio per la risposta.
-            </FaqItem>
-          </li>
-        </ul>
+        <FaqItem q="Devo registrarmi per usare il servizio?">
+          No, non è richiesta alcuna registrazione. Tutte le ricerche sono
+          gratuite e immediate.
+        </FaqItem>
+
+        <FaqItem q="I dati inseriti vengono salvati?">
+          No, Arauze non memorizza né condivide i codici o le informazioni
+          inserite dagli utenti.
+        </FaqItem>
+
+        <FaqItem q="Cosa significa 'Urgenza alta' o 'bassa'?">
+          Si tratta di un’indicazione generata automaticamente in base al tipo
+          di mittente e al contenuto della comunicazione.
+        </FaqItem>
       </div>
     </section>
-  );
-}
-
-/* ---------- Subcomponent: FaqItem (accordion) ---------- */
-
-function FaqItem({ q, children }: FaqItemProps) {
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-3 px-4 py-4 text-left hover:bg-gray-50 transition-colors"
-        aria-expanded={open}
-      >
-        <span className="font-medium">{q}</span>
-        <Chevron open={open} />
-      </button>
-
-      {open && (
-        <div className="px-4 pb-4 text-gray-600">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      className={`h-5 w-5 text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
-      viewBox="0 0 20 20"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M6 8l4 4 4-4"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
