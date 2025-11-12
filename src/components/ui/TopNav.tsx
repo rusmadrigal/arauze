@@ -15,7 +15,7 @@ export default function TopNav() {
   const [open, setOpen] = useState(false);
 
   const navItems = [
-    { label: "Privacy", href: "/privacy" },
+    { label: "Market", href: "/raccomandata-market" },
     { label: "Termini", href: "/termini" },
     { label: "Contatti", href: "/contatti" },
   ];
