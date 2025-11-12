@@ -8,12 +8,6 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!;
 const token = process.env.SANITY_WRITE_TOKEN!;
 
-// ✅ Log de verificación en consola
-console.log("=== ENV CHECK ===");
-console.log("Project ID:", projectId);
-console.log("Dataset:", dataset);
-console.log("Token presente:", !!token);
-
 // ⚙️ Cliente Sanity con permisos de escritura
 const writeClient = createClient({
   projectId,

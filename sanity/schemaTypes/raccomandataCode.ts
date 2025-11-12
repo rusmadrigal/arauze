@@ -13,6 +13,7 @@ export default defineType({
       validation: (r) =>
         r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
     }),
+
     defineField({
       name: "mittente",
       title: "Mittente",
@@ -20,6 +21,7 @@ export default defineType({
       initialValue: "Agenzia delle Entrate (probabile)",
       validation: (r) => r.required(),
     }),
+
     defineField({
       name: "tipologia",
       title: "Tipologia",
@@ -27,6 +29,7 @@ export default defineType({
       initialValue: "Raccomandata Market",
       validation: (r) => r.required(),
     }),
+
     defineField({
       name: "stato",
       title: "Stato",
@@ -35,20 +38,63 @@ export default defineType({
       validation: (r) => r.required(),
     }),
 
-    // 🆕 NUEVO: conteo total de reportes (usado por /api/check-codice)
+    defineField({
+      name: "confidence",
+      title: "Confidence (0–10)",
+      type: "number",
+      description:
+        "Livello di attendibilità stimato per le informazioni di questo codice (0 = bassa, 10 = massima).",
+      validation: (r) => r.min(0).max(10),
+    }),
+
     defineField({
       name: "reportsCount",
       title: "Numero di Segnalazioni",
       type: "number",
-      description: "Conteggio totale delle segnalazioni ricevute per questo codice.",
+      description:
+        "Conteggio totale delle segnalazioni ricevute per questo codice.",
       initialValue: 0,
-      validation: (Rule) => Rule.min(0),
+      validation: (r) => r.min(0),
+    }),
+
+    defineField({
+      name: "sources",
+      title: "Fonti / Sources",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Titolo", type: "string" }),
+            defineField({ name: "url", title: "URL", type: "url" }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "url" },
+          },
+        },
+      ],
+      description: "Link alle fonti ufficiali o ai riferimenti pubblici.",
+    }),
+
+    defineField({
+      name: "updatedAt",
+      title: "Ultimo Aggiornamento Manuale",
+      type: "datetime",
+      description:
+        "Data in cui questo record è stato aggiornato manualmente.",
     }),
   ],
+
   preview: {
-    select: { title: "code", subtitle: "mittente" },
+    select: {
+      title: "code",
+      subtitle: "mittente",
+    },
     prepare({ title, subtitle }) {
-      return { title, subtitle: subtitle || "—" };
+      return {
+        title,
+        subtitle: subtitle || "—",
+      };
     },
   },
 });

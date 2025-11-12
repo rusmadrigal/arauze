@@ -23,9 +23,6 @@ export async function GET(req: Request) {
       }[];
     }>(REPORTS_SERIES_BY_CODE, { code }, { cache: "no-store" });
 
-    // Log para el server
-    console.log("🧠 points from Sanity:", res?.points);
-
     // Normalización + agregación por día
     const perDay = new Map<string, number>();
     for (const p of res.points ?? []) {

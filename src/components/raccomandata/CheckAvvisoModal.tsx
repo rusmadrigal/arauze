@@ -4,6 +4,8 @@ import Modal from "@/components/ui/Modal";
 import ReportAvvisoModal from "@/components/raccomandata/ReportAvvisoModal";
 
 // Tipos de respuesta del endpoint
+type LinkObj = { title?: string; url?: string };
+
 type OfficialFound = {
   ok: true;
   found: true;
@@ -11,10 +13,14 @@ type OfficialFound = {
   mittente: string;
   tipologia: string;
   stato: string;
-  confidence?: number;
+  confidence?: number | string | null;
+  score?: number | string | null;
   reportsCount?: number;
-  sources?: string[];
-  updatedAt?: string;
+  sources?: Array<string | LinkObj> | string | null;
+  fonti?: Array<string | LinkObj> | string | null;
+  links?: Array<string | LinkObj> | string | null;
+  updatedAt?: string | null;
+  _updatedAt?: string;
 };
 
 type OfficialNotFound = {
@@ -32,6 +38,67 @@ type ErrorResponse = {
 
 type CheckResponse = OfficialFound | OfficialNotFound | ErrorResponse;
 
+/* =============== Helpers =============== */
+
+function isRecord(x: unknown): x is Record<string, unknown> {
+  return typeof x === "object" && x !== null;
+}
+
+function isOfficialFound(x: unknown): x is OfficialFound {
+  return (
+    isRecord(x) &&
+    x.ok === true &&
+    x.found === true &&
+    typeof x.code === "string"
+  );
+}
+
+function pickFirst(obj: unknown, keys: readonly string[]): unknown {
+  if (!isRecord(obj)) return undefined;
+  for (const k of keys) {
+    if (k in obj) return (obj as Record<string, unknown>)[k];
+  }
+  return undefined;
+}
+
+function toNumberOrNull(v: unknown): number | null {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
+function normalizeSources(raw: unknown): string[] {
+  if (Array.isArray(raw)) {
+    const out: string[] = [];
+    for (const item of raw) {
+      if (typeof item === "string") {
+        const t = item.trim();
+        if (t) out.push(t);
+      } else if (isRecord(item)) {
+        const title = typeof item.title === "string" ? item.title.trim() : "";
+        const url = typeof item.url === "string" ? item.url.trim() : "";
+        const chosen = title || url;
+        if (chosen) out.push(chosen);
+      }
+    }
+    return out;
+  }
+
+  if (typeof raw === "string") {
+    return raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  }
+
+  return [];
+}
+
+/* =============== Componente principal =============== */
+
 export default function CheckAvvisoModal({
   open,
   onClose,
@@ -41,7 +108,7 @@ export default function CheckAvvisoModal({
 }) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [res, setRes] = useState<CheckResponse | null>(null); // ✅ Tipado correcto
+  const [res, setRes] = useState<CheckResponse | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [openReport, setOpenReport] = useState(false);
 
@@ -58,9 +125,7 @@ export default function CheckAvvisoModal({
 
     setLoading(true);
     try {
-      const r = await fetch(
-        `/api/check-codice?code=${encodeURIComponent(trimmed)}`
-      );
+      const r = await fetch(`/api/check-codice?code=${encodeURIComponent(trimmed)}`);
       const data: CheckResponse = await r.json();
       setRes(data);
     } catch {
@@ -71,7 +136,30 @@ export default function CheckAvvisoModal({
   }
 
   const initialReportCode =
-    res && res.ok && !res.found && "code" in res ? res.code : code;
+    res && res.ok && !("found" in res && res.found)
+      ? (res as OfficialNotFound).code
+      : code;
+
+  /* ---------- Normalizados ---------- */
+  const found = isOfficialFound(res) ? res : null;
+
+  const rawConfidence = found ? pickFirst(found, ["confidence", "score"]) : undefined;
+  const normConfidence = toNumberOrNull(rawConfidence);
+
+  const rawSources = found ? pickFirst(found, ["sources", "fonti", "links"]) : undefined;
+  const normSourcesList = normalizeSources(rawSources);
+  const normSourcesText = normSourcesList.length > 0 ? normSourcesList.join(", ") : "—";
+
+  const rawUpdatedAt = found ? found.updatedAt ?? found._updatedAt ?? null : null;
+  const normUpdatedAtText = rawUpdatedAt
+    ? new Date(rawUpdatedAt).toLocaleString("it-IT", {
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "—";
 
   return (
     <>
@@ -101,10 +189,10 @@ export default function CheckAvvisoModal({
           {err && <p className="text-sm text-rose-600">{err}</p>}
 
           {/* Caso: no se encuentra */}
-          {res && res.ok && !res.found && (
+          {res && res.ok && "found" in res && res.found === false && (
             <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
               <div className="font-semibold mb-1">
-                Nessun dato ufficiale per il codice {res.code}
+                Nessun dato ufficiale per il codice {(res as OfficialNotFound).code}
               </div>
               <p className="mb-2">
                 Aiutaci a migliorare il database inviando una segnalazione.
@@ -120,69 +208,56 @@ export default function CheckAvvisoModal({
           )}
 
           {/* Caso: encontrado */}
-          {res && res.ok && res.found && (
+          {found && (
             <div className="mt-3 rounded-lg border border-gray-200 p-3 text-sm text-gray-800">
               <div className="font-semibold text-gray-900 mb-2">
-                Codice {res.code} — risultato
+                Codice {found.code} — risultato
               </div>
 
               <div className="grid grid-cols-1 gap-y-2">
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Mittente</span>
-                  <span className="font-medium text-right">{res.mittente}</span>
+                  <span className="font-medium text-right">{found.mittente}</span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Tipologia</span>
-                  <span className="font-medium text-right">
-                    {res.tipologia}
-                  </span>
+                  <span className="font-medium text-right">{found.tipologia}</span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Stato</span>
-                  <span className="font-medium text-right">{res.stato}</span>
+                  <span className="font-medium text-right">{found.stato}</span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Confidence (0–10)</span>
                   <span className="font-medium text-right">
-                    {typeof res.confidence === "number"
+                    {normConfidence !== null
                       ? new Intl.NumberFormat("it-IT", {
                           maximumFractionDigits: 2,
-                        }).format(res.confidence)
+                        }).format(normConfidence)
                       : "—"}
                   </span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Reports Count</span>
                   <span className="font-medium text-right">
-                    {typeof res.reportsCount === "number"
-                      ? res.reportsCount
+                    {typeof found.reportsCount === "number"
+                      ? found.reportsCount
                       : "—"}
                   </span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Sources</span>
-                  <span className="font-medium text-right">
-                    {Array.isArray(res.sources) && res.sources.length > 0
-                      ? res.sources
-                          .map((s) => s.trim())
-                          .filter((s) => s.length > 0)
-                          .join(", ")
-                      : "—"}
-                  </span>
+                  <span className="font-medium text-right">{normSourcesText}</span>
                 </div>
+
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Updated At</span>
-                  <span className="font-medium text-right">
-                    {res.updatedAt
-                      ? new Date(res.updatedAt).toLocaleString("it-IT", {
-                          year: "numeric",
-                          month: "long",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "—"}
-                  </span>
+                  <span className="font-medium text-right">{normUpdatedAtText}</span>
                 </div>
               </div>
             </div>
@@ -191,7 +266,7 @@ export default function CheckAvvisoModal({
           {/* Caso: error */}
           {res && !res.ok && (
             <p className="text-sm text-rose-600 mt-2">
-              {"error" in res ? res.error : "Errore sconosciuto"}
+              {"error" in res ? (res as ErrorResponse).error : "Errore sconosciuto"}
             </p>
           )}
         </form>
