@@ -55,7 +55,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/privacy-policy"
+                                    href="/privacy"
                                     className="text-slate-600 hover:text-[#2552AD] transition"
                                 >
                                     Privacy Policy
