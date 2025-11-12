@@ -3,31 +3,46 @@ import { sanityClient } from "sanity/lib/client";
 import { REPORTS_SERIES_BY_CODE } from "sanity/lib/queries/reports";
 
 type TrendPoint = { date: string; count: number };
-type ApiOk = { ok: true; code: string; rangeDays: number; series: TrendPoint[] };
-type ApiErr = { ok: false; error: string };
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const code = (searchParams.get("code") || "").trim();
+    const debug = searchParams.get("debug") === "1";
 
-    if (!code || !/^\d{3,6}$/.test(code)) {
-      return NextResponse.json<ApiErr>({ ok: false, error: "Codice non valido" }, { status: 400 });
+    if (!/^\d{3,6}$/.test(code)) {
+      return NextResponse.json({ ok: false, error: "Codice non valido" }, { status: 400 });
     }
 
-    const res = await sanityClient.fetch<{ points: { date: string; count?: number }[] }>(
-      REPORTS_SERIES_BY_CODE,
-      { code },
-      { cache: "no-store" }
-    );
+    const res = await sanityClient.fetch<{
+      points: {
+        date?: string | null;
+        count?: number | null;
+        _createdAt?: string | null;
+        createdAt?: string | null;
+      }[];
+    }>(REPORTS_SERIES_BY_CODE, { code }, { cache: "no-store" });
 
+    // Log para el server
+    console.log("🧠 points from Sanity:", res?.points);
+
+    // Normalización + agregación por día
     const perDay = new Map<string, number>();
     for (const p of res.points ?? []) {
-      if (!p?.date) continue;
-      const inc = p.count != null && !isNaN(Number(p.count)) ? Number(p.count) : 1;
-      perDay.set(p.date, (perDay.get(p.date) ?? 0) + inc);
+      const rawDate =
+        p?.date ??
+        p?.createdAt ??
+        p?._createdAt ??
+        new Date().toISOString();
+
+      // yyyy-mm-dd seguro
+      const formattedDate = typeof rawDate === "string" ? rawDate.slice(0, 10) : new Date().toISOString().slice(0, 10);
+      const inc = p?.count != null && !Number.isNaN(Number(p.count)) ? Number(p.count) : 1;
+
+      perDay.set(formattedDate, (perDay.get(formattedDate) ?? 0) + inc);
     }
 
+    // Serie continua (últimos 30 días)
     const rangeDays = 30;
     const today = new Date();
     const series: TrendPoint[] = [];
@@ -38,9 +53,30 @@ export async function GET(req: Request) {
       series.push({ date: key, count: perDay.get(key) ?? 0 });
     }
 
-    return NextResponse.json<ApiOk>({ ok: true, code, rangeDays, series }, { status: 200 });
-  } catch (e) {
-    console.error("❌ Errore in /api/code-trend:", e);
-    return NextResponse.json<ApiErr>({ ok: false, error: "Errore interno" }, { status: 500 });
+    if (debug) {
+      // Respuesta extendida para inspección rápida
+      const perDayObject = Array.from(perDay.entries()).reduce<Record<string, number>>(
+        (acc, [k, v]) => ((acc[k] = v), acc),
+        {}
+      );
+      return NextResponse.json(
+        {
+          ok: true,
+          code,
+          rangeDays,
+          series,
+          debug: {
+            rawPoints: res.points,
+            perDay: perDayObject,
+          },
+        },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json({ ok: true, code, rangeDays, series }, { status: 200 });
+  } catch (err) {
+    console.error("❌ /api/code-trend error:", err);
+    return NextResponse.json({ ok: false, error: "Errore interno" }, { status: 500 });
   }
 }

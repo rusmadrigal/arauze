@@ -83,7 +83,8 @@ export async function POST(req: Request) {
     // 🆕 Crear nuevo documento si no existe hoy
     const doc = {
       _type: "raccomandataReport",
-      code,
+      code: String(code), 
+    
       mittenteSegnalato: mittente,
       provincia: provincia || undefined,
       dataRicezione: dataRicezione || undefined,
