@@ -1,18 +1,26 @@
+// /app/api/submit-report/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "next-sanity";
 import crypto from "crypto";
 
-// ⚠️ Requiere SANITY_WRITE_TOKEN en .env.local (rol Editor)
+// 🧩 Variables de entorno requeridas (.env.local)
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!;
 const token = process.env.SANITY_WRITE_TOKEN!;
 
+// ✅ Log de verificación en consola
+console.log("=== ENV CHECK ===");
+console.log("Project ID:", projectId);
+console.log("Dataset:", dataset);
+console.log("Token presente:", !!token);
+
+// ⚙️ Cliente Sanity con permisos de escritura
 const writeClient = createClient({
   projectId,
   dataset,
   apiVersion: "2024-05-01",
   useCdn: false,
-  token, // <- habilita escritura
+  token,
 });
 
 type Body = {
@@ -30,7 +38,7 @@ export async function POST(req: Request) {
     const provincia = (body.provincia || "").trim();
     const dataRicezione = body.dataRicezione || null;
 
-    // Validación básica
+    // 🧠 Validación básica
     if (!/^\d{3,6}$/.test(code) || !mittente) {
       return NextResponse.json(
         { ok: false, error: "Dati non validi (code 3–6 cifre e mittente richiesti)." },
@@ -38,23 +46,41 @@ export async function POST(req: Request) {
       );
     }
 
-    // Fingerprint para dedupe (por día)
+    // 🧩 Fingerprint por combinación (code + mittente + provincia + día)
     const day = new Date().toISOString().slice(0, 10); // yyyy-mm-dd
     const fingerprint = crypto
       .createHash("sha256")
       .update(`${code}|${mittente}|${provincia}|${day}`)
       .digest("hex");
 
-    // ¿Ya existe hoy?
-    const exists = await writeClient.fetch<string[]>(
-      `*[_type == "raccomandataReport" && fingerprint == $fp][]._id`,
+    // 🔍 Buscar si ya existe un reporte hoy
+    const existing = await writeClient.fetch<{ _id: string; count?: number }[]>(
+      `*[_type == "raccomandataReport" && fingerprint == $fp]{ _id, count }`,
       { fp: fingerprint }
     );
-    if (exists && exists.length > 0) {
-      return NextResponse.json({ ok: true, id: exists[0], deduped: true });
+
+    // 🔁 Si ya existe: incrementamos el contador
+    if (existing && existing.length > 0) {
+      const existingId = existing[0]._id;
+
+      const updated = await writeClient
+        .patch(existingId)
+        .setIfMissing({ count: 1 })
+        .inc({ count: 1 })
+        .commit({ autoGenerateArrayKeys: true });
+
+      return NextResponse.json(
+        {
+          ok: true,
+          id: updated._id,
+          updated: true,
+          count: updated.count ?? 1,
+        },
+        { status: 200 }
+      );
     }
 
-    // Crear documento
+    // 🆕 Crear nuevo documento si no existe hoy
     const doc = {
       _type: "raccomandataReport",
       code,
@@ -63,12 +89,16 @@ export async function POST(req: Request) {
       dataRicezione: dataRicezione || undefined,
       status: "pending",
       fingerprint,
+      count: 1, // inicia en 1
       createdAt: new Date().toISOString(),
     };
 
     const created = await writeClient.create(doc, { autoGenerateArrayKeys: true });
 
-    return NextResponse.json({ ok: true, id: created._id }, { status: 201 });
+    return NextResponse.json(
+      { ok: true, id: created._id, created: true },
+      { status: 201 }
+    );
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Errore sconosciuto";
     console.error("❌ /api/submit-report:", msg);

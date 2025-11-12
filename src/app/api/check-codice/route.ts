@@ -1,22 +1,23 @@
-// src/app/api/check-codice/route.ts
 import { NextResponse } from "next/server";
 import { sanityClient } from "sanity/lib/client";
-import {
-  RACCOMANDATA_BY_CODE as CODE_BY_NUMBER,
-  REPORTS_BY_CODE,
-} from "sanity/lib/queries/raccomandata";
+import { RACCOMANDATA_BY_CODE as CODE_BY_NUMBER } from "sanity/lib/queries/raccomandata";
 
 type OfficialDoc = {
   code: string;
   mittente?: string;
   tipologia?: string;
   stato?: string;
-  priority?: "ALTA" | "MEDIA" | "BASSA";
+  priority?: "ALTA" | "MEDIA" | "BASSA" | "RITIRATA";
   confidence?: number;
   reportsCount?: number;
   updatedAt?: string;
   sources?: string[];
 } | null;
+
+type ReportDoc = {
+  _id: string;
+  count?: number;
+};
 
 export async function GET(req: Request) {
   try {
@@ -30,18 +31,26 @@ export async function GET(req: Request) {
       );
     }
 
-    const [official, crowdCount] = await Promise.all([
-      sanityClient.fetch<OfficialDoc>(CODE_BY_NUMBER, { code }),
-      sanityClient.fetch<number>(REPORTS_BY_CODE, { code }),
+    // 1️⃣ Traemos el documento oficial y todos los reportes asociados
+    const [official, reports] = await Promise.all([
+      sanityClient.fetch<OfficialDoc>(CODE_BY_NUMBER, { code }, { cache: "no-store" }),
+      sanityClient.fetch<ReportDoc[]>(
+        `*[_type == "raccomandataReport" && code == $code]{_id, count}`,
+        { code },
+        { cache: "no-store" }
+      ),
     ]);
 
-    const finalReports =
-      (typeof official?.reportsCount === "number"
-        ? official.reportsCount
-        : undefined) ??
-      (typeof crowdCount === "number" ? crowdCount : undefined) ??
-      0;
+    // 2️⃣ Calculamos el total de reportes (sumando 'count' si existe)
+    const totalReports = Array.isArray(reports)
+      ? reports.reduce((acc, r) => acc + (r.count ?? 1), 0)
+      : 0;
 
+    const finalReports =
+      (typeof official?.reportsCount === "number" ? official.reportsCount : undefined) ??
+      totalReports;
+
+    // 3️⃣ Si no hay datos oficiales, devolvemos fallback
     if (!official) {
       return NextResponse.json(
         {
@@ -56,6 +65,7 @@ export async function GET(req: Request) {
       );
     }
 
+    // 4️⃣ Respuesta final
     return NextResponse.json(
       {
         ok: true,
@@ -66,11 +76,7 @@ export async function GET(req: Request) {
       { status: 200 }
     );
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("❌ Errore in /api/check-codice:", error.message);
-    } else {
-      console.error("❌ Errore in /api/check-codice: errore sconosciuto");
-    }
+    console.error("❌ Errore in /api/check-codice:", error);
     return NextResponse.json(
       { ok: false, error: "Errore interno del server." },
       { status: 500 }

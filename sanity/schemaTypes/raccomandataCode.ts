@@ -9,7 +9,7 @@ export default defineType({
       name: "code",
       title: "Codice",
       type: "string",
-      description: "Solo números (3–6 dígitos), ej. 697",
+      description: "Solo numeri (3–6 cifre), es. 697",
       validation: (r) =>
         r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
     }),
@@ -17,7 +17,6 @@ export default defineType({
       name: "mittente",
       title: "Mittente",
       type: "string",
-      // opcional: valores por defecto para nuevos docs
       initialValue: "Agenzia delle Entrate (probabile)",
       validation: (r) => r.required(),
     }),
@@ -34,6 +33,16 @@ export default defineType({
       type: "string",
       initialValue: "In attesa di ritiro",
       validation: (r) => r.required(),
+    }),
+
+    // 🆕 NUEVO: conteo total de reportes (usado por /api/check-codice)
+    defineField({
+      name: "reportsCount",
+      title: "Numero di Segnalazioni",
+      type: "number",
+      description: "Conteggio totale delle segnalazioni ricevute per questo codice.",
+      initialValue: 0,
+      validation: (Rule) => Rule.min(0),
     }),
   ],
   preview: {
