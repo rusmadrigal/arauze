@@ -1,6 +1,7 @@
 // src/app/components/home/UltimeAnalizzate.tsx
 import React from "react";
 import { ArrowRight } from "lucide-react";
+import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
 
 export type Urgency = "ALTA" | "BASSA" | "RITIRATA";
 
@@ -32,6 +33,10 @@ export default function UltimeRaccomandateAnalizzate({
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
                 Urgenza
               </th>
+              {/* Nueva columna: mini gráfico de trend */}
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                Tendenza
+              </th>
               <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide">
                 Azione
               </th>
@@ -51,7 +56,14 @@ export default function UltimeRaccomandateAnalizzate({
                   <Badge tone={it.urgency}>{it.urgency}</Badge>
                 </td>
 
-                {/* Columna 3: acción (Dettaglio → con flecha animada) */}
+                {/* Columna 3: mini gráfico (mismo color azul y lógica que el anterior) */}
+                <td className="px-4 py-3 align-middle">
+                  <div className="h-10 w-28">
+                    <TrendMiniChart code={it.code} />
+                  </div>
+                </td>
+
+                {/* Columna 4: acción (Dettaglio → con flecha animada) */}
                 <td className="px-4 py-3 text-right">
                   {it.href ? (
                     <a
