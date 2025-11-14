@@ -15,7 +15,7 @@ export default function HeroHeader() {
             <span className="inline-block md:whitespace-nowrap">
               Raccomandata Market
             </span>
-            <span className="inline-block md:whitespace-nowrap">2026</span>
+            <span className="inline-block md:whitespace-nowrap">Tracking - 2026</span>
           </h1>
 
           <p className="mt-4 md:mt-5 text-semibold text-lg md:text-xl leading-[1.35] max-w-[60ch]">
