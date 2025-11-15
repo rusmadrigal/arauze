@@ -91,17 +91,27 @@ export default defineType({
             defineField({
               name: "description",
               title: "Descrizione",
-              type: "text",
-              rows: 3,
-              validation: (r) => r.required().max(600),
+              // RICH TEXT
+              type: "array",
+              of: [{ type: "block" }],
+              validation: (r) => r.required(),
             }),
           ],
           preview: {
-            select: { title: "title", subtitle: "description" },
-            prepare({ title, subtitle }) {
+            select: { title: "title", body: "description" },
+            prepare({ title, body }) {
+              let subtitle = "";
+              if (Array.isArray(body) && body.length > 0) {
+                const firstBlock = body[0];
+                const firstSpan = firstBlock?.children?.[0];
+                subtitle =
+                  typeof firstSpan?.text === "string"
+                    ? firstSpan.text.slice(0, 50) + "…"
+                    : "";
+              }
               return {
                 title,
-                subtitle: subtitle ? subtitle.slice(0, 50) + "…" : "",
+                subtitle,
                 media: List,
               };
             },
@@ -132,17 +142,27 @@ export default defineType({
             defineField({
               name: "body",
               title: "Corpo del testo",
-              type: "text",
-              rows: 5,
-              validation: (r) => r.required().max(2000),
+              // RICH TEXT
+              type: "array",
+              of: [{ type: "block" }],
+              validation: (r) => r.required(),
             }),
           ],
           preview: {
-            select: { title: "title", subtitle: "body" },
-            prepare({ title, subtitle }) {
+            select: { title: "title", body: "body" },
+            prepare({ title, body }) {
+              let subtitle = "";
+              if (Array.isArray(body) && body.length > 0) {
+                const firstBlock = body[0];
+                const firstSpan = firstBlock?.children?.[0];
+                subtitle =
+                  typeof firstSpan?.text === "string"
+                    ? firstSpan.text.slice(0, 60) + "…"
+                    : "";
+              }
               return {
                 title,
-                subtitle: subtitle ? `${subtitle.slice(0, 60)}…` : "",
+                subtitle,
                 media: List,
               };
             },
@@ -175,11 +195,21 @@ export default defineType({
         defineField({
           name: "body",
           title: "Testo",
-          type: "text",
-          rows: 4,
-          initialValue:
-            "Se non ritiri la raccomandata entro 30 giorni, potrebbe essere considerata come notificata per “compiuta giacenza”. In tal caso, eventuali comunicazioni fiscali o multe saranno comunque valide anche senza la tua firma di ritiro.",
-          validation: (r) => r.max(800),
+          // RICH TEXT
+          type: "array",
+          of: [{ type: "block" }],
+          initialValue: [
+            {
+              _type: "block",
+              style: "normal",
+              children: [
+                {
+                  _type: "span",
+                  text: "Se non ritiri la raccomandata entro 30 giorni, potrebbe essere considerata come notificata per “compiuta giacenza”. In tal caso, eventuali comunicazioni fiscali o multe saranno comunque valide anche senza la tua firma di ritiro.",
+                },
+              ],
+            },
+          ],
         }),
         defineField({
           name: "icon",
@@ -232,17 +262,27 @@ export default defineType({
                 defineField({
                   name: "description",
                   title: "Descrizione",
-                  type: "text",
-                  rows: 3,
-                  validation: (r) => r.required().max(600),
+                  // RICH TEXT
+                  type: "array",
+                  of: [{ type: "block" }],
+                  validation: (r) => r.required(),
                 }),
               ],
               preview: {
-                select: { title: "title", subtitle: "description" },
-                prepare({ title, subtitle }) {
+                select: { title: "title", body: "description" },
+                prepare({ title, body }) {
+                  let subtitle = "";
+                  if (Array.isArray(body) && body.length > 0) {
+                    const firstBlock = body[0];
+                    const firstSpan = firstBlock?.children?.[0];
+                    subtitle =
+                      typeof firstSpan?.text === "string"
+                        ? firstSpan.text.slice(0, 50) + "…"
+                        : "";
+                  }
                   return {
                     title,
-                    subtitle: subtitle ? subtitle.slice(0, 50) + "…" : "",
+                    subtitle,
                     media: List,
                   };
                 },
@@ -286,7 +326,6 @@ export default defineType({
       ],
     }),
 
-
     // ===== FAQ =====
     defineField({
       name: "faq",
@@ -321,17 +360,27 @@ export default defineType({
                 defineField({
                   name: "a",
                   title: "Risposta",
-                  type: "text",
-                  rows: 3,
-                  validation: (r) => r.required().max(800),
+                  // RICH TEXT
+                  type: "array",
+                  of: [{ type: "block" }],
+                  validation: (r) => r.required(),
                 }),
               ],
               preview: {
-                select: { title: "q", subtitle: "a" },
-                prepare({ title, subtitle }) {
+                select: { title: "q", body: "a" },
+                prepare({ title, body }) {
+                  let subtitle = "";
+                  if (Array.isArray(body) && body.length > 0) {
+                    const firstBlock = body[0];
+                    const firstSpan = firstBlock?.children?.[0];
+                    subtitle =
+                      typeof firstSpan?.text === "string"
+                        ? firstSpan.text.slice(0, 60) + "…"
+                        : "";
+                  }
                   return {
                     title,
-                    subtitle: subtitle ? subtitle.slice(0, 60) + "…" : "",
+                    subtitle,
                     media: List,
                   };
                 },
@@ -348,10 +397,13 @@ export default defineType({
     select: { title: "code", mittente: "mittente", priority: "priority" },
     prepare({ title, mittente, priority }) {
       const tag =
-        priority === "ALTA" ? "🔴 Alta" :
-          priority === "MEDIA" ? "🟠 Media" :
-            priority === "BASSA" ? "🟢 Bassa" :
-              "—";
+        priority === "ALTA"
+          ? "🔴 Alta"
+          : priority === "MEDIA"
+          ? "🟠 Media"
+          : priority === "BASSA"
+          ? "🟢 Bassa"
+          : "—";
       return {
         title,
         subtitle: mittente ? `${mittente} · ${tag}` : tag,

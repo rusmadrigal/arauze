@@ -12,22 +12,67 @@ import FAQSection from "@/components/raccomandata/FAQSection";
 import AdditionalInfoBanner from "@/components/raccomandata/AdditionalInfoBanner";
 
 // SEO JSON-LD
-import SEOJsonLd, { type RaccomandataPage as SeoRaccomandataPage } from "@/components/seo/SEOJsonLd";
-
+import SEOJsonLd, {
+  type RaccomandataPage as SeoRaccomandataPage,
+} from "@/components/seo/SEOJsonLd";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { sanityClient } from "sanity/lib/client";
 import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
+import type { TypedObject } from "@portabletext/types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+// ================= Helpers =================
+
+// Normaliza strings
+const norm = (v?: string | null) => (v ?? "").trim();
+
+// Tipos para Portable Text plano (para ptToPlainText)
+type PortableTextChild = {
+  _type?: string;
+  text?: string;
+  [key: string]: unknown;
+};
+
+type PortableTextBlock = {
+  _type?: string;
+  children?: PortableTextChild[];
+  [key: string]: unknown;
+};
+
+// Convierte Portable Text (o string) a texto plano
+function ptToPlainText(input: unknown): string {
+  if (!input) return "";
+  if (typeof input === "string") return input.trim();
+
+  if (Array.isArray(input)) {
+    const blocks = input as PortableTextBlock[];
+
+    return blocks
+      .map((block) => {
+        if (block?._type !== "block" || !Array.isArray(block.children)) return "";
+        return block.children
+          .map((child) =>
+            typeof child?.text === "string" ? child.text : ""
+          )
+          .join("");
+      })
+      .join("\n")
+      .trim();
+  }
+
+  return "";
+}
+
 // ================= Tipos base (desde Sanity) =================
 type Priority = "ALTA" | "MEDIA" | "BASSA";
-type StepDoc = { title?: string | null; description?: string | null };
-type DetailDoc = { title?: string | null; body?: string | null };
-type FAQItemDoc = { q?: string | null; a?: string | null };
+type StepDoc = { title?: string | null; description?: unknown };
+type DetailDoc = { title?: string | null; body?: unknown };
+type FAQItemDoc = { q?: string | null; a?: unknown };
+
 type RaccomandataPageDoc = {
   code: string;
 
@@ -48,20 +93,47 @@ type RaccomandataPageDoc = {
   // SECCIONES
   steps?: StepDoc[] | null;
   details?: DetailDoc[] | null;
-  alertBox?: { enabled?: boolean; title?: string; body?: string; icon?: string } | null;
-  assistenza?: {
+  alertBox?:
+  | { enabled?: boolean; title?: string; body?: unknown; icon?: string }
+  | null;
+  assistenza?:
+  | {
     title?: string | null;
-    cards?: { icon?: string | null; title?: string | null; description?: string | null }[] | null;
-  } | null;
-  faq?: { title?: string | null; items?: FAQItemDoc[] | null } | null;
+    cards?:
+    | {
+      icon?: string | null;
+      title?: string | null;
+      description?: unknown;
+    }[]
+    | null;
+  }
+  | null;
+  faq?:
+  | {
+    title?: string | null;
+    items?: FAQItemDoc[] | null;
+  }
+  | null;
   authorBox?: { name?: string; avatarUrl?: string; updatedAt?: string };
 
   _createdAt?: string | null;
   _updatedAt?: string | null;
 } | null;
 
+// Tipo que consumirá StepsRaccomandata (compatible con Step)
+type UIStep = {
+  title: string;
+  description: string | TypedObject[] | undefined;
+};
+
+// Tipos para otros componentes
+type AssistenzaData = {
+  title?: string;
+  cards?: { icon?: string; title?: string; description?: string }[];
+};
+type FAQData = { title?: string; items?: { q?: string; a?: string }[] };
+
 // ================= Normalizadores (eliminan null/undefined) =================
-const norm = (v?: string | null) => (v ?? "").trim();
 
 function normalizeMeta(input: NonNullable<RaccomandataPageDoc>, fallbackCode: string) {
   return {
@@ -77,29 +149,62 @@ function normalizeMeta(input: NonNullable<RaccomandataPageDoc>, fallbackCode: st
   };
 }
 
-function normalizeSteps(items?: StepDoc[] | null): { title: string; description: string }[] {
+// Mantiene Portable Text para la UI (enlaces, formato, etc.)
+function normalizeStepsForUI(items?: StepDoc[] | null): UIStep[] {
   if (!Array.isArray(items)) return [];
+
   return items
-    .map((s) => ({ title: norm(s?.title), description: norm(s?.description) }))
-    .filter((s) => s.title.length > 0 || s.description.length > 0);
+    .map((s) => {
+      const title = norm(s?.title);
+      const rawDesc = s?.description;
+
+      let description: string | TypedObject[] | undefined;
+
+      if (Array.isArray(rawDesc)) {
+        // Caso típico: Portable Text como array de bloques
+        description = rawDesc as TypedObject[];
+      } else if (typeof rawDesc === "string") {
+        const trimmed = rawDesc.trim();
+        description = trimmed.length ? trimmed : undefined;
+      } else if (rawDesc && typeof rawDesc === "object") {
+        // Por si Sanity devolviera un único bloque suelto
+        description = [rawDesc as TypedObject];
+      }
+
+      if (!title && !description) {
+        return null;
+      }
+
+      return { title, description };
+    })
+    .filter((s): s is UIStep => s !== null);
 }
 
-function normalizeDetails(items?: DetailDoc[] | null): { title: string; body: string }[] {
+function normalizeDetails(
+  items?: DetailDoc[] | null
+): { title: string; body: string }[] {
   if (!Array.isArray(items)) return [];
   return items
-    .map((d) => ({ title: norm(d?.title), body: norm(d?.body) }))
+    .map((d) => ({
+      title: norm(d?.title),
+      body: ptToPlainText(d?.body),
+    }))
     .filter((d) => d.title.length > 0 || d.body.length > 0);
 }
 
-// Tipos que esperan los componentes (forma estricta, sin null)
-type AssistenzaData = {
-  title?: string;
-  cards?: { icon?: string; title?: string; description?: string }[];
-};
-type FAQData = { title?: string; items?: { q?: string; a?: string }[] };
-
 function normalizeAssistenza(
-  a?: { title?: string | null; cards?: { icon?: string | null; title?: string | null; description?: string | null }[] | null } | null
+  a?:
+    | {
+      title?: string | null;
+      cards?:
+      | {
+        icon?: string | null;
+        title?: string | null;
+        description?: unknown;
+      }[]
+      | null;
+    }
+    | null
 ): AssistenzaData | undefined {
   if (!a) return undefined;
   const cards = Array.isArray(a.cards)
@@ -107,9 +212,8 @@ function normalizeAssistenza(
       .map((c) => ({
         icon: c?.icon ?? undefined,
         title: norm(c?.title) || undefined,
-        description: norm(c?.description) || undefined,
+        description: ptToPlainText(c?.description) || undefined,
       }))
-      // si todas las props quedan undefined, filtramos
       .filter((c) => c.icon || c.title || c.description)
     : undefined;
   return {
@@ -119,12 +223,20 @@ function normalizeAssistenza(
 }
 
 function normalizeFAQ(
-  f?: { title?: string | null; items?: { q?: string | null; a?: string | null }[] | null } | null
+  f?:
+    | {
+      title?: string | null;
+      items?: { q?: string | null; a?: unknown }[] | null;
+    }
+    | null
 ): FAQData | undefined {
   if (!f) return undefined;
   const items = Array.isArray(f.items)
     ? f.items
-      .map((it) => ({ q: norm(it?.q) || undefined, a: norm(it?.a) || undefined }))
+      .map((it) => ({
+        q: norm(it?.q) || undefined,
+        a: ptToPlainText(it?.a) || undefined,
+      }))
       .filter((it) => it.q || it.a)
     : undefined;
   return { title: norm(f.title) || undefined, items };
@@ -132,9 +244,11 @@ function normalizeFAQ(
 
 // ================= Metadata =================
 // Next 15: params es Promise
-export async function generateMetadata(
-  { params }: { params: Promise<{ code?: string }> }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ code?: string }>;
+}): Promise<Metadata> {
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
@@ -159,7 +273,9 @@ export async function generateMetadata(
       ? page.metaDescription
       : page?.heroSubtitle
         ? page.heroSubtitle
-        : (codice ? `Dettagli per il codice ${codice}` : "Dettagli raccomandata");
+        : codice
+          ? `Dettagli per il codice ${codice}`
+          : "Dettagli raccomandata";
 
   const canonical = `/raccomandata/${codice}`;
 
@@ -182,9 +298,11 @@ export async function generateMetadata(
 }
 
 // ================= Página =================
-export default async function RaccomandataPage(
-  { params }: { params: Promise<{ code?: string }> }
-) {
+export default async function RaccomandataPage({
+  params,
+}: {
+  params: Promise<{ code?: string }>;
+}) {
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
@@ -201,26 +319,61 @@ export default async function RaccomandataPage(
   // Para HeroRaccomandata (sin nulls)
   const pageMeta = normalizeMeta(page, codice);
 
-  // Para SEOJsonLd (tolera nulls)
+  // Normalizados estrictos para componentes que exigen string / arrays definidos
+  const uiSteps = normalizeStepsForUI(page.steps);
+  const uiDetails = normalizeDetails(page.details);
+  const uiAssistenza = normalizeAssistenza(page.assistenza);
+  const uiFAQ = normalizeFAQ(page.faq);
+
+  // AlertBox: aplanamos el body para que siga siendo string
+  const uiAlertBox = page.alertBox
+    ? {
+      ...page.alertBox,
+      body: ptToPlainText(page.alertBox.body),
+    }
+    : undefined;
+
+  // ====== Datos para JSON-LD (también en texto plano) ======
+  const seoSteps = Array.isArray(page.steps)
+    ? page.steps.map((s) => ({
+      title: s?.title ?? null,
+      description: ptToPlainText(s?.description) || null,
+    }))
+    : null;
+
+  const seoDetails = Array.isArray(page.details)
+    ? page.details.map((d) => ({
+      title: d?.title ?? null,
+      body: ptToPlainText(d?.body) || null,
+    }))
+    : null;
+
+  const seoFaq =
+    page.faq && Array.isArray(page.faq.items)
+      ? {
+        title: page.faq.title ?? null,
+        items: page.faq.items.map((it) => ({
+          q: it?.q ?? null,
+          a: ptToPlainText(it?.a) || null,
+        })),
+      }
+      : page.faq
+        ? { title: page.faq.title ?? null, items: null }
+        : null;
+
   const seoPage: SeoRaccomandataPage = {
     heroTitleSuffix: page.heroTitleSuffix ?? null,
     metaTitle: page.metaTitle ?? null,
     heroSubtitle: page.heroSubtitle ?? null,
     metaDescription: page.metaDescription ?? null,
-    steps: page.steps ?? null,
-    faq: page.faq ?? null,
-    details: page.details ?? null,
+    steps: seoSteps,
+    faq: seoFaq,
+    details: seoDetails,
     mittente: page.mittente ?? null,
     tipologia: page.tipologia ?? null,
     _createdAt: page._createdAt ?? null,
     _updatedAt: page._updatedAt ?? null,
   };
-
-  // Normalizados estrictos para componentes que exigen string / arrays definidos
-  const uiSteps = normalizeSteps(page.steps);
-  const uiDetails = normalizeDetails(page.details);
-  const uiAssistenza = normalizeAssistenza(page.assistenza);
-  const uiFAQ = normalizeFAQ(page.faq);
 
   return (
     <main className="mx-auto max-w-5xl px-4" role="main">
@@ -238,10 +391,8 @@ export default async function RaccomandataPage(
           <AuthorBox data={page?.authorBox} />
           <StepsRaccomandata steps={uiSteps} />
           <DetailsSection details={uiDetails} />
-          <AlertBox data={page.alertBox ?? undefined} />
-          {/* ✅ ahora sin nulls en cards */}
+          <AlertBox data={uiAlertBox} />
           <AssistenzaSection data={uiAssistenza} />
-          {/* ✅ items normalizados */}
           <FAQSection data={uiFAQ} />
           <AdditionalInfoBanner />
         </div>

@@ -1,15 +1,27 @@
 // src/components/raccomandata/StepsRaccomandata.tsx
 import React from "react";
 import { Search, Mailbox, FileText } from "lucide-react";
+import { PortableText } from "@portabletext/react";
+import type { TypedObject } from "@portabletext/types";
 
+// Usamos TypedObject de @portabletext/types
 type Step = {
   title: string;
-  description: string;
+  description?: string | TypedObject[];
 };
 
 interface Props {
   steps?: Step[];
 }
+
+// Tipo para el mark "link" de Portable Text
+type PortableLinkMarkProps = {
+  value?: {
+    href?: string | null;
+    [key: string]: unknown;
+  } | null;
+  children: React.ReactNode;
+};
 
 export default function StepsRaccomandata({ steps }: Props) {
   // Fallback (por si el documento aún no define los pasos)
@@ -62,14 +74,47 @@ export default function StepsRaccomandata({ steps }: Props) {
                 </span>
 
                 <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 leading-snug">{step.title}</h3>
-                  <p className="mt-1 text-sm text-slate-600">{step.description}</p>
+                  <h3 className="font-semibold text-slate-900 leading-snug">
+                    {step.title}
+                  </h3>
+
+                  {/* Si viene Portable Text, lo renderizamos enriquecido */}
+                  {Array.isArray(step.description) ? (
+                    <div className="mt-1 text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
+                      <PortableText
+                        value={step.description}
+                        components={{
+                          marks: {
+                            link: ({ value, children }: PortableLinkMarkProps) => {
+                              const href =
+                                value && typeof value.href === "string"
+                                  ? value.href
+                                  : "#";
+                              return (
+                                <a
+                                  href={href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {children}
+                                </a>
+                              );
+                            },
+                          },
+                        }}
+                      />
+                    </div>
+                  ) : step.description ? (
+                    // Fallback string plano
+                    <p className="mt-1 text-sm text-slate-600">
+                      {step.description}
+                    </p>
+                  ) : null}
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="inline-flex items-center rounded-lg bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200">
                       Passo {idx + 1}
                     </span>
-
                   </div>
                 </div>
               </div>
