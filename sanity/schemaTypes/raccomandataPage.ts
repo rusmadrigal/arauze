@@ -163,7 +163,7 @@ export default defineType({
           },
         },
       ],
-      validation: (r) => r.min(1).max(10),
+      validation: (r) => r.min(1).max(100),
     }),
 
     // ===== Alert Box =====

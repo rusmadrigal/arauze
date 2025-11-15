@@ -24,6 +24,14 @@ type PortableLinkMarkProps = {
 
 // Configuración de componentes para PortableText
 const portableComponents: PortableTextComponents = {
+  // 🧩 Bloques de texto (párrafos)
+  block: {
+    normal: ({ children }) => (
+      // whitespace-pre-line respeta saltos de línea (\n) que pongas en Sanity
+      <p className="mb-4 whitespace-pre-line">{children}</p>
+    ),
+  },
+
   // 🧩 Links
   marks: {
     link: ({ value, children }: PortableLinkMarkProps) => {
@@ -42,6 +50,7 @@ const portableComponents: PortableTextComponents = {
       );
     },
   },
+
   // 🧩 Listas (bullets y numeradas)
   list: {
     bullet: ({ children }) => (
@@ -52,8 +61,12 @@ const portableComponents: PortableTextComponents = {
     ),
   },
   listItem: {
-    bullet: ({ children }) => <li>{children}</li>,
-    number: ({ children }) => <li>{children}</li>,
+    bullet: ({ children }) => (
+      <li className="whitespace-pre-line">{children}</li>
+    ),
+    number: ({ children }) => (
+      <li className="whitespace-pre-line">{children}</li>
+    ),
   },
 };
 
@@ -89,7 +102,9 @@ export default function DetailsSection({ details }: Props) {
             </div>
           ) : (
             // 🔤 Texto plano (fallback / compatibilidad)
-            <p className="text-gray-600 leading-relaxed">{block.body}</p>
+            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+              {block.body}
+            </p>
           )}
         </div>
       ))}
