@@ -51,7 +51,7 @@ export default defineType({
       validation: (r) => r.max(160),
     }),
 
-    // ===== Priorità (para el ping en UI) =====
+    // ===== Priorità =====
     defineField({
       name: "priority",
       title: "Priorità",
@@ -59,9 +59,9 @@ export default defineType({
       description: "Define el nivel de urgencia/visibilidad del aviso.",
       options: {
         list: [
-          { title: "Alta", value: "ALTA" },   // rojo
-          { title: "Media", value: "MEDIA" }, // naranja
-          { title: "Bassa", value: "BASSA" }, // verde
+          { title: "Alta", value: "ALTA" },
+          { title: "Media", value: "MEDIA" },
+          { title: "Bassa", value: "BASSA" },
         ],
         layout: "radio",
       },
@@ -73,8 +73,7 @@ export default defineType({
     defineField({
       name: "steps",
       title: "Passaggi (Steps – Cosa Fare)",
-      description:
-        "Lista di passaggi mostrati nella sezione 'Cosa Fare Passo per Passo'.",
+      description: "Lista di passaggi mostrati nella sezione 'Cosa Fare'.",
       type: "array",
       of: [
         {
@@ -91,7 +90,6 @@ export default defineType({
             defineField({
               name: "description",
               title: "Descrizione",
-              // RICH TEXT
               type: "array",
               of: [{ type: "block" }],
               validation: (r) => r.required(),
@@ -102,18 +100,13 @@ export default defineType({
             prepare({ title, body }) {
               let subtitle = "";
               if (Array.isArray(body) && body.length > 0) {
-                const firstBlock = body[0];
-                const firstSpan = firstBlock?.children?.[0];
+                const first = body[0]?.children?.[0];
                 subtitle =
-                  typeof firstSpan?.text === "string"
-                    ? firstSpan.text.slice(0, 50) + "…"
+                  typeof first?.text === "string"
+                    ? first.text.slice(0, 50) + "…"
                     : "";
               }
-              return {
-                title,
-                subtitle,
-                media: List,
-              };
+              return { title, subtitle, media: List };
             },
           },
         },
@@ -121,11 +114,11 @@ export default defineType({
       validation: (r) => r.min(1).max(8),
     }),
 
-    // ===== Details (sezione testo) =====
+    // ===== Details (SECCIÓN A MODIFICAR) =====
     defineField({
       name: "details",
       title: "Dettagli (Sezione Testo)",
-      description: "Blocchi di testo per 'Motivo', 'Tempi', ecc.",
+      description: "Blocchi testuali (Motivo, Tempi, ecc.)",
       type: "array",
       of: [
         {
@@ -133,19 +126,21 @@ export default defineType({
           name: "detailBlock",
           options: { collapsible: true, collapsed: true },
           fields: [
+            // ✔️ YA NO ES OBLIGATORIO
             defineField({
               name: "title",
               title: "Titolo",
               type: "string",
-              validation: (r) => r.required().max(120),
+              validation: (r) => r.max(120),
             }),
+
+            // ✔️ TAMPOCO ES OBLIGATORIO
             defineField({
               name: "body",
               title: "Corpo del testo",
-              // RICH TEXT
               type: "array",
               of: [{ type: "block" }],
-              validation: (r) => r.required(),
+              // sin required()
             }),
           ],
           preview: {
@@ -153,15 +148,14 @@ export default defineType({
             prepare({ title, body }) {
               let subtitle = "";
               if (Array.isArray(body) && body.length > 0) {
-                const firstBlock = body[0];
-                const firstSpan = firstBlock?.children?.[0];
+                const first = body[0]?.children?.[0];
                 subtitle =
-                  typeof firstSpan?.text === "string"
-                    ? firstSpan.text.slice(0, 60) + "…"
+                  typeof first?.text === "string"
+                    ? first.text.slice(0, 60) + "…"
                     : "";
               }
               return {
-                title,
+                title: title || "(Nessun titolo)",
                 subtitle,
                 media: List,
               };
@@ -172,7 +166,7 @@ export default defineType({
       validation: (r) => r.min(1).max(10),
     }),
 
-    // ===== Alert Box (Avviso) =====
+    // ===== Alert Box =====
     defineField({
       name: "alertBox",
       title: "Alert Box (Avviso)",
@@ -195,33 +189,19 @@ export default defineType({
         defineField({
           name: "body",
           title: "Testo",
-          // RICH TEXT
           type: "array",
           of: [{ type: "block" }],
-          initialValue: [
-            {
-              _type: "block",
-              style: "normal",
-              children: [
-                {
-                  _type: "span",
-                  text: "Se non ritiri la raccomandata entro 30 giorni, potrebbe essere considerata come notificata per “compiuta giacenza”. In tal caso, eventuali comunicazioni fiscali o multe saranno comunque valide anche senza la tua firma di ritiro.",
-                },
-              ],
-            },
-          ],
         }),
         defineField({
           name: "icon",
           title: "Icona (Lucide)",
           type: "string",
-          description: "Esempi: AlertTriangle, Info, Bell…",
           initialValue: "AlertTriangle",
         }),
       ],
     }),
 
-    // ===== Assistenza e Contatti =====
+    // ===== Assistenza =====
     defineField({
       name: "assistenza",
       title: "Assistenza e Contatti Utili",
@@ -237,7 +217,7 @@ export default defineType({
         }),
         defineField({
           name: "cards",
-          title: "Schede di Contatto",
+          title: "Schede",
           type: "array",
           of: [
             defineField({
@@ -250,7 +230,6 @@ export default defineType({
                   name: "icon",
                   title: "Icona (Lucide)",
                   type: "string",
-                  description: "Esempi: MapPin, Phone, Mail, HelpCircle…",
                   initialValue: "MapPin",
                 }),
                 defineField({
@@ -262,31 +241,11 @@ export default defineType({
                 defineField({
                   name: "description",
                   title: "Descrizione",
-                  // RICH TEXT
                   type: "array",
                   of: [{ type: "block" }],
                   validation: (r) => r.required(),
                 }),
               ],
-              preview: {
-                select: { title: "title", body: "description" },
-                prepare({ title, body }) {
-                  let subtitle = "";
-                  if (Array.isArray(body) && body.length > 0) {
-                    const firstBlock = body[0];
-                    const firstSpan = firstBlock?.children?.[0];
-                    subtitle =
-                      typeof firstSpan?.text === "string"
-                        ? firstSpan.text.slice(0, 50) + "…"
-                        : "";
-                  }
-                  return {
-                    title,
-                    subtitle,
-                    media: List,
-                  };
-                },
-              },
             }),
           ],
           validation: (r) => r.min(1).max(6),
@@ -294,6 +253,7 @@ export default defineType({
       ],
     }),
 
+    // ===== Author Box =====
     defineField({
       name: "authorBox",
       title: "Author Box",
@@ -309,17 +269,15 @@ export default defineType({
         }),
         defineField({
           name: "avatarUrl",
-          title: "Avatar URL (Next/Image)",
+          title: "Avatar URL",
           type: "url",
-          description: "URL absoluta o ruta pública (p.ej. /images/author.jpg).",
-          validation: (r) => r.uri({ allowRelative: true }),
           initialValue: "/images/author.jpg",
+          validation: (r) => r.uri({ allowRelative: true }),
         }),
         defineField({
           name: "updatedAt",
           title: "Fecha de actualización",
           type: "datetime",
-          description: "Se mostrará como 'Aggiornato il …' en it-IT.",
           validation: (r) => r.required(),
           initialValue: () => new Date().toISOString(),
         }),
@@ -342,7 +300,7 @@ export default defineType({
         }),
         defineField({
           name: "items",
-          title: "Elenco Domande e Risposte",
+          title: "Domande e Risposte",
           type: "array",
           of: [
             defineField({
@@ -360,31 +318,11 @@ export default defineType({
                 defineField({
                   name: "a",
                   title: "Risposta",
-                  // RICH TEXT
                   type: "array",
                   of: [{ type: "block" }],
                   validation: (r) => r.required(),
                 }),
               ],
-              preview: {
-                select: { title: "q", body: "a" },
-                prepare({ title, body }) {
-                  let subtitle = "";
-                  if (Array.isArray(body) && body.length > 0) {
-                    const firstBlock = body[0];
-                    const firstSpan = firstBlock?.children?.[0];
-                    subtitle =
-                      typeof firstSpan?.text === "string"
-                        ? firstSpan.text.slice(0, 60) + "…"
-                        : "";
-                  }
-                  return {
-                    title,
-                    subtitle,
-                    media: List,
-                  };
-                },
-              },
             }),
           ],
           validation: (r) => r.min(1).max(10),
@@ -400,10 +338,11 @@ export default defineType({
         priority === "ALTA"
           ? "🔴 Alta"
           : priority === "MEDIA"
-          ? "🟠 Media"
-          : priority === "BASSA"
-          ? "🟢 Bassa"
-          : "—";
+            ? "🟠 Media"
+            : priority === "BASSA"
+              ? "🟢 Bassa"
+              : "—";
+
       return {
         title,
         subtitle: mittente ? `${mittente} · ${tag}` : tag,

@@ -126,6 +126,12 @@ type UIStep = {
   description: string | TypedObject[] | undefined;
 };
 
+// 👇 body ahora es SIEMPRE una propiedad (puede ser undefined, pero no opcional)
+type UIDetail = {
+  title: string;
+  body: string | TypedObject[] | undefined;
+};
+
 // Tipos para otros componentes
 type AssistenzaData = {
   title?: string;
@@ -149,27 +155,35 @@ function normalizeMeta(input: NonNullable<RaccomandataPageDoc>, fallbackCode: st
   };
 }
 
+function normalizePortableContent(
+  input: unknown
+): string | TypedObject[] | undefined {
+  if (!input) return undefined;
+
+  if (typeof input === "string") {
+    const trimmed = input.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }
+
+  if (Array.isArray(input)) {
+    return input.length > 0 ? (input as TypedObject[]) : undefined;
+  }
+
+  if (typeof input === "object") {
+    return [input as TypedObject];
+  }
+
+  return undefined;
+}
+
 // Mantiene Portable Text para la UI (enlaces, formato, etc.)
 function normalizeStepsForUI(items?: StepDoc[] | null): UIStep[] {
   if (!Array.isArray(items)) return [];
 
   return items
-    .map((s) => {
+    .map<UIStep | null>((s) => {
       const title = norm(s?.title);
-      const rawDesc = s?.description;
-
-      let description: string | TypedObject[] | undefined;
-
-      if (Array.isArray(rawDesc)) {
-        // Caso típico: Portable Text como array de bloques
-        description = rawDesc as TypedObject[];
-      } else if (typeof rawDesc === "string") {
-        const trimmed = rawDesc.trim();
-        description = trimmed.length ? trimmed : undefined;
-      } else if (rawDesc && typeof rawDesc === "object") {
-        // Por si Sanity devolviera un único bloque suelto
-        description = [rawDesc as TypedObject];
-      }
+      const description = normalizePortableContent(s?.description);
 
       if (!title && !description) {
         return null;
@@ -180,16 +194,29 @@ function normalizeStepsForUI(items?: StepDoc[] | null): UIStep[] {
     .filter((s): s is UIStep => s !== null);
 }
 
-function normalizeDetails(
-  items?: DetailDoc[] | null
-): { title: string; body: string }[] {
+function normalizeDetails(items?: DetailDoc[] | null): UIDetail[] {
   if (!Array.isArray(items)) return [];
+
   return items
-    .map((d) => ({
-      title: norm(d?.title),
-      body: ptToPlainText(d?.body),
-    }))
-    .filter((d) => d.title.length > 0 || d.body.length > 0);
+    .map<UIDetail | null>((d) => {
+      const title = norm(d?.title);
+      const body = normalizePortableContent(d?.body);
+
+      const hasBody =
+        typeof body === "string"
+          ? body.trim().length > 0
+          : Array.isArray(body)
+            ? body.length > 0
+            : false;
+
+      if (!title && !hasBody) {
+        return null;
+      }
+
+      // body SIEMPRE existe en UIDetail, aunque sea undefined
+      return { title, body };
+    })
+    .filter((detail): detail is UIDetail => detail !== null);
 }
 
 function normalizeAssistenza(
