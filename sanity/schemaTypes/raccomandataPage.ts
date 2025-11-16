@@ -1,6 +1,66 @@
-// /sanity/schemas/raccomandataPage.ts
+
 import { defineType, defineField } from "sanity";
 import { List } from "phosphor-react";
+
+// 🔧 Bloques de Portable Text con estilos, listas, links e imágenes
+const richTextBlocks = [
+  {
+    type: "block",
+    styles: [
+      { title: "Normale", value: "normal" },
+      { title: "Titolo H2", value: "h2" },
+      { title: "Titolo H3", value: "h3" },
+      { title: "Citazione", value: "blockquote" },
+    ],
+    lists: [
+      { title: "Lista puntata", value: "bullet" },
+      { title: "Lista numerata", value: "number" },
+    ],
+    marks: {
+      decorators: [
+        { title: "Grassetto", value: "strong" },
+        { title: "Corsivo", value: "em" },
+        { title: "Sottolineato", value: "underline" },
+      ],
+      annotations: [
+        {
+          name: "link",
+          type: "object",
+          title: "Link",
+          fields: [
+            {
+              name: "href",
+              title: "URL",
+              type: "url",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    type: "image",
+    options: { hotspot: true },
+    fields: [
+      {
+        name: "alt",
+        title: "Testo alternativo (alt)",
+        type: "string",
+        validation: (r: any) =>
+          r
+            .required()
+            .error(
+              "L'immagine deve avere un testo alternativo per l'accessibilità."
+            ),
+      },
+      {
+        name: "caption",
+        title: "Didascalia",
+        type: "string",
+      },
+    ],
+  },
+];
 
 export default defineType({
   name: "raccomandataPage",
@@ -13,13 +73,14 @@ export default defineType({
       name: "code",
       title: "Code (Codice)",
       type: "string",
-      validation: (r) => r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
+      validation: (r: any) =>
+        r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
     }),
     defineField({
       name: "heroTitleSuffix",
       title: "Hero Title Suffix",
       type: "string",
-      validation: (r) => r.required().max(80),
+      validation: (r: any) => r.required().max(80),
       description: "Sufijo del título en el hero (máx. ~80 caracteres).",
     }),
     defineField({
@@ -27,7 +88,7 @@ export default defineType({
       title: "Hero Subtitle",
       type: "text",
       rows: 3,
-      validation: (r) => r.max(240),
+      validation: (r: any) => r.max(240),
       description: "Subtítulo breve (recomendado ≤ 240 caracteres).",
     }),
     defineField({ name: "mittente", title: "Mittente", type: "string" }),
@@ -40,7 +101,7 @@ export default defineType({
       title: "Meta Title",
       type: "string",
       description: "Título SEO (ideal 50–60, máximo 65 caracteres).",
-      validation: (r) => r.max(65),
+      validation: (r: any) => r.max(65),
     }),
     defineField({
       name: "metaDescription",
@@ -48,7 +109,7 @@ export default defineType({
       type: "text",
       rows: 3,
       description: "Descripción SEO (ideal 140–155, máximo 160 caracteres).",
-      validation: (r) => r.max(160),
+      validation: (r: any) => r.max(160),
     }),
 
     // ===== Priorità =====
@@ -66,7 +127,7 @@ export default defineType({
         layout: "radio",
       },
       initialValue: "BASSA",
-      validation: (r) => r.required(),
+      validation: (r: any) => r.required(),
     }),
 
     // ===== Steps (Cosa fare) =====
@@ -85,14 +146,14 @@ export default defineType({
               name: "title",
               title: "Titolo",
               type: "string",
-              validation: (r) => r.required().max(120),
+              validation: (r: any) => r.required().max(120),
             }),
             defineField({
               name: "description",
               title: "Descrizione",
               type: "array",
-              of: [{ type: "block" }],
-              validation: (r) => r.required(),
+              of: richTextBlocks,
+              validation: (r: any) => r.required(),
             }),
           ],
           preview: {
@@ -100,7 +161,7 @@ export default defineType({
             prepare({ title, body }) {
               let subtitle = "";
               if (Array.isArray(body) && body.length > 0) {
-                const first = body[0]?.children?.[0];
+                const first = (body as any)[0]?.children?.[0];
                 subtitle =
                   typeof first?.text === "string"
                     ? first.text.slice(0, 50) + "…"
@@ -111,10 +172,10 @@ export default defineType({
           },
         },
       ],
-      validation: (r) => r.min(1).max(8),
+      validation: (r: any) => r.min(1).max(8),
     }),
 
-    // ===== Details (SECCIÓN A MODIFICAR) =====
+    // ===== Details =====
     defineField({
       name: "details",
       title: "Dettagli (Sezione Testo)",
@@ -126,21 +187,18 @@ export default defineType({
           name: "detailBlock",
           options: { collapsible: true, collapsed: true },
           fields: [
-            // ✔️ YA NO ES OBLIGATORIO
             defineField({
               name: "title",
               title: "Titolo",
               type: "string",
-              validation: (r) => r.max(120),
+              validation: (r: any) => r.max(120),
             }),
-
-            // ✔️ TAMPOCO ES OBLIGATORIO
             defineField({
               name: "body",
               title: "Corpo del testo",
               type: "array",
-              of: [{ type: "block" }],
-              // sin required()
+              of: richTextBlocks,
+              // opcional → sin required
             }),
           ],
           preview: {
@@ -148,7 +206,7 @@ export default defineType({
             prepare({ title, body }) {
               let subtitle = "";
               if (Array.isArray(body) && body.length > 0) {
-                const first = body[0]?.children?.[0];
+                const first = (body as any)[0]?.children?.[0];
                 subtitle =
                   typeof first?.text === "string"
                     ? first.text.slice(0, 60) + "…"
@@ -163,7 +221,7 @@ export default defineType({
           },
         },
       ],
-      validation: (r) => r.min(1).max(100),
+      validation: (r: any) => r.min(1).max(100),
     }),
 
     // ===== Alert Box =====
@@ -184,13 +242,13 @@ export default defineType({
           title: "Titolo",
           type: "string",
           initialValue: "Attenzione ai Termini di Ritiro",
-          validation: (r) => r.max(140),
+          validation: (r: any) => r.max(140),
         }),
         defineField({
           name: "body",
           title: "Testo",
           type: "array",
-          of: [{ type: "block" }],
+          of: richTextBlocks,
         }),
         defineField({
           name: "icon",
@@ -213,7 +271,7 @@ export default defineType({
           title: "Titolo Sezione",
           type: "string",
           initialValue: "Assistenza e Contatti Utili",
-          validation: (r) => r.max(120),
+          validation: (r: any) => r.max(120),
         }),
         defineField({
           name: "cards",
@@ -236,19 +294,37 @@ export default defineType({
                   name: "title",
                   title: "Titolo",
                   type: "string",
-                  validation: (r) => r.required().max(120),
+                  validation: (r: any) => r.required().max(120),
                 }),
                 defineField({
                   name: "description",
                   title: "Descrizione",
                   type: "array",
-                  of: [{ type: "block" }],
-                  validation: (r) => r.required(),
+                  of: richTextBlocks,
+                  validation: (r: any) => r.required(),
                 }),
               ],
+              preview: {
+                select: { title: "title", body: "description" },
+                prepare({ title, body }) {
+                  let subtitle = "";
+                  if (Array.isArray(body) && body.length > 0) {
+                    const first = (body as any)[0]?.children?.[0];
+                    subtitle =
+                      typeof first?.text === "string"
+                        ? first.text.slice(0, 50) + "…"
+                        : "";
+                  }
+                  return {
+                    title,
+                    subtitle,
+                    media: List,
+                  };
+                },
+              },
             }),
           ],
-          validation: (r) => r.min(1).max(6),
+          validation: (r: any) => r.min(1).max(6),
         }),
       ],
     }),
@@ -264,7 +340,7 @@ export default defineType({
           name: "name",
           title: "Nombre del autor",
           type: "string",
-          validation: (r) => r.required().max(80),
+          validation: (r: any) => r.required().max(80),
           initialValue: "Lorenzo Sposti",
         }),
         defineField({
@@ -272,13 +348,13 @@ export default defineType({
           title: "Avatar URL",
           type: "url",
           initialValue: "/images/author.jpg",
-          validation: (r) => r.uri({ allowRelative: true }),
+          validation: (r: any) => r.uri({ allowRelative: true }),
         }),
         defineField({
           name: "updatedAt",
           title: "Fecha de actualización",
           type: "datetime",
-          validation: (r) => r.required(),
+          validation: (r: any) => r.required(),
           initialValue: () => new Date().toISOString(),
         }),
       ],
@@ -296,7 +372,7 @@ export default defineType({
           title: "Titolo Sezione",
           type: "string",
           initialValue: "Domande Frequenti (FAQ)",
-          validation: (r) => r.max(120),
+          validation: (r: any) => r.max(120),
         }),
         defineField({
           name: "items",
@@ -313,19 +389,37 @@ export default defineType({
                   name: "q",
                   title: "Domanda",
                   type: "string",
-                  validation: (r) => r.required().max(160),
+                  validation: (r: any) => r.required().max(160),
                 }),
                 defineField({
                   name: "a",
                   title: "Risposta",
                   type: "array",
-                  of: [{ type: "block" }],
-                  validation: (r) => r.required(),
+                  of: richTextBlocks,
+                  validation: (r: any) => r.required(),
                 }),
               ],
+              preview: {
+                select: { title: "q", body: "a" },
+                prepare({ title, body }) {
+                  let subtitle = "";
+                  if (Array.isArray(body) && body.length > 0) {
+                    const first = (body as any)[0]?.children?.[0];
+                    subtitle =
+                      typeof first?.text === "string"
+                        ? first.text.slice(0, 60) + "…"
+                        : "";
+                  }
+                  return {
+                    title,
+                    subtitle,
+                    media: List,
+                  };
+                },
+              },
             }),
           ],
-          validation: (r) => r.min(1).max(10),
+          validation: (r: any) => r.min(1).max(10),
         }),
       ],
     }),
@@ -338,10 +432,10 @@ export default defineType({
         priority === "ALTA"
           ? "🔴 Alta"
           : priority === "MEDIA"
-            ? "🟠 Media"
-            : priority === "BASSA"
-              ? "🟢 Bassa"
-              : "—";
+          ? "🟠 Media"
+          : priority === "BASSA"
+          ? "🟢 Bassa"
+          : "—";
 
       return {
         title,
