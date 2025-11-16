@@ -4,6 +4,7 @@ import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import type { TypedObject } from "@portabletext/types";
 import imageUrlBuilder from "@sanity/image-url";
 import { sanityClient } from "sanity/lib/client";
+import Image from "next/image";
 
 const builder = imageUrlBuilder(sanityClient);
 
@@ -98,10 +99,13 @@ const portableComponents: PortableTextComponents = {
 
       return (
         <figure className="my-5">
-          <img
+          <Image
             src={urlFor(value).url()}
             alt={(value as { alt?: string }).alt || ""}
+            width={800}                // ⬅️ obligatorio
+            height={500}               // ⬅️ obligatorio
             className="rounded-lg shadow-sm border border-gray-200"
+            sizes="(max-width: 768px) 100vw, 700px" // responsive ideal
           />
           {"caption" in (value as object) &&
             (value as { caption?: string }).caption && (
