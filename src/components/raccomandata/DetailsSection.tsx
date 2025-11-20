@@ -102,8 +102,8 @@ const portableComponents: PortableTextComponents = {
           <Image
             src={urlFor(value).url()}
             alt={(value as { alt?: string }).alt || ""}
-            width={800}               
-            height={500}               
+            width={800}
+            height={500}
             className="rounded-lg shadow-sm border border-gray-200"
             sizes="(max-width: 768px) 100vw, 700px" // responsive ideal
           />

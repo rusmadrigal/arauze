@@ -1,4 +1,3 @@
-// src/components/raccomandata/FeedbackRaccomandata.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -15,11 +14,9 @@ type FeedbackItem = {
 };
 
 interface FeedbackRaccomandataProps {
-    /** Feedback già approvati che llegan del server (solo approved == true) */
     feedback?: FeedbackItem[];
 }
 
-// Mapeo slug -> label bonito
 const CATEGORY_LABELS: Record<string, string> = {
     avviso_giacenza: "Avviso di giacenza",
     agenzia_entrate: "Agenzia delle Entrate / Fisco",
@@ -36,7 +33,6 @@ const CATEGORY_LABELS: Record<string, string> = {
     altro: "Altro",
 };
 
-// Lista para el dropdown
 const CATEGORIES = Object.entries(CATEGORY_LABELS).map(([value, label]) => ({
     value,
     label,
@@ -55,13 +51,24 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    // Nuevo: controlamos si el formulario está desplegado o no
     const [isFormOpen, setIsFormOpen] = useState(false);
+
+    const [honeypot, setHoneypot] = useState("");
+    const [formLoadedAt] = useState(() => Date.now());
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setSuccessMsg(null);
         setErrorMsg(null);
+
+        const now = Date.now();
+
+        if (honeypot) return;
+
+        if (now - formLoadedAt < 4000) {
+            setErrorMsg("Per favore riprova tra qualche secondo.");
+            return;
+        }
 
         if (!nome || !citta || !codice || !categoria || !commento) {
             setErrorMsg("Per favore compila tutti i campi.");
@@ -78,21 +85,21 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                     nome,
                     citta,
                     codice,
-                    categoria, // aquí va el slug (es. "avviso_giacenza")
+                    categoria,
                     commento,
+                    submittedAt: now,
+                    honeypot,
                 }),
             });
 
             if (!res.ok) {
                 const data = await res.json().catch(() => null);
-                const msg =
-                    data?.message ??
-                    "Si è verificato un errore durante l’invio del feedback.";
+                const msg = data?.message ?? "Errore durante l’invio.";
                 throw new Error(msg);
             }
 
             setSuccessMsg(
-                "Grazie! Il tuo feedback è stato inviato e sarà visibile dopo la nostra approvazione."
+                "Grazie! Il tuo feedback sarà visibile dopo la nostra approvazione."
             );
 
             setNome("");
@@ -100,20 +107,22 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
             setCodice("");
             setCategoria("");
             setCommento("");
-        } catch (err: unknown) {
-            const message =
-                err instanceof Error
-                    ? err.message
-                    : "Si è verificato un errore imprevisto.";
-            setErrorMsg(message);
+            setHoneypot("");
+        } catch (err) {
+            if (err instanceof Error) {
+                setErrorMsg(err.message);
+            } else {
+                setErrorMsg("Errore imprevisto.");
+            }
         } finally {
             setIsSubmitting(false);
         }
+
     }
 
     return (
         <section className="mt-10 space-y-6">
-            {/* BLOCCO: Feedback di altri utenti */}
+            {/* FEEDBACK ALTRI UTENTI */}
             <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold text-slate-900 md:text-xl">
                     Feedback di altri utenti
@@ -121,8 +130,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
 
                 {feedback.length === 0 ? (
                     <p className="text-sm text-slate-500">
-                        Non ci sono ancora feedback pubblici per questo codice. Sii il
-                        primo a condividere la tua esperienza.
+                        Non ci sono ancora feedback pubblici per questo codice.
                     </p>
                 ) : (
                     <div className="space-y-3">
@@ -133,15 +141,31 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                             return (
                                 <article
                                     key={item._id}
-                                    className="flex items-start justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                                    className="
+                                        relative
+                                        flex items-start justify-between
+                                        rounded-2xl border border-slate-200 bg-white
+                                        px-4 py-3 shadow-sm
+                                        transition-all duration-200
+                                        hover:border-blue-300 hover:shadow-md hover:-translate-y-[1px]
+                                    "
                                 >
+                                    {/* Borde animado premium */}
+                                    <span
+                                        className="
+                                            pointer-events-none absolute inset-0 rounded-2xl
+                                            border-2 border-blue-500 opacity-0
+                                            transition-opacity duration-200
+                                            hover:opacity-20
+                                        "
+                                    ></span>
+
                                     <div className="flex flex-1 items-start gap-3">
                                         <div className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-                                            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                                            <MessageCircle className="h-4 w-4" />
                                         </div>
 
                                         <div className="flex-1">
-                                            {/* Primera fila: nombre izquierda, ciudad + pin derecha */}
                                             <div className="flex items-start justify-between gap-2">
                                                 <span className="text-sm font-semibold text-slate-900">
                                                     {item.nome}
@@ -149,20 +173,18 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
 
                                                 {item.citta && (
                                                     <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                                                        <MapPin className="h-3 w-3" aria-hidden="true" />
+                                                        <MapPin className="h-3 w-3" />
                                                         {item.citta}
                                                     </span>
                                                 )}
                                             </div>
 
-                                            {/* Categoría como pill */}
                                             {categoriaLabel && (
                                                 <div className="mt-1 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700">
                                                     {categoriaLabel}
                                                 </div>
                                             )}
 
-                                            {/* Comentario */}
                                             <p className="mt-2 text-sm leading-relaxed text-slate-700">
                                                 {item.commento}
                                             </p>
@@ -182,7 +204,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                 )}
             </div>
 
-            {/* BLOCCO: Form di invio feedback (collapsabile) */}
+            {/* FORM */}
             <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                     <div>
@@ -190,25 +212,35 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                             Condividi la tua esperienza
                         </h3>
                         <p className="mt-1 text-sm text-slate-600">
-                            Racconta cosa hai trovato nella tua raccomandata in base al
-                            codice che hai ricevuto.
+                            Racconta cosa hai trovato nella tua raccomandata.
                         </p>
                     </div>
 
                     <button
                         type="button"
                         onClick={() => setIsFormOpen((prev) => !prev)}
-                        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-100"
+                        className={`
+        inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 
+        px-4 py-2 text-xs font-medium text-slate-700 shadow-sm transition 
+        hover:bg-slate-100
+        ${!isFormOpen ? "animate-[pulseLight_2.5s_ease-in-out_infinite]" : ""}
+    `}
                     >
-                        <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                        <span>
-                            {isFormOpen ? "Nascondi modulo" : "Lascia un feedback"}
-                        </span>
+                        <MessageCircle className="h-4 w-4" />
+                        {isFormOpen ? "Nascondi modulo" : "Lascia un feedback"}
                     </button>
                 </div>
 
                 {isFormOpen && (
                     <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+                        <input
+                            type="text"
+                            name="website"
+                            value={honeypot}
+                            onChange={(e) => setHoneypot(e.target.value)}
+                            className="hidden"
+                        />
+
                         <div className="grid gap-3 md:grid-cols-2">
                             <div>
                                 <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -218,8 +250,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                                     type="text"
                                     value={nome}
                                     onChange={(e) => setNome(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                                    placeholder="Es. Giovanni"
+                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 />
                             </div>
 
@@ -231,8 +262,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                                     type="text"
                                     value={citta}
                                     onChange={(e) => setCitta(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                                    placeholder="Es. Milano"
+                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 />
                             </div>
                         </div>
@@ -246,21 +276,20 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                                     type="text"
                                     value={codice}
                                     onChange={(e) => setCodice(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                                    placeholder="Es. 648..."
+                                    className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 />
                             </div>
 
                             <div>
                                 <label className="mb-1 block text-sm font-medium text-slate-700">
-                                    Seleziona una categoria
+                                    Categoria
                                 </label>
                                 <select
                                     value={categoria}
                                     onChange={(e) => setCategoria(e.target.value)}
-                                    className="w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 >
-                                    <option value="">Seleziona una categoria</option>
+                                    <option value="">Seleziona...</option>
                                     {CATEGORIES.map((cat) => (
                                         <option key={cat.value} value={cat.value}>
                                             {cat.label}
@@ -278,35 +307,33 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                                 value={commento}
                                 onChange={(e) => setCommento(e.target.value)}
                                 rows={4}
-                                className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                                placeholder="Descrivi brevemente il contenuto della raccomandata che hai ricevuto..."
+                                className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                             />
                         </div>
 
                         {errorMsg && (
-                            <p className="rounded-2xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+                            <p className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
                                 {errorMsg}
                             </p>
                         )}
+
                         {successMsg && (
-                            <p className="rounded-2xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                            <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
                                 {successMsg}
                             </p>
                         )}
 
                         <p className="text-xs text-slate-500">
-                            Il tuo feedback sarà visibile solo dopo la nostra approvazione.
+                            Il tuo feedback sarà visibile dopo approvazione.
                         </p>
 
-                        <div className="pt-1">
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70 md:w-auto"
-                            >
-                                {isSubmitting ? "Invio in corso..." : "Invia feedback"}
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-blue-700 disabled:opacity-60"
+                        >
+                            {isSubmitting ? "Invio..." : "Invia feedback"}
+                        </button>
                     </form>
                 )}
             </div>

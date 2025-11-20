@@ -125,5 +125,22 @@ textarea::placeholder {
   --text: #e5e7eb;
 }
 
-.bg-surface { background-color: var(--surface); }
-.text-default { color: var(--text); }
+.bg-surface {
+  background-color: var(--surface);
+}
+.text-default {
+  color: var(--text);
+}
+
+/* Enhanced soft pulsing glow for the “Lascia un feedback” button */
+@keyframes pulseLight {
+  0% {
+    box-shadow: 0 0 0px rgba(0, 123, 255, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.32);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(0, 123, 255, 0.18);
+  }
+}

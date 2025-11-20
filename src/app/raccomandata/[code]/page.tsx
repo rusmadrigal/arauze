@@ -9,7 +9,6 @@ import DetailsSection from "@/components/raccomandata/DetailsSection";
 import AlertBox from "@/components/raccomandata/AlertBox";
 import AssistenzaSection from "@/components/raccomandata/AssistenzaSection";
 import FAQSection from "@/components/raccomandata/FAQSection";
-import AdditionalInfoBanner from "@/components/raccomandata/AdditionalInfoBanner";
 import FeedbackRaccomandata from "@/components/raccomandata/FeedbackRaccomandata";
 
 // SEO JSON-LD
@@ -95,26 +94,26 @@ type RaccomandataPageDoc = {
   steps?: StepDoc[] | null;
   details?: DetailDoc[] | null;
   alertBox?:
-    | { enabled?: boolean; title?: string; body?: unknown; icon?: string }
-    | null;
+  | { enabled?: boolean; title?: string; body?: unknown; icon?: string }
+  | null;
   assistenza?:
+  | {
+    title?: string | null;
+    cards?:
     | {
-        title?: string | null;
-        cards?:
-          | {
-              icon?: string | null;
-              title?: string | null;
-              description?: unknown;
-            }[]
-          | null;
-      }
+      icon?: string | null;
+      title?: string | null;
+      description?: unknown;
+    }[]
     | null;
+  }
+  | null;
   faq?:
-    | {
-        title?: string | null;
-        items?: FAQItemDoc[] | null;
-      }
-    | null;
+  | {
+    title?: string | null;
+    items?: FAQItemDoc[] | null;
+  }
+  | null;
   authorBox?: { name?: string; avatarUrl?: string; updatedAt?: string };
 
   _createdAt?: string | null;
@@ -228,8 +227,8 @@ function normalizeDetails(items?: DetailDoc[] | null): UIDetail[] {
         typeof body === "string"
           ? body.trim().length > 0
           : Array.isArray(body)
-          ? body.length > 0
-          : false;
+            ? body.length > 0
+            : false;
 
       if (!title && !hasBody) {
         return null;
@@ -244,26 +243,26 @@ function normalizeDetails(items?: DetailDoc[] | null): UIDetail[] {
 function normalizeAssistenza(
   a?:
     | {
+      title?: string | null;
+      cards?:
+      | {
+        icon?: string | null;
         title?: string | null;
-        cards?:
-          | {
-              icon?: string | null;
-              title?: string | null;
-              description?: unknown;
-            }[]
-          | null;
-      }
+        description?: unknown;
+      }[]
+      | null;
+    }
     | null
 ): AssistenzaData | undefined {
   if (!a) return undefined;
   const cards = Array.isArray(a.cards)
     ? a.cards
-        .map((c) => ({
-          icon: c?.icon ?? undefined,
-          title: norm(c?.title) || undefined,
-          description: ptToPlainText(c?.description) || undefined,
-        }))
-        .filter((c) => c.icon || c.title || c.description)
+      .map((c) => ({
+        icon: c?.icon ?? undefined,
+        title: norm(c?.title) || undefined,
+        description: ptToPlainText(c?.description) || undefined,
+      }))
+      .filter((c) => c.icon || c.title || c.description)
     : undefined;
   return {
     title: norm(a.title) || undefined,
@@ -274,19 +273,19 @@ function normalizeAssistenza(
 function normalizeFAQ(
   f?:
     | {
-        title?: string | null;
-        items?: { q?: string | null; a?: unknown }[] | null;
-      }
+      title?: string | null;
+      items?: { q?: string | null; a?: unknown }[] | null;
+    }
     | null
 ): FAQData | undefined {
   if (!f) return undefined;
   const items = Array.isArray(f.items)
     ? f.items
-        .map((it) => ({
-          q: norm(it?.q) || undefined,
-          a: ptToPlainText(it?.a) || undefined,
-        }))
-        .filter((it) => it.q || it.a)
+      .map((it) => ({
+        q: norm(it?.q) || undefined,
+        a: ptToPlainText(it?.a) || undefined,
+      }))
+      .filter((it) => it.q || it.a)
     : undefined;
   return { title: norm(f.title) || undefined, items };
 }
@@ -342,17 +341,17 @@ export async function generateMetadata({
     page?.metaTitle && page.metaTitle.trim().length > 0
       ? page.metaTitle
       : page?.heroTitleSuffix
-      ? `${titleBase} – ${page.heroTitleSuffix}`
-      : titleBase;
+        ? `${titleBase} – ${page.heroTitleSuffix}`
+        : titleBase;
 
   const description =
     page?.metaDescription && page.metaDescription.trim().length > 0
       ? page.metaDescription
       : page?.heroSubtitle
-      ? page.heroSubtitle
-      : codice
-      ? `Dettagli per il codice ${codice}`
-      : "Dettagli raccomandata";
+        ? page.heroSubtitle
+        : codice
+          ? `Dettagli per il codice ${codice}`
+          : "Dettagli raccomandata";
 
   const canonical = `/raccomandata/${codice}`;
 
@@ -428,38 +427,38 @@ export default async function RaccomandataPage({
   // AlertBox: aplanamos el body para que siga siendo string
   const uiAlertBox = page.alertBox
     ? {
-        ...page.alertBox,
-        body: ptToPlainText(page.alertBox.body),
-      }
+      ...page.alertBox,
+      body: ptToPlainText(page.alertBox.body),
+    }
     : undefined;
 
   // ====== Datos para JSON-LD (también en texto plano) ======
   const seoSteps = Array.isArray(page.steps)
     ? page.steps.map((s) => ({
-        title: s?.title ?? null,
-        description: ptToPlainText(s?.description) || null,
-      }))
+      title: s?.title ?? null,
+      description: ptToPlainText(s?.description) || null,
+    }))
     : null;
 
   const seoDetails = Array.isArray(page.details)
     ? page.details.map((d) => ({
-        title: d?.title ?? null,
-        body: ptToPlainText(d?.body) || null,
-      }))
+      title: d?.title ?? null,
+      body: ptToPlainText(d?.body) || null,
+    }))
     : null;
 
   const seoFaq =
     page.faq && Array.isArray(page.faq.items)
       ? {
-          title: page.faq.title ?? null,
-          items: page.faq.items.map((it) => ({
-            q: it?.q ?? null,
-            a: ptToPlainText(it?.a) || null,
-          })),
-        }
+        title: page.faq.title ?? null,
+        items: page.faq.items.map((it) => ({
+          q: it?.q ?? null,
+          a: ptToPlainText(it?.a) || null,
+        })),
+      }
       : page.faq
-      ? { title: page.faq.title ?? null, items: null }
-      : null;
+        ? { title: page.faq.title ?? null, items: null }
+        : null;
 
   const seoPage: SeoRaccomandataPage = {
     heroTitleSuffix: page.heroTitleSuffix ?? null,
@@ -495,8 +494,8 @@ export default async function RaccomandataPage({
           <AlertBox data={uiAlertBox} />
           <AssistenzaSection data={uiAssistenza} />
           <FAQSection data={uiFAQ} />
-          <AdditionalInfoBanner />
-          
+          {/* <AdditionalInfoBanner /> */}
+
         </div>
       </div>
 

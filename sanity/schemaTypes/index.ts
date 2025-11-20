@@ -4,8 +4,8 @@ import raccomandataPage from "./raccomandataPage";
 import raccomandataFeedback from "./raccomandataFeedback";
 
 export const schemaTypes = [
-  raccomandataCode,
-  raccomandataReport,
-  raccomandataPage,
-  raccomandataFeedback,
+    raccomandataCode,
+    raccomandataReport,
+    raccomandataPage,
+    raccomandataFeedback,
 ];
