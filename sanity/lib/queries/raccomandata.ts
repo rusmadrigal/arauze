@@ -1,7 +1,7 @@
 // /sanity/lib/queries/raccomandata.ts
 import { groq } from "next-sanity";
 
-// ✅ Query de detalle por código (ya existente)
+// ✅ Detalle de la raccomandata por código
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
@@ -50,7 +50,7 @@ export const RACCOMANDATA_BY_CODE = groq`
 }
 `;
 
-// (Opcional) Conteo de reportes crowd (ya existente)
+// ✅ Conteo de reportes crowd por código
 export const REPORTS_BY_CODE = groq`
 count(*[
   _type == "raccomandataReport" &&
@@ -59,9 +59,7 @@ count(*[
 ])
 `;
 
-// ✅ NUEVO: últimas páginas analizadas para la tabla del home
-// Campos que necesitas en la UI: code (#573), mittente (AGENZIA DEI…), priority (ALTA|BASSA|RITIRATA)
-// El texto "Dettaglio →" lo armamos en Next.js, y el href = /raccomandata/${code}
+// ✅ Últimas páginas analizadas para la tabla del home
 export const ULTIME_ANALIZZATE_PAGES = groq`
 *[
   _type == "raccomandataPage" && defined(code) && defined(mittente)
@@ -71,5 +69,21 @@ export const ULTIME_ANALIZZATE_PAGES = groq`
   "sender": mittente,
   "urgency": priority,
   "state": stato
+}
+`;
+
+// ✅ Nuevo: datos del gráfico PIE por código (raccomandataChart)
+export const RACCOMANDATA_CHART_BY_CODE = groq`
+*[
+  _type == "raccomandataChart" &&
+  string(codice) == string($code)
+][0]{
+  "code": string(codice),
+  titolo,
+  slices[]{
+    categoria,
+    valore,
+    color
+  }
 }
 `;

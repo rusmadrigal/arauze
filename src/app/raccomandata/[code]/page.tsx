@@ -10,6 +10,8 @@ import AlertBox from "@/components/raccomandata/AlertBox";
 import AssistenzaSection from "@/components/raccomandata/AssistenzaSection";
 import FAQSection from "@/components/raccomandata/FAQSection";
 import FeedbackRaccomandata from "@/components/raccomandata/FeedbackRaccomandata";
+import RaccomandataPieChart from "@/components/raccomandata/RaccomandataPieChart";
+import { getRaccomandataChart } from "@/lib/sanity/raccomandataChart";
 
 // SEO JSON-LD
 import SEOJsonLd, {
@@ -395,6 +397,9 @@ export default async function RaccomandataPage({
 
   const codice = (page.code ?? code).trim();
 
+  // 👇 AQUÍ se declara chartData, antes del return
+  const chartData = await getRaccomandataChart(codice);
+
   // Fetch de feedback aprobados para este codice
   const feedbackDocs = await sanityClient.fetch<FeedbackDoc[]>(
     `*[_type == "raccomandataFeedback" && approved == true && codice == $codice] | order(createdAt desc){
@@ -489,13 +494,23 @@ export default async function RaccomandataPage({
           />
           <AuthorBox data={page?.authorBox} />
           <FeedbackRaccomandata feedback={uiFeedback} />
+
+          {/* 👇 Gráfico: solo si hay datos */}
+          {chartData?.slices?.length ? (
+            <RaccomandataPieChart
+              slices={chartData.slices}
+              title={
+                chartData.titolo ||
+                "Distribuzione delle categorie per questo codice"
+              }
+            />
+          ) : null}
+
           <StepsRaccomandata steps={uiSteps} />
           <DetailsSection details={uiDetails} />
           <AlertBox data={uiAlertBox} />
           <AssistenzaSection data={uiAssistenza} />
           <FAQSection data={uiFAQ} />
-          {/* <AdditionalInfoBanner /> */}
-
         </div>
       </div>
 
