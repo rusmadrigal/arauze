@@ -1,7 +1,6 @@
-// src/components/raccomandata/RaccomandataPieChart.tsx
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     PieChart,
     Pie,
@@ -32,9 +31,8 @@ const CATEGORY_LABELS: Record<string, string> = {
     assicurazione: "Assicurazione",
     recupero_crediti: "Recupero crediti / Sollecito di pagamento",
     multa: "Multa / Verbale di contestazione",
-    fornitore_servizi:
-        "Fornitore di servizi (luce, gas, acqua, internet)",
-    condominio: "Condominio / Amministratore di condominio",
+    fornitore_servizi: "Fornitore di servizi",
+    condominio: "Condominio",
     altro: "Altro",
 };
 
@@ -48,7 +46,26 @@ const DEFAULT_COLORS = [
     "#f97316",
 ];
 
-const RaccomandataPieChart: React.FC<Props> = ({ slices, title }) => {
+export default function RaccomandataPieChart({ slices, title }: Props) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [radius, setRadius] = useState(90); // valor desktop
+
+    useEffect(() => {
+        function updateRadius() {
+            if (!containerRef.current) return;
+            const width = containerRef.current.offsetWidth;
+
+            // Ajuste dinámico responsivo
+            if (width < 360) setRadius(65);
+            else if (width < 480) setRadius(80);
+            else setRadius(95);
+        }
+
+        updateRadius();
+        window.addEventListener("resize", updateRadius);
+        return () => window.removeEventListener("resize", updateRadius);
+    }, []);
+
     if (!slices || slices.length === 0) return null;
 
     const data = slices.map((slice) => ({
@@ -67,75 +84,62 @@ const RaccomandataPieChart: React.FC<Props> = ({ slices, title }) => {
     };
 
     return (
-        <section className="mt-8 rounded-2xl border border-slate-100 bg-slate-50/70 p-5 shadow-sm">
+        <section className="mt-6 rounded-xl bg-white p-4 shadow-sm border border-slate-200">
             {title && (
                 <h3 className="mb-4 text-sm font-semibold text-slate-800">
                     {title}
                 </h3>
             )}
 
-            <div className="rounded-xl bg-white p-4 shadow-inner">
-                <div className="h-64 w-full">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={data}
-                                dataKey="value"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={40}
-                                outerRadius={90}
-                                label={renderLabel}
-                                labelLine={false}
-                            >
-                                {data.map((entry, index) => (
-                                    <Cell
-                                        key={entry.key ?? index}
-                                        fill={
-                                            entry.color ||
-                                            DEFAULT_COLORS[index % DEFAULT_COLORS.length]
-                                        }
-                                        className="cursor-pointer transition-transform duration-150 hover:scale-105"
-                                    />
-                                ))}
-                            </Pie>
+            {/* contenedor responsivo */}
+            <div
+                ref={containerRef}
+                className="w-full h-[280px] sm:h-[300px] flex items-center justify-center"
+            >
+                <ResponsiveContainer>
+                    <PieChart>
+                        <Pie
+                            data={data}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={radius * 0.45}
+                            outerRadius={radius}
+                            label={renderLabel}
+                            labelLine={false}
+                        >
+                            {data.map((entry, index) => (
+                                <Cell
+                                    key={entry.key ?? index}
+                                    fill={
+                                        entry.color ||
+                                        DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                                    }
+                                    className="cursor-pointer transition-transform duration-150 hover:scale-105"
+                                />
+                            ))}
+                        </Pie>
 
-                            <Tooltip
-                                formatter={(value: ValueType, name: NameType) => {
-                                    const v =
-                                        typeof value === "number" ? value : Number(value);
-                                    const pct = total ? (v / total) * 100 : 0;
-                                    return [
-                                        `${v} (${pct.toFixed(0)}%)`,
-                                        String(name),
-                                    ];
-                                }}
-                                contentStyle={{
-                                    borderRadius: 12,
-                                    border: "1px solid #e2e8f0",
-                                    boxShadow: "0 10px 25px rgba(15,23,42,0.10)",
-                                    backgroundColor: "#ffffff",
-                                    padding: "8px 12px",
-                                }}
-                                itemStyle={{
-                                    paddingTop: 2,
-                                    paddingBottom: 2,
-                                }}
-                            />
+                        <Tooltip
+                            formatter={(value: ValueType, name: NameType) => {
+                                const v =
+                                    typeof value === "number" ? value : Number(value);
+                                const pct = total ? (v / total) * 100 : 0;
+                                return [`${v} (${pct.toFixed(0)}%)`, String(name)];
+                            }}
+                            contentStyle={{
+                                borderRadius: 10,
+                                border: "1px solid #e2e8f0",
+                                backgroundColor: "#fff",
+                                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                            }}
+                        />
 
-                            <Legend
-                                wrapperStyle={{
-                                    paddingTop: 12,
-                                }}
-                                iconType="square"
-                            />
-                        </PieChart>
-                    </ResponsiveContainer>
-                </div>
+                        <Legend wrapperStyle={{ paddingTop: 10 }} iconType="square" />
+                    </PieChart>
+                </ResponsiveContainer>
             </div>
         </section>
     );
-};
-
-export default RaccomandataPieChart;
+}
