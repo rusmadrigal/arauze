@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Footer from "@/components/ui/Footer";
+import GlobalScripts from "@/components/scripts/GlobalScripts"; // 👈 nuevo import
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -69,8 +70,18 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="bg-surface text-gray-900 dark:text-gray-600 flex flex-col min-h-dvh transition-colors duration-200">
+
+        {/* Scripts globales: GTM, AdSense, etc. */}
+
+        <GlobalScripts
+          gtmId="GTM-WTWX6SPM"
+          adsenseId="ca-pub-6280528663229175"
+        />
+
+
         {/* Contenido principal */}
         <main className="flex-1 py-8">{children}</main>
+
 
         {/* Footer global */}
         <Footer />
