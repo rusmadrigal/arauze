@@ -23,6 +23,7 @@ import { notFound } from "next/navigation";
 import { sanityClient } from "sanity/lib/client";
 import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
 import type { TypedObject } from "@portabletext/types";
+import AdSenseAd from "@/components/ads/AdSenseAd";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -492,8 +493,16 @@ export default async function RaccomandataPage({
             stato={page.stato ?? undefined}
             priority={page.priority ?? undefined}
           />
+          <AdSenseAd
+            adSlot="2025677270"
+            className="my-6"
+          />
           <AuthorBox data={page?.authorBox} />
           <FeedbackRaccomandata feedback={uiFeedback} />
+          <AdSenseAd
+            adSlot="2025677270"
+            className="my-6"
+          />
 
           {/* 👇 Gráfico: solo si hay datos */}
           {chartData?.slices?.length ? (
@@ -507,6 +516,10 @@ export default async function RaccomandataPage({
           ) : null}
 
           <StepsRaccomandata steps={uiSteps} />
+          <AdSenseAd
+            adSlot="2025677270"
+            className="my-6"
+          />
           <DetailsSection details={uiDetails} />
           <AlertBox data={uiAlertBox} />
           <AssistenzaSection data={uiAssistenza} />
