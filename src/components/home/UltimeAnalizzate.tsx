@@ -59,7 +59,7 @@ export default function UltimeRaccomandateAnalizzate({
                 {/* Columna 3: mini gráfico (mismo color azul y lógica que el anterior) */}
                 <td className="px-4 py-3 align-middle">
                   <div className="h-10 w-28">
-                    <TrendMiniChart code={it.code.toLowerCase()} />
+                    <TrendMiniChart code={it.code} />
                   </div>
                 </td>
 
