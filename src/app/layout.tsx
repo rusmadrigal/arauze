@@ -52,10 +52,10 @@ export const metadata: Metadata = {
     description:
       "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots:
+    siteUrl === "https://arauze.vercel.app"
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
 };
 
 export default function RootLayout({
