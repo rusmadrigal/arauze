@@ -55,6 +55,21 @@ export const metadata: Metadata = {
 export default async function RaccomandataMarketPage() {
     const items: RaccomandataItem[] = await sanityClient.fetch(RACCOMANDATA_LIST);
 
+    // Orden de prioridad
+    const ORDER: Record<Exclude<Urgency, undefined>, number> = {
+        ALTA: 1,
+        MEDIA: 2,
+        BASSA: 3,
+        RITIRATA: 4,
+    };
+
+    // Ordenamos los resultados
+    const sorted = [...items].sort((a, b) => {
+        const pa = a.priority ?? "RITIRATA";
+        const pb = b.priority ?? "RITIRATA";
+        return ORDER[pa] - ORDER[pb];
+    });
+
     return (
         <main className="mx-auto max-w-5xl px-4" role="main">
             <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
@@ -85,8 +100,9 @@ export default async function RaccomandataMarketPage() {
                                 </th>
                             </tr>
                         </thead>
+
                         <tbody className="divide-y divide-gray-100">
-                            {items.map((it) => (
+                            {sorted.map((it) => (
                                 <tr key={it._id} className="hover:bg-gray-50 transition">
                                     <td className="px-4 py-3 font-semibold text-base leading-tight">
                                         #{it.code}
@@ -121,7 +137,7 @@ export default async function RaccomandataMarketPage() {
                 </div>
             </div>
 
-            {/* JSON-LD tipo ItemList para SEO */}
+            {/* JSON-LD */}
             <Script
                 id="raccomandata-market-jsonld"
                 type="application/ld+json"
@@ -129,10 +145,7 @@ export default async function RaccomandataMarketPage() {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "ItemList",
-                        name: "Raccomandata Market",
-                        description:
-                            "Elenco completo delle raccomandate analizzate da Arauze.",
-                        itemListElement: items.map((it: RaccomandataItem, i: number) => ({
+                        itemListElement: sorted.map((it, i) => ({
                             "@type": "ListItem",
                             position: i + 1,
                             url: `https://arauze.com${it.href}`,
@@ -144,6 +157,7 @@ export default async function RaccomandataMarketPage() {
         </main>
     );
 }
+
 
 // -------------------
 // 🔹 Indicador visual de Urgenza

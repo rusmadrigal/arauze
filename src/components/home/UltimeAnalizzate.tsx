@@ -1,17 +1,14 @@
-// src/app/components/home/UltimeAnalizzate.tsx
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
 
-export type Urgency = "ALTA" | "BASSA" | "RITIRATA";
+export type Urgency = "ALTA" | "MEDIA" | "BASSA" | "RITIRATA";
 
 export type RaccomandataItem = {
   code: string;
   sender: string;
   urgency: Urgency;
-  /** Texto opcional para la 3ra columna (p.ej. "Dettaglio →") */
   state?: string;
-  /** URL opcional para el CTA de detalle */
   href?: string;
 };
 
@@ -20,6 +17,19 @@ export default function UltimeRaccomandateAnalizzate({
 }: {
   items: RaccomandataItem[];
 }) {
+  /** ORDEN PRIORITARIO */
+  const ORDER: Record<Urgency, number> = {
+    ALTA: 1,
+    MEDIA: 2,
+    BASSA: 3,
+    RITIRATA: 4,
+  };
+
+  /** Ordenamos los resultados */
+  const sorted = [...items].sort(
+    (a, b) => ORDER[a.urgency] - ORDER[b.urgency]
+  );
+
   return (
     <section className="mt-10">
       <h3 className="text-lg font-semibold mb-4">Ultime Raccomandate Analizzate</h3>
@@ -33,7 +43,6 @@ export default function UltimeRaccomandateAnalizzate({
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
                 Urgenza
               </th>
-              {/* Nueva columna: mini gráfico de trend */}
               <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
                 Tendenza
               </th>
@@ -42,28 +51,29 @@ export default function UltimeRaccomandateAnalizzate({
               </th>
             </tr>
           </thead>
+
           <tbody>
-            {items.map((it, i) => (
+            {sorted.map((it, i) => (
               <tr key={i} className="hover:bg-gray-50/70 transition">
-                {/* Columna 1: código + mittente */}
+                {/* Codice + mittente */}
                 <td className="px-4 py-3">
                   <div className="font-semibold text-base leading-tight">#{it.code}</div>
                   <div className="text-xs text-gray-500">{it.sender}</div>
                 </td>
 
-                {/* Columna 2: nivel de urgencia */}
+                {/* Urgenza */}
                 <td className="px-4 py-3">
                   <Badge tone={it.urgency}>{it.urgency}</Badge>
                 </td>
 
-                {/* Columna 3: mini gráfico (mismo color azul y lógica que el anterior) */}
+                {/* Mini chart */}
                 <td className="px-4 py-3 align-middle">
                   <div className="h-10 w-28">
                     <TrendMiniChart code={it.code} />
                   </div>
                 </td>
 
-                {/* Columna 4: acción (Dettaglio → con flecha animada) */}
+                {/* Azione */}
                 <td className="px-4 py-3 text-right">
                   {it.href ? (
                     <a
@@ -71,9 +81,7 @@ export default function UltimeRaccomandateAnalizzate({
                       className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
                       aria-label={`Vedi dettagli per ${it.code}`}
                     >
-                      <span className="text-sm font-medium">
-                        {it.state ? "Dettaglio" : "Dettaglio"}
-                      </span>
+                      <span className="text-sm font-medium">Dettaglio</span>
                       <ArrowRight
                         className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
                         strokeWidth={2.2}
@@ -102,9 +110,11 @@ function Badge({
 }) {
   const map: Record<Urgency, string> = {
     ALTA: "bg-rose-100 text-rose-700",
-    BASSA: "bg-amber-100 text-amber-700",
-    RITIRATA: "bg-emerald-100 text-emerald-700",
+    MEDIA: "bg-orange-100 text-orange-700",
+    BASSA: "bg-emerald-100 text-emerald-700",
+    RITIRATA: "bg-gray-100 text-gray-700",
   };
+
   const urgencyClass = map[tone] ?? "bg-gray-100 text-gray-700";
 
   return (
