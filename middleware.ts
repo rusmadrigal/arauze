@@ -1,23 +1,25 @@
+// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-    const { pathname } = req.nextUrl;
+  const url = req.nextUrl;
+  const pathname = url.pathname;
 
-    // Solo afecta rutas que tengan mayúsculas
-    if (pathname !== pathname.toLowerCase()) {
-        const url = req.nextUrl.clone();
-        url.pathname = pathname.toLowerCase();
+  const lowerPathname = pathname.toLowerCase();
 
-        return NextResponse.redirect(url, 301);
-    }
-
+  // Si ya está en minúsculas, dejamos pasar
+  if (pathname === lowerPathname) {
     return NextResponse.next();
+  }
+
+  // Si hay mayúsculas, redirigimos a la versión en minúsculas
+  const redirectUrl = url.clone();
+  redirectUrl.pathname = lowerPathname;
+
+  return NextResponse.redirect(redirectUrl, 301);
 }
 
-// Rutas donde queremos aplicar esta lógica
 export const config = {
-    matcher: [
-        "/raccomandata/:path*",
-    ],
+  matcher: ["/raccomandata/:path*"],
 };

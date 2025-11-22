@@ -356,7 +356,7 @@ export async function generateMetadata({
           ? `Dettagli per il codice ${codice}`
           : "Dettagli raccomandata";
 
-  const canonical = `/raccomandata/${codice}`;
+  const canonical = `/raccomandata/${codice.toLowerCase()}`;
 
   return {
     title,

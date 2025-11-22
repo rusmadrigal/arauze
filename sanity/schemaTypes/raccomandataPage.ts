@@ -76,9 +76,8 @@ export default defineType({
       validation: (r) =>
         r
           .required()
-          .regex(/^[A-Za-z0-9]{3,10}$/, {
-            name: "3–10 letters or digits",
-            invert: false,
+          .regex(/^[a-z0-9]{3,10}$/, {
+            name: "3–10 lettere o numeri minuscoli (a–z, 0–9)",
           }),
     }),
     defineField({

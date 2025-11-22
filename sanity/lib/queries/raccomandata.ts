@@ -1,11 +1,11 @@
 // /sanity/lib/queries/raccomandata.ts
 import { groq } from "next-sanity";
 
-// ✅ Detalle de la raccomandata por código
+// ✅ Detalle de la raccomandata por código (case-insensitive)
 export const RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
-  string(code) == string($code)
+  lower(string(code)) == lower(string($code))
 ][0]{
   // META/SEO
   code,
@@ -50,11 +50,11 @@ export const RACCOMANDATA_BY_CODE = groq`
 }
 `;
 
-// ✅ Conteo de reportes crowd por código
+// ✅ Conteo de reportes crowd por código (case-insensitive)
 export const REPORTS_BY_CODE = groq`
 count(*[
   _type == "raccomandataReport" &&
-  string(code) == string($code) &&
+  lower(string(code)) == lower(string($code)) &&
   status != "rejected"
 ])
 `;
@@ -72,11 +72,11 @@ export const ULTIME_ANALIZZATE_PAGES = groq`
 }
 `;
 
-// ✅ Nuevo: datos del gráfico PIE por código (raccomandataChart)
+// ✅ Datos del gráfico PIE por código (raccomandataChart) – case-insensitive
 export const RACCOMANDATA_CHART_BY_CODE = groq`
 *[
   _type == "raccomandataChart" &&
-  string(codice) == string($code)
+  lower(string(codice)) == lower(string($code))
 ][0]{
   "code": string(codice),
   titolo,

@@ -59,7 +59,7 @@ export default function UltimeRaccomandateAnalizzate({
                 {/* Columna 3: mini gráfico (mismo color azul y lógica que el anterior) */}
                 <td className="px-4 py-3 align-middle">
                   <div className="h-10 w-28">
-                    <TrendMiniChart code={it.code} />
+                    <TrendMiniChart code={it.code.toLowerCase()} />
                   </div>
                 </td>
 
@@ -67,7 +67,7 @@ export default function UltimeRaccomandateAnalizzate({
                 <td className="px-4 py-3 text-right">
                   {it.href ? (
                     <a
-                      href={it.href}
+                      href={it.href.toLowerCase()}
                       className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
                       aria-label={`Vedi dettagli per ${it.code}`}
                     >

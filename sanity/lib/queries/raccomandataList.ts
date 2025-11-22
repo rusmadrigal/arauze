@@ -7,6 +7,6 @@ export const RACCOMANDATA_LIST = `
   mittente,
   priority,
   stato,
-  "href": "/raccomandata/" + code
+  "href": "/raccomandata/" + lower(code)
 }
 `;
