@@ -66,7 +66,9 @@ export async function POST(req: NextRequest) {
         // Tiempo mínimo / máximo entre carga del form y envío (2s – 10min)
         if (submittedAt && typeof submittedAt === "number") {
             const diff = now - submittedAt;
-            if (diff < 2000 || diff > 10 * 60 * 1000) {
+
+            // solo consideramos sospetta una richiesta demasiado vecchia
+            if (diff > 10 * 60 * 1000) {
                 return NextResponse.json(
                     { message: "Richiesta sospetta." },
                     { status: 400 }
