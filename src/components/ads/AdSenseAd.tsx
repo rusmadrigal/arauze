@@ -19,7 +19,7 @@ declare global {
 }
 
 // true en local / preview, false solo en prod
-const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_DEV = process.env.VERCEL_ENV !== "production";
 
 export default function AdSenseAd({
     adSlot,
@@ -60,16 +60,15 @@ export default function AdSenseAd({
                     {placeholderText}
                 </div>
             ) : (
-                // ✅ Bloque real de AdSense solo en producción
+                // AdSense
                 <ins
                     className="adsbygoogle"
                     style={{ display: "block", ...style }}
                     data-ad-client="ca-pub-6280528663229175"
-                    data-ad-slot="2025677270"
-                    data-ad-format="auto"
+                    data-ad-slot={adSlot}
+                    data-ad-format={adFormat}
                     data-full-width-responsive={fullWidthResponsive ? "true" : "false"}
                 />
-
             )}
         </div>
     );
