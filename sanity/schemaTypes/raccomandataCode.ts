@@ -11,7 +11,7 @@ export default defineType({
       type: "string",
       description: "Solo numeri (3–6 cifre), es. 697",
       validation: (r) =>
-        r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
+        r.required().regex(/^[A-Za-z0-9]{3,6}$/, { name: "3–6 lettere o numeri" }),
     }),
 
     defineField({
