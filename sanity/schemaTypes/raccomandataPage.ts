@@ -73,8 +73,13 @@ export default defineType({
       name: "code",
       title: "Code (Codice)",
       type: "string",
-      validation: (r: any) =>
-        r.required().regex(/^\d{3,6}$/, { name: "3–6 digits" }),
+      validation: (r) =>
+        r
+          .required()
+          .regex(/^[A-Za-z0-9]{3,10}$/, {
+            name: "3–10 letters or digits",
+            invert: false,
+          }),
     }),
     defineField({
       name: "heroTitleSuffix",
@@ -432,10 +437,10 @@ export default defineType({
         priority === "ALTA"
           ? "🔴 Alta"
           : priority === "MEDIA"
-          ? "🟠 Media"
-          : priority === "BASSA"
-          ? "🟢 Bassa"
-          : "—";
+            ? "🟠 Media"
+            : priority === "BASSA"
+              ? "🟢 Bassa"
+              : "—";
 
       return {
         title,
