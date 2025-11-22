@@ -8,7 +8,7 @@ import Image from "next/image";
 
 const builder = imageUrlBuilder(sanityClient);
 
-function urlFor(source: { [key: string]: unknown }) {
+function urlFor(source: Record<string, unknown>) {
   return builder.image(source).auto("format").fit("max");
 }
 
@@ -24,11 +24,23 @@ interface Props {
 
 // Tipo para el mark "link" de Portable Text
 type PortableLinkMarkProps = {
-  value?: {
+  value?:
+  | {
     href?: string | null;
     [key: string]: unknown;
-  } | null;
+  }
+  | null;
   children: React.ReactNode;
+};
+
+// Tipo para imágenes dentro de Portable Text
+type PortableImageValue = {
+  asset?: {
+    _ref?: string;
+  };
+  alt?: string;
+  caption?: string;
+  [key: string]: unknown;
 };
 
 // Configuración de componentes para PortableText
@@ -59,7 +71,7 @@ const portableComponents: PortableTextComponents = {
   marks: {
     link: ({ value, children }: PortableLinkMarkProps) => {
       const href =
-        value && typeof value.href === "string" ? value.href : "#";
+        value?.href && typeof value.href === "string" ? value.href : "#";
 
       return (
         <a
@@ -95,24 +107,28 @@ const portableComponents: PortableTextComponents = {
   // 🖼️ Imágenes dentro de Portable Text
   types: {
     image: ({ value }) => {
-      if (!value?.asset?._ref) return null;
+      const img = value as PortableImageValue;
+
+      if (!img?.asset?._ref) return null;
+
+      const src = urlFor(img as Record<string, unknown>).url();
+      if (!src) return null;
 
       return (
         <figure className="my-5">
           <Image
-            src={urlFor(value).url()}
-            alt={(value as { alt?: string }).alt || ""}
+            src={src}
+            alt={img.alt || ""}
             width={800}
             height={500}
             className="rounded-lg shadow-sm border border-gray-200"
-            sizes="(max-width: 768px) 100vw, 700px" // responsive ideal
+            sizes="(max-width: 768px) 100vw, 700px"
           />
-          {"caption" in (value as object) &&
-            (value as { caption?: string }).caption && (
-              <figcaption className="text-xs text-gray-500 mt-1">
-                {(value as { caption?: string }).caption}
-              </figcaption>
-            )}
+          {img.caption && (
+            <figcaption className="text-xs text-gray-500 mt-1">
+              {img.caption}
+            </figcaption>
+          )}
         </figure>
       );
     },
