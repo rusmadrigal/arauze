@@ -402,22 +402,35 @@ export default async function RaccomandataPage({
   const chartData = await getRaccomandataChart(codice);
 
   // Fetch de feedback aprobados para este codice
+  const codiceLower = codice.toLowerCase();
+
   const feedbackDocs = await sanityClient.fetch<FeedbackDoc[]>(
-    `*[_type == "raccomandataFeedback" && approved == true && codice == $codice] | order(createdAt desc){
-      _id,
-      nome,
-      citta,
-      codice,
-      categoria,
-      commento,
-      createdAt
-    }`,
-    { codice },
+    `*[
+    _type == "raccomandataFeedback" &&
+    approved == true &&
+    (
+      lower(codice) == $codiceLower ||           // exacto pero case-insensitive
+      lower(codice) match $codicePatternLower    // contiene el código, también case-insensitive
+    )
+  ] | order(createdAt desc){
+    _id,
+    nome,
+    citta,
+    codice,
+    categoria,
+    commento,
+    createdAt
+  }`,
+    {
+      codiceLower,
+      codicePatternLower: `*${codiceLower}*`,
+    },
     {
       cache: "no-store",
       next: { revalidate: 0, tags: [`raccomandataFeedback:${codice}`] },
     }
   );
+
 
   const uiFeedback = normalizeFeedback(feedbackDocs ?? [], codice);
 
