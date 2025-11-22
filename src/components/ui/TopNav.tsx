@@ -16,6 +16,7 @@ export default function TopNav() {
 
   const navItems = [
     { label: "Market", href: "/raccomandata-market" },
+    { label: "RKE", href: "/raccomandata/rke" },
     { label: "Termini", href: "/termini" },
     { label: "Contatti", href: "/contatti" },
   ];
