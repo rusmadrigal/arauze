@@ -14,6 +14,29 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  // -------------------------
+  //  No index staging
+  // -------------------------
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "arauze.vercel.app",
+          },
+        ],
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow, noarchive, nosnippet",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
