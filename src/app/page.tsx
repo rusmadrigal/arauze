@@ -7,6 +7,9 @@ import UltimeAnalizzateDynamic from "../components/home/UltimeAnalizzateDynamic"
 import TextBlockHome from "../components/home/TextBlockHome";
 import FaqsHome from "../components/home/FaqsHome";
 import NewsletterCTA from "../components/ui/NewsletterCTA";
+import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
+
+
 
 // Dominio base (prod) con fallback a localhost en dev
 const siteUrl =
@@ -92,6 +95,7 @@ export default function HomePage() {
           <ComeFunziona />
           <UltimeAnalizzateDynamic />
           <TextBlockHome />
+          <RaccomandataMarketInfoCard />
           <FaqsHome />
           <div className="mt-10">
             <NewsletterCTA />
