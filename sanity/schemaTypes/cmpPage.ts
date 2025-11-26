@@ -13,6 +13,35 @@ export const cmpPage = defineType({
     }),
 
     defineField({
+      name: "city",
+      title: "Città",
+      type: "string",
+    }),
+    defineField({
+      name: "province",
+      title: "Provincia",
+      type: "string",
+    }),
+    defineField({
+      name: "region",
+      title: "Regione",
+      type: "string",
+    }),
+    defineField({
+      name: "macroArea",
+      title: "Area geografica",
+      type: "string",
+      options: {
+        list: [
+          { title: "Nord", value: "Nord" },
+          { title: "Centro", value: "Centro" },
+          { title: "Sud", value: "Sud" },
+        ],
+      },
+    }),
+
+
+    defineField({
       name: "metaDescription",
       title: "Meta Description",
       type: "text",
