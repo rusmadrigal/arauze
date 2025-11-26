@@ -6,6 +6,23 @@ export const cmpPage = defineType({
   title: "Pagina CMP",
   type: "document",
   fields: [
+
+    // Name and URL
+    defineField({
+      name: "name",
+      title: "Nome CMP",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "name", maxLength: 96 },
+      validation: (Rule) => Rule.required(),
+    }),
+
     defineField({
       name: "metaTitle",
       title: "Meta Title",
@@ -46,28 +63,7 @@ export const cmpPage = defineType({
       },
     }),
 
-    defineField({
-      name: "name",
-      title: "Nome CMP",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
-
     // Contenuto aggiuntivo libero (rich text)
-    defineField({
-      name: "richContent",
-      title: "Contenuto aggiuntivo",
-      type: "array",
-      of: [{ type: "block" }],
-    }),
-
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: { source: "name", maxLength: 96 },
-      validation: (Rule) => Rule.required(),
-    }),
 
     defineField({
       name: "subtitle",
@@ -160,32 +156,6 @@ export const cmpPage = defineType({
       title: "Lista problemi comuni",
       type: "array",
       of: [{ type: "string" }],
-    }),
-
-    // 🔹 Tabella stati (significato con rich text)
-    defineField({
-      name: "statusTableTitle",
-      title: "Titolo tabella stati",
-      type: "string",
-    }),
-    defineField({
-      name: "statusRows",
-      title: "Righe tabella stati",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "status", title: "Stato", type: "string" },
-            {
-              name: "meaning",
-              title: "Significato",
-              type: "array",
-              of: [{ type: "block" }],
-            },
-          ],
-        },
-      ],
     }),
 
     // 🔹 FAQ (risposta con rich text)
