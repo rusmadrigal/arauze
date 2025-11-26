@@ -13,6 +13,12 @@ export const cmpPage = defineType({
     }),
 
     defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+    }),
+
+    defineField({
       name: "city",
       title: "Città",
       type: "string",
@@ -38,13 +44,6 @@ export const cmpPage = defineType({
           { title: "Sud", value: "Sud" },
         ],
       },
-    }),
-
-
-    defineField({
-      name: "metaDescription",
-      title: "Meta Description",
-      type: "text",
     }),
 
     defineField({
