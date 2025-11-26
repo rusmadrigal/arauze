@@ -6,7 +6,7 @@ interface CmpData {
 
 export default function CmpHero({ data }: { data: CmpData }) {
   return (
-    <section className="space-y-3 text-center md:text-left">
+    <section className="mt-10 md:mt-14 space-y-3 text-center md:text-left">  {/* ← AQUI SE APLICA */}
       <h1 className="text-3xl md:text-4xl font-semibold text-gray-900">
         {data.name}
       </h1>
