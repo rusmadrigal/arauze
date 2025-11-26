@@ -1,5 +1,9 @@
 export const GET_CMP_PAGE = `
   *[_type == "cmpPage" && slug.current == $slug][0]{
+
+    metaTitle,
+    metaDescription,
+
     name,
     subtitle,
     typeLabel,

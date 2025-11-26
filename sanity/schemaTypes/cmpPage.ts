@@ -7,6 +7,18 @@ export const cmpPage = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "metaTitle",
+      title: "Meta Title",
+      type: "string",
+    }),
+
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+    }),
+
+    defineField({
       name: "name",
       title: "Nome CMP",
       type: "string",

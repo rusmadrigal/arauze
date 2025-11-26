@@ -29,18 +29,16 @@ export async function generateMetadata(
     if (!cmp) {
         return {
             title: "CMP – Informazioni centro di smistamento",
-            description:
-                "Scheda informativa del centro di meccanizzazione postale.",
+            description: "Scheda informativa del centro di meccanizzazione postale.",
         };
     }
 
     return {
-        title: `${cmp.name} – ${cmp.subtitle}`,
+        title: cmp.metaTitle || `${cmp.name} – ${cmp.subtitle}`,
         description:
+            cmp.metaDescription ||
             "Scheda informativa del centro di meccanizzazione postale: significato, tempi di consegna e stato nel tracciamento.",
-        alternates: {
-            canonical: `/raccomandata/cmp/${slug}`,
-        },
+        alternates: { canonical: `/raccomandata/cmp/${slug}` },
     };
 }
 
