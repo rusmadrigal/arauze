@@ -1,7 +1,10 @@
+import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
+import type { PortableTextBlock } from "@portabletext/types";
+
 interface CmpDetailsProps {
     data: {
         deliveryTitle?: string;
-        deliveryBody?: string[];
+        deliveryBody?: PortableTextBlock[];
 
         whatHappensTitle?: string;
         whatHappensList?: string[];
@@ -14,23 +17,19 @@ interface CmpDetailsProps {
 export default function CmpDetails({ data }: CmpDetailsProps) {
     return (
         <section className="space-y-6">
-
             {/* Tempi di consegna */}
             <div className="rounded-xl border border-gray-100 bg-white px-5 py-4 shadow-sm">
                 <h2 className="text-base font-semibold text-gray-900">
                     {data.deliveryTitle}
                 </h2>
 
-                <div className="mt-2 space-y-2 text-sm text-gray-700 leading-relaxed">
-                    {data.deliveryBody?.map((p, i) => (
-                        <p key={i}>{p}</p>
-                    ))}
+                <div className="mt-2 text-sm text-gray-700 leading-relaxed">
+                    <PortableTextRenderer value={data.deliveryBody} />
                 </div>
             </div>
 
             {/* Cosa succede / Problemi comuni */}
             <div className="grid gap-6 md:grid-cols-2">
-
                 {/* Cosa succede */}
                 <div className="rounded-xl border border-gray-100 bg-white px-5 py-4 shadow-sm">
                     <h2 className="text-base font-semibold text-gray-900">
@@ -59,7 +58,6 @@ export default function CmpDetails({ data }: CmpDetailsProps) {
                         ))}
                     </ul>
                 </div>
-
             </div>
         </section>
     );

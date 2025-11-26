@@ -1,10 +1,15 @@
+import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
+import type { PortableTextBlock } from "@portabletext/types";
+
+interface CmpFaqItem {
+    q: string;
+    a: PortableTextBlock[];
+}
+
 interface CmpFaqProps {
     data: {
         faqTitle?: string;
-        faqItems?: {
-            q: string;
-            a: string;
-        }[];
+        faqItems?: CmpFaqItem[];
     };
 }
 
@@ -19,7 +24,9 @@ export default function CmpFaq({ data }: CmpFaqProps) {
                 {data.faqItems?.map((item, i) => (
                     <div key={i}>
                         <p className="text-sm font-medium text-gray-800">{item.q}</p>
-                        <p className="mt-1 text-sm text-gray-700">{item.a}</p>
+                        <div className="mt-1 text-sm text-gray-700">
+                            <PortableTextRenderer value={item.a} />
+                        </div>
                     </div>
                 ))}
             </div>

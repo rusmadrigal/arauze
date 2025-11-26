@@ -1,4 +1,6 @@
 import Image from "next/image";
+import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
+import type { PortableTextBlock } from "@portabletext/types";
 
 interface CmpMapAndMeaningProps {
     data: {
@@ -6,16 +8,15 @@ interface CmpMapAndMeaningProps {
         mapImage?: string;
         mapAlt?: string;
         addressTitle?: string;
-        address?: string;
+        address?: PortableTextBlock[];
         meaningTitle?: string;
-        meaningBody?: string[];
+        meaningBody?: PortableTextBlock[];
     };
 }
 
 export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
     return (
         <section className="grid gap-6 md:grid-cols-2">
-
             {/* Mappa + Indirizzo */}
             <div className="rounded-xl border border-gray-100 bg-gray-50 overflow-hidden">
                 <div className="border-b border-gray-100 px-4 py-2 text-xs font-medium uppercase tracking-wide text-gray-500">
@@ -36,9 +37,9 @@ export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
                         {data.addressTitle}
                     </h2>
 
-                    <p className="mt-1 whitespace-pre-line text-sm text-gray-600">
-                        {data.address}
-                    </p>
+                    <div className="mt-1 text-sm text-gray-600">
+                        <PortableTextRenderer value={data.address} />
+                    </div>
                 </div>
             </div>
 
@@ -48,13 +49,10 @@ export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
                     {data.meaningTitle}
                 </h2>
 
-                <div className="mt-3 space-y-3 text-sm text-gray-700 leading-relaxed">
-                    {data.meaningBody?.map((p, i) => (
-                        <p key={i}>{p}</p>
-                    ))}
+                <div className="mt-3">
+                    <PortableTextRenderer value={data.meaningBody} />
                 </div>
             </div>
-
         </section>
     );
 }

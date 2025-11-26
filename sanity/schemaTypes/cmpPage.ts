@@ -12,6 +12,15 @@ export const cmpPage = defineType({
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
+
+    // Contenuto aggiuntivo libero (rich text)
+    defineField({
+      name: "richContent",
+      title: "Contenuto aggiuntivo",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
+
     defineField({
       name: "slug",
       title: "Slug",
@@ -19,41 +28,49 @@ export const cmpPage = defineType({
       options: { source: "name", maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "subtitle",
       title: "Sottotitolo",
       type: "string",
     }),
+
     defineField({
       name: "typeLabel",
       title: "Etichetta tipo",
       type: "string",
       initialValue: "Centro di Meccanizzazione Postale (CMP)",
     }),
+
     defineField({
       name: "addressTitle",
       title: "Titolo indirizzo",
       type: "string",
       initialValue: "Indirizzo",
     }),
+
+    // 🔹 Indirizzo con editor enriquecido
     defineField({
       name: "address",
       title: "Indirizzo",
-      type: "text",
+      type: "array",
+      of: [{ type: "block" }],
     }),
+
     defineField({
       name: "mapImage",
       title: "Immagine mappa",
       type: "image",
       options: { hotspot: true },
     }),
+
     defineField({
       name: "mapAlt",
       title: "Alt mappa",
       type: "string",
     }),
 
-    // Significato
+    // 🔹 Significato (rich text)
     defineField({
       name: "meaningTitle",
       title: "Titolo significato",
@@ -63,10 +80,10 @@ export const cmpPage = defineType({
       name: "meaningBody",
       title: "Testo significato",
       type: "array",
-      of: [{ type: "text" }],
+      of: [{ type: "block" }],
     }),
 
-    // Tempi di consegna
+    // 🔹 Tempi di consegna (rich text)
     defineField({
       name: "deliveryTitle",
       title: "Titolo tempi di consegna",
@@ -76,10 +93,10 @@ export const cmpPage = defineType({
       name: "deliveryBody",
       title: "Testo tempi di consegna",
       type: "array",
-      of: [{ type: "text" }],
+      of: [{ type: "block" }],
     }),
 
-    // Cosa succede nel CMP
+    // Cosa succede nel CMP (lista simple)
     defineField({
       name: "whatHappensTitle",
       title: "Titolo cosa succede",
@@ -92,7 +109,7 @@ export const cmpPage = defineType({
       of: [{ type: "string" }],
     }),
 
-    // Problemi comuni
+    // Problemi comuni (lista simple)
     defineField({
       name: "commonIssuesTitle",
       title: "Titolo problemi comuni",
@@ -105,7 +122,7 @@ export const cmpPage = defineType({
       of: [{ type: "string" }],
     }),
 
-    // Tabella stati
+    // 🔹 Tabella stati (significato con rich text)
     defineField({
       name: "statusTableTitle",
       title: "Titolo tabella stati",
@@ -120,13 +137,18 @@ export const cmpPage = defineType({
           type: "object",
           fields: [
             { name: "status", title: "Stato", type: "string" },
-            { name: "meaning", title: "Significato", type: "text" },
+            {
+              name: "meaning",
+              title: "Significato",
+              type: "array",
+              of: [{ type: "block" }],
+            },
           ],
         },
       ],
     }),
 
-    // FAQ
+    // 🔹 FAQ (risposta con rich text)
     defineField({
       name: "faqTitle",
       title: "Titolo FAQ",
@@ -141,7 +163,12 @@ export const cmpPage = defineType({
           type: "object",
           fields: [
             { name: "q", title: "Domanda", type: "string" },
-            { name: "a", title: "Risposta", type: "text" },
+            {
+              name: "a",
+              title: "Risposta",
+              type: "array",
+              of: [{ type: "block" }],
+            },
           ],
         },
       ],

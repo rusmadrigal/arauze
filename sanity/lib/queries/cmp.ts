@@ -3,21 +3,31 @@ export const GET_CMP_PAGE = `
     name,
     subtitle,
     typeLabel,
+
     addressTitle,
     address,
+
     "mapImage": mapImage.asset->url,
     mapAlt,
+
     meaningTitle,
     meaningBody,
+
     deliveryTitle,
     deliveryBody,
+
     whatHappensTitle,
     whatHappensList,
+
     commonIssuesTitle,
     commonIssuesList,
+
     statusTableTitle,
     statusRows,
+
     faqTitle,
-    faqItems
+    faqItems,
+
+    richContent
   }
 `;
