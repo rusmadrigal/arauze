@@ -3,6 +3,7 @@ import raccomandataReport from "./raccomandataReport";
 import raccomandataPage from "./raccomandataPage";
 import raccomandataFeedback from "./raccomandataFeedback";
 import raccomandataChart from "./raccomandataChart";
+import { cmpPage } from "./cmpPage";
 
 export const schemaTypes = [
     raccomandataCode,
@@ -10,4 +11,5 @@ export const schemaTypes = [
     raccomandataPage,
     raccomandataFeedback,
     raccomandataChart,
+    cmpPage
 ];
