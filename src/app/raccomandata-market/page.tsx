@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
+import Raccomendatamarket from "@/components/raccomandata/RaccomandataMarket";
 
 // -------------------
 // 🔹 Tipi
@@ -149,6 +150,7 @@ export default async function RaccomandataMarketPage() {
                         </tbody>
                     </table>
                 </div>
+                <Raccomendatamarket />
             </div>
 
             {/* JSON-LD */}
@@ -168,7 +170,9 @@ export default async function RaccomandataMarketPage() {
                     }),
                 }}
             />
+
         </div>
+
     );
 }
 
@@ -199,6 +203,7 @@ function PriorityIndicator({ level }: { level: Exclude<Urgency, undefined> }) {
                 />
             </span>
             <span className="text-sm font-medium">{styles.label}</span>
+
         </div>
     );
 }
