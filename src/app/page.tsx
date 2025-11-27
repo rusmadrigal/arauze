@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
   description:
-    "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+    "Scopri chi ha inviato la tua raccomandata, come interpretare il codice CMP e se è necessaria un’azione immediata.",
   alternates: { canonical: `${siteUrl}/` },
   openGraph: {
     type: "website",
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
     siteName: "Arauze",
     title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
     description:
-      "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+      "Scopri chi ha inviato la tua raccomandata, come interpretare il codice CMP e se è necessaria un’azione immediata.",
   },
   twitter: {
     card: "summary",
     title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
     description:
-      "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
+      "Scopri chi ha inviato la tua raccomandata, come interpretare il codice CMP e se è necessaria un’azione immediata.",
   },
   robots: { index: true, follow: true },
 };
