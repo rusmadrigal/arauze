@@ -20,7 +20,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Arauze – Controlla la tua Raccomandata Online",
+  title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
   description:
     "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
   alternates: { canonical: `${siteUrl}/` },
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
     type: "website",
     url: `${siteUrl}/`,
     siteName: "Arauze",
-    title: "Arauze – Controlla la tua Raccomandata Online",
+    title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
     description:
       "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
   },
   twitter: {
     card: "summary",
-    title: "Arauze – Controlla la tua Raccomandata Online",
+    title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
     description:
       "Scopri chi ti ha inviato la comunicazione e se richiede un’azione urgente.",
   },
