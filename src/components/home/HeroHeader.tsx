@@ -13,7 +13,7 @@ export default function HeroHeader({ isChristmas = true }: HeroHeaderProps) {
         <div className="mb-4 flex items-center justify-between gap-3 text-xs md:text-sm">
           <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-red-500 px-3 py-1 text-white shadow-sm">
             <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.18em]">
-              Natale 2025
+              Natale 2025 |
             </span>
             <span className="hidden md:inline-block text-[11px] font-medium">
               Vi auguriamo un sereno e felice Natale
