@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { sanityClient } from "sanity/lib/client";
+import { CMP_LIST_QUERY } from "sanity/lib/queries/cmpList";
+import type { CmpItem } from "@/components/cmp/types";
+
 import TopNav from "../components/ui/TopNav";
 import HeroHeader from "../components/home/HeroHeader";
 import SearchForm from "../components/home/SearchForm";
@@ -8,8 +12,9 @@ import TextBlockHome from "../components/home/TextBlockHome";
 import FaqsHome from "../components/home/FaqsHome";
 import NewsletterCTA from "../components/ui/NewsletterCTA";
 import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
+import CmpPreviewSection from "@/components/cmp/CmpPreviewSection";
 
-
+export const revalidate = 60;
 
 // Dominio base (prod) con fallback a localhost en dev
 const siteUrl =
@@ -40,6 +45,12 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+// --- Fetch CMP desde Sanity ---
+async function getCmpList(): Promise<CmpItem[]> {
+  const data = await sanityClient.fetch<CmpItem[]>(CMP_LIST_QUERY);
+  return Array.isArray(data) ? data : [];
+}
 
 // --- Schema JSON-LD ---
 function SEOJsonLd() {
@@ -83,7 +94,9 @@ function SEOJsonLd() {
 }
 
 // --- Página principal ---
-export default function HomePage() {
+export default async function HomePage() {
+  const cmpList = await getCmpList();
+
   return (
     <>
       <SEOJsonLd />
@@ -95,6 +108,15 @@ export default function HomePage() {
           <ComeFunziona />
           <UltimeAnalizzateDynamic />
           <TextBlockHome />
+
+          <CmpPreviewSection
+            items={cmpList}
+            title="Centri CMP principali"
+            subtitle="Scopri i CMP più importanti per raccomandate, multe e atti giudiziari."
+            viewAllHref="/raccomandata/cmp"
+            maxItems={6}
+          />
+
           <RaccomandataMarketInfoCard />
           <FaqsHome />
           <div className="mt-10">
