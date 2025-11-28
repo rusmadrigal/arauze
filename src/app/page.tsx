@@ -103,7 +103,7 @@ export default async function HomePage() {
       <main className="mx-auto max-w-5xl px-4" role="main">
         <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
           <TopNav />
-          <HeroHeader />
+          <HeroHeader isChristmas />
           <SearchForm />
           <ComeFunziona />
           <UltimeAnalizzateDynamic />
