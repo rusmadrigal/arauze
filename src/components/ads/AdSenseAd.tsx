@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface AdSenseAdProps {
   adSlot: string;
@@ -18,17 +18,6 @@ declare global {
   }
 }
 
-/**
- * ✅ Solo mostramos anuncios cuando:
- * - VERCEL_ENV === "production"
- * - Y el dominio configurado es el real (ej: https://arauze.com)
- *
- * En cualquier otro caso → placeholder.
- */
-const IS_REAL_PROD =
-  process.env.VERCEL_ENV === "production" &&
-  (process.env.NEXT_PUBLIC_SITE_URL?.includes("arauze.com") ?? false);
-
 export default function AdSenseAd({
   adSlot,
   adFormat = "auto",
@@ -37,21 +26,27 @@ export default function AdSenseAd({
   style,
   placeholderText = "Spazio pubblicitario (anteprima – nessun annuncio in questa modalità)",
 }: AdSenseAdProps) {
+  const [canShowAds, setCanShowAds] = useState(false);
+
   useEffect(() => {
-    // En entornos que no son producción real, no inicializamos AdSense
-    if (!IS_REAL_PROD) return;
+    // Solo correr en cliente
+    if (typeof window === "undefined") return;
+
+    // Asegurarnos que estamos en arauze.com
+    const isProdDomain = window.location.hostname === "arauze.com";
+    if (!isProdDomain) return;
+
+    setCanShowAds(true);
 
     try {
-      if (typeof window !== "undefined") {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch {
       // Silenciado a propósito
     }
-  }, []);
+  }, [adSlot]);
 
-  // ❌ No prod real → placeholder
-  if (!IS_REAL_PROD) {
+  // ❌ No dominio real → placeholder
+  if (!canShowAds) {
     return (
       <div
         className={className}
@@ -70,7 +65,7 @@ export default function AdSenseAd({
     );
   }
 
-  // ✅ Prod real → bloque de AdSense
+  // ✅ Dominio real → bloque AdSense
   return (
     <div className={className}>
       <ins
