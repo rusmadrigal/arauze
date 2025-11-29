@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface AdSenseAdProps {
   adSlot: string;
@@ -18,15 +18,6 @@ declare global {
   }
 }
 
-/**
- * ✅ Solo mostramos anuncios cuando:
- * - NODE_ENV === "production"
- * - NEXT_PUBLIC_SITE_URL incluye "arauze.com"
- */
-const IS_REAL_PROD =
-  process.env.NODE_ENV === "production" &&
-  (process.env.NEXT_PUBLIC_SITE_URL?.includes("arauze.com") ?? false);
-
 export default function AdSenseAd({
   adSlot,
   adFormat = "auto",
@@ -35,20 +26,30 @@ export default function AdSenseAd({
   style,
   placeholderText = "Spazio pubblicitario (anteprima – nessun annuncio in questa modalità)",
 }: AdSenseAdProps) {
+  // 🔹 Leemos una sola vez si podemos mostrar ads (solo cliente)
+  const [canShowAds] = useState(() => {
+    if (typeof window === "undefined") return false;
+
+    const isProd = process.env.NODE_ENV === "production";
+    const isProdDomain =
+      window.location.hostname === "arauze.com" ||
+      window.location.hostname === "www.arauze.com";
+
+    return isProd && isProdDomain;
+  });
+
   useEffect(() => {
-    if (!IS_REAL_PROD) return;
+    if (!canShowAds) return;
 
     try {
-      if (typeof window !== "undefined") {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch {
       // silencioso
     }
-  }, []);
+  }, [canShowAds, adSlot]);
 
-  // ❌ No prod real → placeholder
-  if (!IS_REAL_PROD) {
+  // ❌ No dominio real / no prod → placeholder
+  if (!canShowAds) {
     return (
       <div
         className={className}
@@ -67,7 +68,7 @@ export default function AdSenseAd({
     );
   }
 
-  // ✅ Prod real → bloque de AdSense
+  // ✅ Dominio real + prod → bloque AdSense
   return (
     <div className={className}>
       <ins
