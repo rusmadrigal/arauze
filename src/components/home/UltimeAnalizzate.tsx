@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
+import Link from "next/link";
 
 export type Urgency = "ALTA" | "MEDIA" | "BASSA" | "RITIRATA";
 
@@ -76,7 +77,7 @@ export default function UltimeRaccomandateAnalizzate({
                 {/* Azione */}
                 <td className="px-4 py-3 text-right">
                   {it.href ? (
-                    <a
+                    <Link
                       href={it.href.toLowerCase()}
                       className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
                       aria-label={`Vedi dettagli per ${it.code}`}
@@ -86,7 +87,8 @@ export default function UltimeRaccomandateAnalizzate({
                         className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
                         strokeWidth={2.2}
                       />
-                    </a>
+                    </Link>
+
                   ) : (
                     <span className="text-gray-400">›</span>
                   )}
