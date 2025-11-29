@@ -33,70 +33,78 @@ export default function UltimeRaccomandateAnalizzate({
 
   return (
     <section className="mt-10">
-      <h3 className="text-lg font-semibold mb-4">Ultime Raccomandate Analizzate</h3>
-      <div className="overflow-hidden rounded-xl border border-gray-200">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
-                Raccomandata
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
-                Urgenza
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
-                Tendenza
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide">
-                Azione
-              </th>
-            </tr>
-          </thead>
+      <h3 className="text-lg font-semibold mb-4">
+        Ultime Raccomandate Analizzate
+      </h3>
 
-          <tbody>
-            {sorted.map((it, i) => (
-              <tr key={i} className="hover:bg-gray-50/70 transition">
-                {/* Codice + mittente */}
-                <td className="px-4 py-3">
-                  <div className="font-semibold text-base leading-tight">#{it.code}</div>
-                  <div className="text-xs text-gray-500">{it.sender}</div>
-                </td>
-
-                {/* Urgenza */}
-                <td className="px-4 py-3">
-                  <Badge tone={it.urgency}>{it.urgency}</Badge>
-                </td>
-
-                {/* Mini chart */}
-                <td className="px-4 py-3 align-middle">
-                  <div className="h-10 w-28">
-                    <TrendMiniChart code={it.code} />
-                  </div>
-                </td>
-
-                {/* Azione */}
-                <td className="px-4 py-3 text-right">
-                  {it.href ? (
-                    <Link
-                      href={it.href.toLowerCase()}
-                      className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
-                      aria-label={`Vedi dettagli per ${it.code}`}
-                    >
-                      <span className="text-sm font-medium">Dettaglio</span>
-                      <ArrowRight
-                        className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
-                        strokeWidth={2.2}
-                      />
-                    </Link>
-
-                  ) : (
-                    <span className="text-gray-400">›</span>
-                  )}
-                </td>
+      {/* Contenedor con borde/redondeado */}
+      <div className="rounded-xl border border-gray-200 overflow-hidden">
+        {/* ✅ Scroll horizontal en móvil */}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                  Raccomandata
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                  Urgenza
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide">
+                  Tendenza
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wide">
+                  Azione
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {sorted.map((it, i) => (
+                <tr key={i} className="hover:bg-gray-50/70 transition">
+                  {/* Codice + mittente */}
+                  <td className="px-4 py-3">
+                    <div className="font-semibold text-base leading-tight">
+                      #{it.code}
+                    </div>
+                    <div className="text-xs text-gray-500">{it.sender}</div>
+                  </td>
+
+                  {/* Urgenza */}
+                  <td className="px-4 py-3">
+                    <Badge tone={it.urgency}>{it.urgency}</Badge>
+                  </td>
+
+                  {/* Mini chart */}
+                  <td className="px-4 py-3 align-middle">
+                    <div className="h-10 w-28">
+                      <TrendMiniChart code={it.code} />
+                    </div>
+                  </td>
+
+                  {/* Azione */}
+                  <td className="px-4 py-3 text-right">
+                    {it.href ? (
+                      <Link
+                        href={it.href.toLowerCase()}
+                        className="inline-flex items-center gap-1.5 text-[#2F66D5] hover:text-[#2552AD] transition group"
+                        aria-label={`Vedi dettagli per ${it.code}`}
+                      >
+                        <span className="text-sm font-medium">Dettaglio</span>
+                        <ArrowRight
+                          className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                          strokeWidth={2.2}
+                        />
+                      </Link>
+                    ) : (
+                      <span className="text-gray-400">›</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );
