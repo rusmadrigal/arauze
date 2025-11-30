@@ -57,23 +57,53 @@ export default function Raccomendatamarket() {
             </div>
 
             {/* Texto descriptivo */}
-            <div className="space-y-3 text-sm leading-relaxed text-slate-600 md:text-base">
+            <div className="space-y-6 text-sm leading-relaxed text-slate-600 md:text-base">
+                <h2 className="text-xl font-semibold text-slate-900 md:text-2xl">
+                    Che cos`è realmente la Raccomandata Market e perché è così utilizzata in Italia
+                </h2>
                 <p>
-                    La raccomandata è utilizzata principalmente per l’invio di documenti legali; il peso massimo da spedire è di 2 kg, quindi viene solitamente utilizzata per l’invio di documenti legali. Inoltre, insieme alla raccomandata viene inviato un codice certificato, che viene assegnato a seconda del contenuto del pacco.
+                    La Raccomandata Market è uno dei formati di comunicazione certificata più utilizzati in Italia
+                    da aziende private, enti finanziari e fornitori di servizi. Sebbene molti cittadini la associano
+                    esclusivamente ad avvisi di pagamento o solleciti di fatture, la sua funzione va ben oltre: si
+                    tratta di un sistema progettato per garantire che un documento arrivi al destinatario in modo
+                    tracciabile, sicuro e con validità probatoria in caso di controversie o verifiche successive.
+                </p>
+                <p>
+                    A differenza della raccomandata tradizionale o delle comunicazioni giudiziarie, la Raccomandata Market
+                    è pensata per situazioni in cui l`azienda ha bisogno di dimostrare che un`informazione importante è
+                    stata inviata, ma senza ricorrere alle procedure formali riservate agli atti legali rigorosi. Per questo
+                    motivo, è uno strumento comune nei rapporti tra cittadini e aziende di fornitura di energia elettrica,
+                    gas, telecomunicazioni, banche, società finanziarie, assicurazioni o società di recupero crediti.
+                </p>
 
-                </p>
+                <h2 className="text-xl font-semibold text-slate-900 md:text-2xl">
+                    Perché così tante aziende ricorrono alla Raccomandata Market?
+                </h2>
                 <p>
-                    È importante ricordare che il servizio di posta raccomandata può essere utilizzato da aziende pubbliche e private e anche da privati (avvocati, notai, architetti, ecc.) Per inviare documenti importanti, che devono essere firmati dal destinatario o da una persona delegata. Qui di seguito vi spieghiamo in dettaglio tutto quello che c’è da sapere sul cosiddetto Raccomandata Market.
-                </p>
-                <p>
-                    È un mezzo di comunicazione legale, fornito da Poste Italiane; questo servizio funziona all’interno dell’Italia (ovviamente) ma anche per le spedizioni all’estero.  Essendo un servizio di posta veloce e altamente custodito, non è possibile spedire pacchi di peso superiore ai 2 chili, e questo servizio viene utilizzato principalmente per l’invio di documenti legali, che devono essere ricevuti e firmati dal destinatario o da una persona da lui delegata.
+                    Il suo utilizzo risponde a un equilibrio tra costo, velocità e livello di garanzia. Offre una sicurezza
+                    giuridica sufficiente affinché il mittente possa accreditare la spedizione, la data e il tentativo di consegna,
+                    ma senza i costi e le esigenze procedurali degli atti giudiziari. Questo la rende la soluzione ideale per
+                    notificare scadenze, richieste di documentazione, aggiornamenti contrattuali, rinnovi obbligatori o
+                    comunicazioni di rischio.
                 </p>
 
+                <h2 className="text-xl font-semibold text-slate-900 md:text-2xl">
+                    Cosa deve tenere presente il destinatario
+                </h2>
                 <p>
-                    Inoltre, potete condividere la vostra esperienza per aiutare altri
-                    utenti a comprendere meglio le loro notifiche.
+                    Ricevere una Raccomandata Market non implica automaticamente un problema, ma significa che c`è una
+                    comunicazione importante da esaminare. Il suo contenuto può variare da un semplice aggiornamento
+                    informativo a un avviso di pagamento o una richiesta di dati. Rispondere tempestivamente aiuta a evitare
+                    more, blocchi del servizio o malintesi amministrativi, soprattutto quando sono coinvolte banche,
+                    assicurazioni o fornitori essenziali.
+                </p>
+                <p>
+                    In un contesto in cui molte operazioni vengono gestite online, la Raccomandata Market rimane uno strumento
+                    fondamentale per quelle comunicazioni che richiedono certezza, tracciabilità e responsabilità condivisa tra
+                    mittente e destinatario.
                 </p>
             </div>
+
         </section>
     );
 }
