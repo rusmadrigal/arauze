@@ -8,6 +8,8 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
 import Raccomendatamarket from "@/components/raccomandata/RaccomandataMarket";
+import CmpPreviewSection from "@/components/cmp/CmpPreviewSection";
+import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
 
 // -------------------
 // 🔹 Tipi
@@ -150,8 +152,10 @@ export default async function RaccomandataMarketPage() {
                         </tbody>
                     </table>
                 </div>
+                <RaccomandataMarketInfoCard />
                 <Raccomendatamarket />
             </div>
+
 
             {/* JSON-LD */}
             <Script
