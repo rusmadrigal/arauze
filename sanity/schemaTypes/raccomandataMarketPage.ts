@@ -49,9 +49,33 @@ export const raccomandataMarketPage = defineType({
 
         // Confronto con Atti Giudiziari (opzionale)
         defineField({
-            name: "comparison",
-            title: "Confronto con Atti Giudiziari",
-            type: "blockContent",
+            name: "comparisonRows",
+            title: "Tabella confronto: Raccomandata Market vs Atti Giudiziari",
+            type: "array",
+            of: [
+                {
+                    type: "object",
+                    name: "comparisonRow",
+                    title: "Riga tabella",
+                    fields: [
+                        defineField({
+                            name: "feature",
+                            title: "Caratteristica",
+                            type: "string",
+                        }),
+                        defineField({
+                            name: "raccomandataMarket",
+                            title: "Raccomandata Market",
+                            type: "string",
+                        }),
+                        defineField({
+                            name: "attiGiudiziari",
+                            title: "Atto Giudiziario",
+                            type: "string",
+                        }),
+                    ],
+                },
+            ],
         }),
 
         // FAQ
