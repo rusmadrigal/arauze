@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 interface AdSenseAdProps {
   adSlot: string;
@@ -26,6 +27,8 @@ export default function AdSenseAd({
   style,
   placeholderText = "Spazio pubblicitario (anteprima – nessun annuncio in questa modalità)",
 }: AdSenseAdProps) {
+  const pathname = usePathname();
+
   // 🔹 Leemos una sola vez si podemos mostrar ads (solo cliente)
   const [canShowAds] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -42,11 +45,12 @@ export default function AdSenseAd({
     if (!canShowAds) return;
 
     try {
+      // Cada cambio de ruta → nuevo "fill" del bloque
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // silencioso
+    } catch (err) {
+      console.error("Adsense push error:", err);
     }
-  }, [canShowAds, adSlot]);
+  }, [canShowAds, adSlot, pathname]); // 👈 importante: depende de la ruta
 
   // ❌ No dominio real / no prod → placeholder
   if (!canShowAds) {
@@ -72,6 +76,7 @@ export default function AdSenseAd({
   return (
     <div className={className}>
       <ins
+        key={`${adSlot}-${pathname}`} // 👈 fuerza remount del ins al cambiar de página
         className="adsbygoogle"
         style={{ display: "block", ...style }}
         data-ad-client="ca-pub-6280528663229175"
