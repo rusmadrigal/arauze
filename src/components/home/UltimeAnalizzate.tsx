@@ -33,10 +33,6 @@ export default function UltimeRaccomandateAnalizzate({
 
   return (
     <section className="mt-10">
-      <h3 className="text-lg font-semibold mb-4">
-        Ultime Raccomandate Analizzate
-      </h3>
-
       {/* Contenedor con borde/redondeado */}
       <div className="rounded-xl border border-gray-200 overflow-hidden">
         {/* ✅ Scroll horizontal en móvil */}
