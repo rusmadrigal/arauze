@@ -51,6 +51,9 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
     devDependencies:
+      '@portabletext/types':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.17
