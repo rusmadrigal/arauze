@@ -5,7 +5,9 @@ export default function HeroHeader() {
   return (
     <header className="rounded-2xl shadow-card bg-white p-6 md:p-10 pt-12 md:pt-16 pb-5">
       <section className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12">
+        
         {/* Texto principal */}
+
         <div className="w-full md:pr-2 max-w-3xl">
           <h1
             className="font-semibold text-slate-700
