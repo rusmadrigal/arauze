@@ -3,7 +3,7 @@ import React from "react";
 import { Search, Mailbox, FileText } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import type { TypedObject } from "@portabletext/types";
-import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
+import { raccomandataRichTextComponents } from "@/components/shared/richTextPortableComponents";
 import { RACCOMANDATA_DEFAULT_STEPS } from "@/lib/raccomandata/italianPublicCopy";
 
 type Step = {
@@ -24,22 +24,20 @@ export default function StepsRaccomandata({ steps }: Props) {
   const visibleSteps = steps?.length ? steps : defaultSteps;
 
   return (
-    <section className="mt-10">
-      <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-        Cosa fare passo dopo passo (Italia)
-      </h2>
+    <section className="rac-section">
+      <h2 className="rac-section-h2 mb-4">Cosa fare passo dopo passo (Italia)</h2>
 
-      <ol className="relative ms-4 space-y-4 before:absolute before:inset-y-0 before:-start-4 before:w-px before:bg-gradient-to-b before:from-slate-200 before:via-slate-200 before:to-transparent">
+      <ol className="relative ms-4 space-y-4 before:absolute before:inset-y-0 before:-start-4 before:w-px before:bg-gradient-to-b before:from-gray-200 before:via-gray-200 before:to-transparent">
         {visibleSteps.map((step, idx) => (
           <li key={idx} className="relative">
             <span
-              className="absolute -start-4 -translate-x-1/2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-700 shadow ring-1 ring-slate-200"
+              className="absolute -start-4 -translate-x-1/2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white font-sans text-xs font-semibold text-gray-700 shadow ring-1 ring-gray-200"
               aria-hidden="true"
             >
-              <span className="text-xs font-semibold">{idx + 1}</span>
+              {idx + 1}
             </span>
 
-            <div className="group rounded-2xl border border-slate-200 bg-white/80 backdrop-blur-sm p-4 md:p-5 shadow hover:shadow-lg transition-shadow">
+            <div className="rac-surface rac-surface-pad group transition-shadow hover:shadow-lg">
               <div className="flex items-start gap-3">
                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2F66D5]/10 to-[#2552AD]/10 text-[#2552AD] ring-1 ring-[#2F66D5]/20">
                   {idx === 0 ? (
@@ -52,38 +50,18 @@ export default function StepsRaccomandata({ steps }: Props) {
                 </span>
 
                 <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 leading-snug">
-                    {step.title}
-                  </h3>
+                  <h3 className="rac-card-heading">{step.title}</h3>
 
                   {/* Si viene Portable Text, lo renderizamos enriquecido */}
                   {Array.isArray(step.description) ? (
-                    <div className="mt-1 text-sm text-slate-600 leading-relaxed prose prose-sm max-w-none">
+                    <div className="rac-prose mt-2">
                       <PortableText
                         value={step.description}
-                        components={{
-                          marks: {
-                            link: ({ value, children }) => {
-                              const href =
-                                value && typeof value.href === "string"
-                                  ? value.href
-                                  : "#";
-                              return (
-                                <PortableTextMarkLink
-                                  href={href}
-                                  className="text-sky-700 underline underline-offset-2 hover:text-sky-900"
-                                >
-                                  {children}
-                                </PortableTextMarkLink>
-                              );
-                            },
-                          },
-                        }}
+                        components={raccomandataRichTextComponents}
                       />
                     </div>
                   ) : step.description ? (
-                    // Fallback string plano
-                    <p className="mt-1 text-sm text-slate-600">{step.description}</p>
+                    <p className="rac-body mt-2">{step.description}</p>
                   ) : null}
 
                   <div className="mt-3 flex flex-wrap gap-2">

@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Script para aplicar el tema antes de la carga visual */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="bg-surface text-gray-900 dark:text-gray-600 flex flex-col min-h-dvh transition-colors duration-200">
+      <body className="font-sans antialiased bg-surface text-gray-900 dark:text-gray-600 flex flex-col min-h-dvh transition-colors duration-200">
         {/* Scripts globales: GTM, AdSense, etc. */}
 
         <GlobalScripts gtmId="GTM-WTWX6SPM" adsenseId="ca-pub-6280528663229175" />

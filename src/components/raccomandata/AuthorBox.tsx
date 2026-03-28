@@ -26,7 +26,7 @@ export default function AuthorBox({ data }: { data?: AuthorBoxData }) {
   const remoteAvatar = avatar.startsWith("http") && !avatar.includes("cdn.sanity.io");
 
   return (
-    <section className="flex items-center gap-3 mt-6 text-sm text-gray-500">
+    <section className="rac-body-sm flex items-center gap-3 mt-6 text-gray-500">
       <Image
         src={avatar}
         alt={name}
@@ -37,7 +37,7 @@ export default function AuthorBox({ data }: { data?: AuthorBoxData }) {
         sizes="40px"
       />
       <div>
-        <p className="font-medium text-gray-700">{name}</p>
+        <p className="font-sans text-sm font-semibold text-gray-800">{name}</p>
         {prettyDate && (
           <p className="text-gray-500">
             Aggiornato il <span className="font-medium">{prettyDate}</span>

@@ -74,8 +74,8 @@ export default function RaccomandataPieChart({ slices, title }: Props) {
   };
 
   return (
-    <section className="mt-6 rounded-xl bg-white p-4 shadow-sm border border-slate-200">
-      {title && <h3 className="mb-4 text-sm font-semibold text-slate-800">{title}</h3>}
+    <section className="rac-surface rac-surface-pad">
+      {title && <h3 className="rac-section-h2 mb-4">{title}</h3>}
 
       {/* min-w-0: evita flex con width 0; initialDimension evita warning Recharts (-1×-1) su SSR/hydration */}
       <div
@@ -121,9 +121,11 @@ export default function RaccomandataPieChart({ slices, title }: Props) {
               }}
               contentStyle={{
                 borderRadius: 10,
-                border: "1px solid #e2e8f0",
+                border: "1px solid #e5e7eb",
                 backgroundColor: "#fff",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+                fontSize: 14,
               }}
             />
 

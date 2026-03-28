@@ -103,7 +103,7 @@ export default function InfoBoxRaccomandata({
       : "bg-white/10 text-white/80 ring-white/20";
 
   return (
-    <section className="text-sm">
+    <section className="font-sans text-base">
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-[#2F66D5]/20
                    bg-linear-to-r from-[#2F66D5] to-[#2552AD] text-white
@@ -128,7 +128,7 @@ export default function InfoBoxRaccomandata({
         )}
 
         {/* Titolo */}
-        <h2 className="flex items-center gap-2 text-base sm:text-lg md:text-xl font-semibold mb-4 leading-tight">
+        <h2 className="rac-section-h2-invert flex items-center gap-2 mb-4">
           <svg
             className="h-5 w-5 shrink-0 text-white/90"
             viewBox="0 0 24 24"

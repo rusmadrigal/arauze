@@ -32,11 +32,8 @@ export default function AssistenzaSection({ data }: { data?: AssistenzaData }) {
   const sectionTitle = data.title || "Assistenza e Contatti Utili";
 
   return (
-    <section className="mt-10">
-      {/* Section title */}
-      <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-6">
-        {sectionTitle}
-      </h2>
+    <section className="rac-section">
+      <h2 className="rac-section-h2 mb-6">{sectionTitle}</h2>
 
       {/* Card grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -49,9 +46,9 @@ export default function AssistenzaSection({ data }: { data?: AssistenzaData }) {
           return (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white
-                       shadow-[0_2px_6px_-2px_rgba(0,0,0,0.15)]
-                       transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.2)]
+              className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white
+                       shadow-[0_2px_6px_-2px_rgba(0,0,0,0.12)]
+                       transition-all duration-300 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.18)]
                        hover:-translate-y-1"
             >
               <div className="absolute inset-x-0 top-0 h-[4px] bg-gradient-to-r from-[#2F66D5] to-[#3A78E0]" />
@@ -65,10 +62,8 @@ export default function AssistenzaSection({ data }: { data?: AssistenzaData }) {
                   <IconComponent className="w-6 h-6 text-[#2F66D5]" />
                 </div>
 
-                <h3 className="font-semibold text-slate-900 mb-1">{card.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  {card.description}
-                </p>
+                <h3 className="rac-card-heading mb-1">{card.title}</h3>
+                <p className="rac-body">{card.description}</p>
               </div>
 
               <div

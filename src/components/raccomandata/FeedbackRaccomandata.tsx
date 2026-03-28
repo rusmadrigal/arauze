@@ -121,19 +121,17 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
   }
 
   return (
-    <section className="mt-10 space-y-6">
+    <section className="rac-section space-y-6">
       {/* FEEDBACK ALTRI UTENTI */}
-      <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900 md:text-xl">
-          Feedback di altri utenti
-        </h2>
-        <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+      <div className="rac-panel">
+        <h2 className="rac-section-h2">Feedback di altri utenti</h2>
+        <p className="rac-body mt-1">
           Segnalazioni pubblicate dopo moderazione. Sono esperienze personali: usale come
           indicazione, non come prova ufficiale del contenuto della raccomandata.
         </p>
 
         {feedback.length === 0 ? (
-          <p className="mt-4 text-sm text-slate-500">
+          <p className="rac-body mt-4 text-gray-500">
             Non ci sono ancora feedback pubblici per questo codice.
           </p>
         ) : (
@@ -144,14 +142,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
               return (
                 <article
                   key={item._id}
-                  className="
-                                        relative
-                                        flex items-start justify-between
-                                        rounded-2xl border border-slate-200 bg-white
-                                        px-4 py-3 shadow-sm
-                                        transition-all duration-200
-                                        hover:border-blue-300 hover:shadow-md hover:-translate-y-[1px]
-                                    "
+                  className="relative flex items-start justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:border-[#2F66D5]/40 hover:shadow-md hover:-translate-y-px"
                 >
                   {/* Borde animado premium */}
                   <span
@@ -164,18 +155,18 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                   ></span>
 
                   <div className="flex flex-1 items-start gap-3">
-                    <div className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                    <div className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500">
                       <MessageCircle className="h-4 w-4" />
                     </div>
 
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-semibold text-slate-900">
+                        <span className="font-sans text-base font-semibold text-gray-900">
                           {item.nome}
                         </span>
 
                         {item.citta && (
-                          <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                          <span className="rac-body-sm inline-flex items-center gap-1 text-gray-500">
                             <MapPin className="h-3 w-3" />
                             {item.citta}
                           </span>
@@ -183,19 +174,17 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
                       </div>
 
                       {categoriaLabel && (
-                        <div className="mt-1 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700">
+                        <div className="mt-1 inline-flex rounded-full bg-gray-100 px-2 py-0.5 font-sans text-xs font-medium text-gray-700">
                           {categoriaLabel}
                         </div>
                       )}
 
-                      <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                        {item.commento}
-                      </p>
+                      <p className="rac-body mt-2 text-gray-700">{item.commento}</p>
                     </div>
                   </div>
 
                   {item.createdAt && (
-                    <p className="ml-3 shrink-0 text-xs text-slate-400">
+                    <p className="rac-body-sm ml-3 shrink-0 text-gray-400">
                       Inviato il {new Date(item.createdAt).toLocaleDateString("it-IT")}
                     </p>
                   )}
@@ -207,13 +196,11 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
       </div>
 
       {/* FORM */}
-      <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+      <div className="rac-panel">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 md:text-xl">
-              Condividi la tua esperienza
-            </h3>
-            <p className="mt-1 text-sm text-slate-600">
+            <h3 className="rac-subsection-h3">Condividi la tua esperienza</h3>
+            <p className="rac-body mt-1">
               Racconta cosa hai trovato nella tua raccomandata.
             </p>
           </div>
@@ -221,12 +208,7 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
           <button
             type="button"
             onClick={() => setIsFormOpen((prev) => !prev)}
-            className={`
-        inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 
-        px-4 py-2 text-xs font-medium text-slate-700 shadow-sm transition 
-        hover:bg-slate-100
-        ${!isFormOpen ? "animate-[pulseLight_2.5s_ease-in-out_infinite]" : ""}
-    `}
+            className={`rac-btn-ghost shrink-0 ${!isFormOpen ? "animate-[pulseLight_2.5s_ease-in-out_infinite]" : ""}`}
           >
             <MessageCircle className="h-4 w-4" />
             {isFormOpen ? "Nascondi modulo" : "Lascia un feedback"}
@@ -245,51 +227,43 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
 
             <div className="grid gap-3 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Nome
-                </label>
+                <label className="rac-form-label">Nome</label>
                 <input
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rac-form-control"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Città
-                </label>
+                <label className="rac-form-label">Città</label>
                 <input
                   type="text"
                   value={citta}
                   onChange={(e) => setCitta(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rac-form-control"
                 />
               </div>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Codice raccomandata
-                </label>
+                <label className="rac-form-label">Codice raccomandata</label>
                 <input
                   type="text"
                   value={codice}
                   onChange={(e) => setCodice(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rac-form-control"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Categoria
-                </label>
+                <label className="rac-form-label">Categoria</label>
                 <select
                   value={categoria}
                   onChange={(e) => setCategoria(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="rac-form-control"
                 >
                   <option value="">Seleziona...</option>
                   {CATEGORIES.map((cat) => (
@@ -302,14 +276,12 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Commento
-              </label>
+              <label className="rac-form-label">Commento</label>
               <textarea
                 value={commento}
                 onChange={(e) => setCommento(e.target.value)}
                 rows={4}
-                className="w-full rounded-2xl border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="rac-form-control min-h-[7rem]"
               />
             </div>
 
@@ -325,14 +297,14 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
               </p>
             )}
 
-            <p className="text-xs text-slate-500">
+            <p className="rac-body-sm text-gray-500">
               Il tuo feedback sarà visibile dopo approvazione.
             </p>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-blue-700 disabled:opacity-60"
+              className="rac-btn-primary w-full md:w-auto"
             >
               {isSubmitting ? "Invio..." : "Invia feedback"}
             </button>

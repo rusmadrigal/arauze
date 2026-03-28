@@ -23,20 +23,117 @@ body {
   overflow-x: hidden;
   background-color: #f4f3f2; /* surface color */
   color: #111827; /* gray-900 */
-  font-family: var(--font-inter);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  line-height: 1.2;
-  font-weight: 700;
+  font-family: inherit;
+  line-height: 1.25;
+  font-weight: 600;
 }
 
 p {
-  line-height: 1.7;
+  line-height: 1.65;
   color: #4b5563; /* gray-600 */
+}
+
+/* Tipografía editorial raccomandata: misma familia (Inter) y jerarquía coherente */
+@layer components {
+  .rac-page-h1 {
+    @apply font-sans text-2xl md:text-3xl font-semibold tracking-tight text-gray-900 leading-tight;
+  }
+
+  .rac-section-h2 {
+    @apply font-sans text-lg md:text-xl font-semibold tracking-tight text-gray-900 leading-snug;
+  }
+
+  .rac-subsection-h3 {
+    @apply font-sans text-lg md:text-xl font-semibold tracking-tight text-gray-900 leading-snug;
+  }
+
+  .rac-card-heading {
+    @apply font-sans text-base md:text-lg font-semibold tracking-tight text-gray-900 leading-snug;
+  }
+
+  .rac-body {
+    @apply font-sans text-base font-normal text-gray-600 leading-relaxed antialiased;
+  }
+
+  .rac-body-sm {
+    @apply font-sans text-sm font-normal text-gray-600 leading-relaxed antialiased;
+  }
+
+  /*
+   * Wrapper solo per Portable Text: niente text-gray-600 sul contenitore,
+   * così i titoli (H2/H3 da CMS) non ereditano peso/colore del body.
+   */
+  .rac-prose {
+    @apply max-w-none font-sans antialiased;
+  }
+
+  /* Callout su sfondo brand (testo chiaro, stesso font, peso leggibile) */
+  /* Titoli sezione su sfondo brand (es. InfoBox blu) */
+  .rac-section-h2-invert {
+    @apply font-sans text-lg md:text-xl font-semibold tracking-tight leading-snug !text-white;
+  }
+
+  /* !text-white: la regla globale `p { color }` (fuori layer) non deve vincere sul callout */
+  .rac-callout-title {
+    @apply font-sans text-lg md:text-xl font-semibold tracking-tight leading-snug !text-white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+  }
+
+  .rac-callout-body {
+    @apply font-sans text-base font-medium leading-relaxed antialiased !text-white;
+  }
+
+  /* --- Layout sezioni scheda raccomandata (spaziatura e superfici coerenti) --- */
+  .rac-section {
+    @apply mt-10;
+  }
+
+  .rac-section-head {
+    @apply mb-4 flex items-center gap-3;
+  }
+
+  .rac-section-icon {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2F66D5]/10 to-[#3A78E0]/10 text-[#2F66D5] ring-1 ring-[#2F66D5]/20;
+  }
+
+  /** Card / pannello: stesso bordo dei Passi e della FAQ */
+  .rac-surface {
+    @apply rounded-2xl border border-gray-200 bg-white/80 shadow-sm backdrop-blur-sm;
+  }
+
+  .rac-surface-pad {
+    @apply p-4 md:p-5;
+  }
+
+  /** Blocchi esterni (feedback, ecc.) */
+  .rac-panel {
+    @apply rounded-2xl border border-gray-200 bg-white/90 p-5 shadow-sm;
+  }
+
+  .rac-form-label {
+    @apply mb-1 block font-sans text-sm font-semibold text-gray-700;
+  }
+
+  .rac-form-control {
+    @apply w-full rounded-2xl border border-gray-300 bg-white px-3 py-2 font-sans text-base text-gray-900 shadow-sm focus:border-[#2F66D5] focus:outline-none focus:ring-2 focus:ring-[#2F66D5]/20;
+  }
+
+  .rac-btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-[#2F66D5] px-5 py-2.5 font-sans text-base font-semibold text-white shadow-md transition hover:bg-[#2552AD] disabled:opacity-60;
+  }
+
+  .rac-btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 font-sans text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-100;
+  }
 }
 
 button {
