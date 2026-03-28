@@ -1,22 +1,24 @@
 # 🧱 Arauze.com – Project Structure & Setup Guide
 
 ## 🪶 Overview
+
 This document serves as a quick reference for maintaining and scaling the **Arauze.com** project.  
 It summarizes the stack, folder structure, commands, and conventions used across the app and CMS.
 
 ---
 
 ## ⚙️ Stack Overview
-| Layer | Technology |
-|--------|-------------|
-| **Frontend** | Next.js 14 (App Router, Turbopack) |
-| **Language** | TypeScript (.tsx) |
-| **Styling** | TailwindCSS |
-| **CMS** | Sanity v3 (Embedded Studio) |
-| **Database (planned)** | Supabase (for feedback and stats) |
-| **Charts** | Chart.js + react-chartjs-2 |
-| **Animations** | Framer Motion |
-| **Hosting** | Vercel |
+
+| Layer                  | Technology                         |
+| ---------------------- | ---------------------------------- |
+| **Frontend**           | Next.js 14 (App Router, Turbopack) |
+| **Language**           | TypeScript (.tsx)                  |
+| **Styling**            | TailwindCSS                        |
+| **CMS**                | Sanity v3 (Embedded Studio)        |
+| **Database (planned)** | Supabase (for feedback and stats)  |
+| **Charts**             | Chart.js + react-chartjs-2         |
+| **Animations**         | Framer Motion                      |
+| **Hosting**            | Vercel                             |
 
 ---
 

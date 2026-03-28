@@ -40,8 +40,13 @@ const PRIORITY_STYLES: Record<
 function PingDot({ level }: { level: Exclude<Urgency, "NONE"> }) {
   const styles = PRIORITY_STYLES[level];
   return (
-    <span className="relative inline-flex h-3.5 w-3.5 items-center justify-center" aria-hidden="true">
-      <span className={`absolute inline-flex h-3.5 w-3.5 rounded-full opacity-60 animate-ping ${styles.ping}`} />
+    <span
+      className="relative inline-flex h-3.5 w-3.5 items-center justify-center"
+      aria-hidden="true"
+    >
+      <span
+        className={`absolute inline-flex h-3.5 w-3.5 rounded-full opacity-60 animate-ping ${styles.ping}`}
+      />
       <span className={`relative inline-flex h-3.5 w-3.5 rounded-full ${styles.dot}`} />
     </span>
   );
@@ -51,8 +56,7 @@ const PLACEHOLDER_MITTENTE =
   "Non indicato in scheda — verifica mittente sull'avviso di ritiro o in posta";
 const PLACEHOLDER_TIPOLOGIA =
   "Comunicazione postale tracciata (dettaglio sul piego / avviso)";
-const PLACEHOLDER_STATO =
-  "Dipende dal tuo avviso — controlla scadenze e sede di ritiro";
+const PLACEHOLDER_STATO = "Dipende dal tuo avviso — controlla scadenze e sede di ritiro";
 
 export default function InfoBoxRaccomandata({
   code = "",
@@ -84,15 +88,18 @@ export default function InfoBoxRaccomandata({
   ];
 
   const priorityLabel =
-    level === "ALTA" ? "Urgenza Alta" :
-      level === "MEDIA" ? "Urgenza Media" :
-        level === "BASSA" ? "Urgenza Bassa" :
-          null;
+    level === "ALTA"
+      ? "Urgenza Alta"
+      : level === "MEDIA"
+        ? "Urgenza Media"
+        : level === "BASSA"
+          ? "Urgenza Bassa"
+          : null;
 
   // Badge styles según nivel
   const badgeClass =
     level !== "NONE"
-      ? PRIORITY_STYLES[(level as Exclude<Urgency, "NONE">)].badge
+      ? PRIORITY_STYLES[level as Exclude<Urgency, "NONE">].badge
       : "bg-white/10 text-white/80 ring-white/20";
 
   return (

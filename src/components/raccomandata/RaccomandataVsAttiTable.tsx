@@ -4,11 +4,7 @@ type ComparisonRow = {
   attiGiudiziari: string;
 };
 
-export default function RaccomandataVsAttiTable({
-  rows,
-}: {
-  rows: ComparisonRow[];
-}) {
+export default function RaccomandataVsAttiTable({ rows }: { rows: ComparisonRow[] }) {
   if (!rows || rows.length === 0) return null;
 
   return (
@@ -61,18 +57,12 @@ export default function RaccomandataVsAttiTable({
               <p className="letter-card__mobile-feature">{row.feature}</p>
               <div className="space-y-2">
                 <div>
-                  <p className="letter-card__mobile-label">
-                    Raccomandata Market
-                  </p>
-                  <p className="letter-card__mobile-text">
-                    {row.raccomandataMarket}
-                  </p>
+                  <p className="letter-card__mobile-label">Raccomandata Market</p>
+                  <p className="letter-card__mobile-text">{row.raccomandataMarket}</p>
                 </div>
                 <div>
                   <p className="letter-card__mobile-label">Atto Giudiziario</p>
-                  <p className="letter-card__mobile-text">
-                    {row.attiGiudiziari}
-                  </p>
+                  <p className="letter-card__mobile-text">{row.attiGiudiziari}</p>
                 </div>
               </div>
             </div>

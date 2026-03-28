@@ -27,9 +27,7 @@ export default function UltimeRaccomandateAnalizzate({
   };
 
   /** Ordenamos los resultados */
-  const sorted = [...items].sort(
-    (a, b) => ORDER[a.urgency] - ORDER[b.urgency]
-  );
+  const sorted = [...items].sort((a, b) => ORDER[a.urgency] - ORDER[b.urgency]);
 
   return (
     <section className="mt-10">
@@ -107,13 +105,7 @@ export default function UltimeRaccomandateAnalizzate({
 }
 
 /* ---------- Badge ---------- */
-function Badge({
-  tone,
-  children,
-}: {
-  tone: Urgency;
-  children: React.ReactNode;
-}) {
+function Badge({ tone, children }: { tone: Urgency; children: React.ReactNode }) {
   const map: Record<Urgency, string> = {
     ALTA: "bg-rose-100 text-rose-700",
     MEDIA: "bg-orange-100 text-orange-700",
@@ -124,9 +116,7 @@ function Badge({
   const urgencyClass = map[tone] ?? "bg-gray-100 text-gray-700";
 
   return (
-    <span
-      className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}
-    >
+    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${urgencyClass}`}>
       {children}
     </span>
   );

@@ -37,18 +37,12 @@ type PortableImageValue = {
 const portableComponents: PortableTextComponents = {
   // 🧩 Bloques de texto (párrafos y encabezados)
   block: {
-    normal: ({ children }) => (
-      <p className="mb-4 whitespace-pre-line">{children}</p>
-    ),
+    normal: ({ children }) => <p className="mb-4 whitespace-pre-line">{children}</p>,
     h2: ({ children }) => (
-      <h3 className="mt-6 mb-3 text-lg font-semibold text-gray-900">
-        {children}
-      </h3>
+      <h3 className="mt-6 mb-3 text-lg font-semibold text-gray-900">{children}</h3>
     ),
     h3: ({ children }) => (
-      <h4 className="mt-4 mb-2 text-base font-semibold text-gray-900">
-        {children}
-      </h4>
+      <h4 className="mt-4 mb-2 text-base font-semibold text-gray-900">{children}</h4>
     ),
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-700 my-4">
@@ -67,11 +61,7 @@ const portableComponents: PortableTextComponents = {
         typeof (value as { href?: string }).href === "string"
           ? (value as { href: string }).href
           : "#";
-      return (
-        <PortableTextMarkLink href={href}>
-          {children}
-        </PortableTextMarkLink>
-      );
+      return <PortableTextMarkLink href={href}>{children}</PortableTextMarkLink>;
     },
   },
 
@@ -85,12 +75,8 @@ const portableComponents: PortableTextComponents = {
     ),
   },
   listItem: {
-    bullet: ({ children }) => (
-      <li className="whitespace-pre-line">{children}</li>
-    ),
-    number: ({ children }) => (
-      <li className="whitespace-pre-line">{children}</li>
-    ),
+    bullet: ({ children }) => <li className="whitespace-pre-line">{children}</li>,
+    number: ({ children }) => <li className="whitespace-pre-line">{children}</li>,
   },
 
   // 🖼️ Imágenes dentro de Portable Text
@@ -114,9 +100,7 @@ const portableComponents: PortableTextComponents = {
             sizes="(max-width: 768px) 100vw, 700px"
           />
           {img.caption && (
-            <figcaption className="text-xs text-gray-500 mt-1">
-              {img.caption}
-            </figcaption>
+            <figcaption className="text-xs text-gray-500 mt-1">{img.caption}</figcaption>
           )}
         </figure>
       );
@@ -129,13 +113,11 @@ export default function DetailsSection({ details }: Props) {
   const fallback: Detail[] = [
     {
       title: "Motivo della Raccomandata",
-      body:
-        "Il codice viene spesso utilizzato da enti pubblici o società di servizi per notifiche ufficiali.",
+      body: "Il codice viene spesso utilizzato da enti pubblici o società di servizi per notifiche ufficiali.",
     },
     {
       title: "Tempi di Giacenza e Ritiro",
-      body:
-        "Hai 30 giorni di tempo per ritirare la raccomandata presso l’ufficio postale indicato.",
+      body: "Hai 30 giorni di tempo per ritirare la raccomandata presso l’ufficio postale indicato.",
     },
   ];
 

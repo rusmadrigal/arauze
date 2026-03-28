@@ -51,7 +51,5 @@ export function getPublicSiteOrigin(): string {
 }
 
 export function shouldNoIndexProductionPreview(origin: string): boolean {
-  return (
-    process.env.VERCEL_ENV === "preview" || origin.includes(".vercel.app")
-  );
+  return process.env.VERCEL_ENV === "preview" || origin.includes(".vercel.app");
 }

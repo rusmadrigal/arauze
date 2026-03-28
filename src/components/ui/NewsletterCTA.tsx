@@ -22,9 +22,7 @@ export default function NewsletterCTA() {
 
     try {
       // TODO: integra tu API aquí
-      setMessage(
-        "Iscrizione completata! Ti invieremo aggiornamenti periodici."
-      );
+      setMessage("Iscrizione completata! Ti invieremo aggiornamenti periodici.");
       setEmail("");
       setAccepted(false);
     } catch {
@@ -43,8 +41,8 @@ export default function NewsletterCTA() {
               Iscriviti alla nostra newsletter
             </p>
             <p className="text-white/80 text-sm mt-1">
-              Ricevi aggiornamenti su nuovi codici e informazioni sulle
-              raccomandate in Italia.
+              Ricevi aggiornamenti su nuovi codici e informazioni sulle raccomandate in
+              Italia.
             </p>
           </div>
 
@@ -85,10 +83,7 @@ export default function NewsletterCTA() {
                 informativa sulla privacy
               </Link>{" "}
               e acconsento al trattamento dei miei dati ai sensi del{" "}
-              <span className="font-medium">
-                Regolamento UE 2016/679 (GDPR)
-              </span>
-              .
+              <span className="font-medium">Regolamento UE 2016/679 (GDPR)</span>.
             </span>
           </label>
 

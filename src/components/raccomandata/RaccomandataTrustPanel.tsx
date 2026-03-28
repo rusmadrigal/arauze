@@ -119,8 +119,8 @@ export default function RaccomandataTrustPanel({
             <span className="text-slate-800">
               invii anonimi dal modulo in fondo alla pagina
             </span>
-            . Non sostituisce l&apos;avviso di ritiro, il piego o le comunicazioni ufficiali del
-            mittente: verifica sempre su documenti e canali istituzionali.
+            . Non sostituisce l&apos;avviso di ritiro, il piego o le comunicazioni
+            ufficiali del mittente: verifica sempre su documenti e canali istituzionali.
           </p>
         </div>
       </div>
@@ -134,7 +134,9 @@ export default function RaccomandataTrustPanel({
             label="Ultimo aggiornamento"
             value={updated!}
             subline={
-              created && created !== updated ? `Prima pubblicazione: ${created}` : undefined
+              created && created !== updated
+                ? `Prima pubblicazione: ${created}`
+                : undefined
             }
           />
         ) : null}

@@ -45,14 +45,22 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
   const rawMetaDescription = clean(page?.metaDescription);
 
   const seoTitle =
-    rawMetaTitle || (rawTitleSuffix ? `Raccomandata ${code} – ${rawTitleSuffix}` : `Raccomandata ${code}`);
+    rawMetaTitle ||
+    (rawTitleSuffix
+      ? `Raccomandata ${code} – ${rawTitleSuffix}`
+      : `Raccomandata ${code}`);
 
-  const seoDescription = rawMetaDescription || rawHeroSubtitle || `Dettagli per il codice ${code}`;
+  const seoDescription =
+    rawMetaDescription || rawHeroSubtitle || `Dettagli per il codice ${code}`;
 
   // HowTo
   const howToSteps = arr<Step>(page?.steps)
     .filter((s) => hasText(s?.title) || hasText(s?.description))
-    .map((s) => ({ "@type": "HowToStep", name: clean(s?.title), text: clean(s?.description) }));
+    .map((s) => ({
+      "@type": "HowToStep",
+      name: clean(s?.title),
+      text: clean(s?.description),
+    }));
 
   // FAQ
   const faqEntities = arr<FAQItem>(page?.faq?.items)
@@ -64,18 +72,24 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     }));
 
   // Details -> ItemList opcional
-  const details = arr<Detail>(page?.details).filter((d) => hasText(d?.title) || hasText(d?.body));
+  const details = arr<Detail>(page?.details).filter(
+    (d) => hasText(d?.title) || hasText(d?.body)
+  );
   const detailsList =
     details.length > 0
       ? {
-        "@type": "ItemList",
-        name: "Dettagli e informazioni",
-        itemListElement: details.map((d, idx) => ({
-          "@type": "ListItem",
-          position: idx + 1,
-          item: { "@type": "WebPageElement", name: clean(d?.title), text: clean(d?.body) },
-        })),
-      }
+          "@type": "ItemList",
+          name: "Dettagli e informazioni",
+          itemListElement: details.map((d, idx) => ({
+            "@type": "ListItem",
+            position: idx + 1,
+            item: {
+              "@type": "WebPageElement",
+              name: clean(d?.title),
+              text: clean(d?.body),
+            },
+          })),
+        }
       : undefined;
 
   // Términos relacionados al CONTENIDO (los movemos al WebPage.about)
@@ -83,18 +97,27 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     { "@type": "DefinedTerm", name: `Raccomandata ${code}`, termCode: code },
     hasText(page?.mittente)
       ? {
-        "@type": "DefinedTerm",
-        name: clean(page?.mittente),
-        ...(hasText(page?.tipologia) ? { inDefinedTermSet: clean(page?.tipologia) } : {}),
-      }
+          "@type": "DefinedTerm",
+          name: clean(page?.mittente),
+          ...(hasText(page?.tipologia)
+            ? { inDefinedTermSet: clean(page?.tipologia) }
+            : {}),
+        }
       : null,
   ].filter(Boolean);
 
   const parts = [
     howToSteps.length
-      ? { "@type": "HowTo", "@id": `${pageUrl}#howto`, name: `Cosa fare con la raccomandata ${code}`, step: howToSteps }
+      ? {
+          "@type": "HowTo",
+          "@id": `${pageUrl}#howto`,
+          name: `Cosa fare con la raccomandata ${code}`,
+          step: howToSteps,
+        }
       : null,
-    faqEntities.length ? { "@type": "FAQPage", "@id": `${pageUrl}#faq`, mainEntity: faqEntities } : null,
+    faqEntities.length
+      ? { "@type": "FAQPage", "@id": `${pageUrl}#faq`, mainEntity: faqEntities }
+      : null,
     detailsList ?? null,
   ].filter(Boolean);
 
@@ -120,7 +143,12 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web",
       url: pageUrl,
-      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", availability: "https://schema.org/InStock" },
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+        availability: "https://schema.org/InStock",
+      },
       // Referencia limpia al Organization
       provider: { "@id": `${siteUrl}#org` },
     },

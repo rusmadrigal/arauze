@@ -9,8 +9,8 @@ export default function TextBlockHome() {
           Cos’è una Raccomandata Market?
         </h2>
         <p className="text-sm text-slate-600 md:text-base">
-          Un sistema ufficiale utilizzato da aziende, enti pubblici e banche
-          per inviare comunicazioni con valore legale.
+          Un sistema ufficiale utilizzato da aziende, enti pubblici e banche per inviare
+          comunicazioni con valore legale.
         </p>
       </div>
 
@@ -24,8 +24,8 @@ export default function TextBlockHome() {
             Comunicazione certificata
           </h3>
           <p className="text-sm text-slate-600">
-            Ogni lettera inviata tramite Raccomandata Market è tracciata e ha
-            valore legale.
+            Ogni lettera inviata tramite Raccomandata Market è tracciata e ha valore
+            legale.
           </p>
         </div>
 
@@ -37,8 +37,8 @@ export default function TextBlockHome() {
             Enti pubblici, banche e assicurazioni
           </h3>
           <p className="text-sm text-slate-600">
-            Viene usata per notifiche ufficiali: pagamenti, estratti conto,
-            contratti, operazioni bancarie e comunicazioni amministrative.
+            Viene usata per notifiche ufficiali: pagamenti, estratti conto, contratti,
+            operazioni bancarie e comunicazioni amministrative.
           </p>
         </div>
 
@@ -50,8 +50,8 @@ export default function TextBlockHome() {
             Non tutte le notifiche riguardano debiti
           </h3>
           <p className="text-sm text-slate-600">
-            Spesso le banche la usano per inviare informazioni, sostituzioni di
-            carte o aggiornamenti ai clienti.
+            Spesso le banche la usano per inviare informazioni, sostituzioni di carte o
+            aggiornamenti ai clienti.
           </p>
         </div>
       </div>
@@ -59,30 +59,29 @@ export default function TextBlockHome() {
       {/* Texto descriptivo */}
       <div className="space-y-3 text-sm leading-relaxed text-slate-600 md:text-base">
         <p>
-          Raccomandata Market è un sistema utilizzato da aziende, enti pubblici
-          e fornitori di servizi per inviare comunicazioni ufficiali ai
-          destinatari.
+          Raccomandata Market è un sistema utilizzato da aziende, enti pubblici e
+          fornitori di servizi per inviare comunicazioni ufficiali ai destinatari.
         </p>
         <p>
-          A differenza della posta tradizionale, le notifiche inviate tramite
-          questo sistema sono tracciate in ogni fase e hanno valore legale.
+          A differenza della posta tradizionale, le notifiche inviate tramite questo
+          sistema sono tracciate in ogni fase e hanno valore legale.
         </p>
         <p>
-          Viene impiegata soprattutto per comunicazioni importanti come:
-          pagamenti in ritardo, operazioni bancarie, contratti, assicurazioni,
-          atti amministrativi o giudiziari. Tuttavia, non tutte le raccomandate
-          indicano problemi: molte banche lo utilizzano anche per inviare
-          aggiornamenti informativi o sostituzioni di carte.
+          Viene impiegata soprattutto per comunicazioni importanti come: pagamenti in
+          ritardo, operazioni bancarie, contratti, assicurazioni, atti amministrativi o
+          giudiziari. Tuttavia, non tutte le raccomandate indicano problemi: molte banche
+          lo utilizzano anche per inviare aggiornamenti informativi o sostituzioni di
+          carte.
         </p>
         <p>
-          Noi di <strong>Arauze.com</strong> raccogliamo e organizziamo
-          informazioni pubbliche relative ai codici di Raccomandata Market, per
-          offrirvi maggiore chiarezza su chi vi sta contattando e sul possibile
-          contenuto dell’avviso di ritiro.
+          Noi di <strong>Arauze.com</strong> raccogliamo e organizziamo informazioni
+          pubbliche relative ai codici di Raccomandata Market, per offrirvi maggiore
+          chiarezza su chi vi sta contattando e sul possibile contenuto dell’avviso di
+          ritiro.
         </p>
         <p>
-          Inoltre, potete condividere la vostra esperienza per aiutare altri
-          utenti a comprendere meglio le loro notifiche.
+          Inoltre, potete condividere la vostra esperienza per aiutare altri utenti a
+          comprendere meglio le loro notifiche.
         </p>
       </div>
     </section>

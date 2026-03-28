@@ -25,9 +25,7 @@ export default function FaqItem({ q, children }: FaqItemProps) {
       </button>
 
       {open && (
-        <div className="px-5 pb-4 text-gray-600 text-sm leading-relaxed">
-          {children}
-        </div>
+        <div className="px-5 pb-4 text-gray-600 text-sm leading-relaxed">{children}</div>
       )}
     </div>
   );

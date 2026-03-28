@@ -1,8 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-const defaultClass =
-  "text-blue-600 underline underline-offset-2 hover:text-blue-700";
+const defaultClass = "text-blue-600 underline underline-offset-2 hover:text-blue-700";
 
 function internalPath(href: string): string | null {
   if (!href || href === "#") return null;
@@ -47,12 +46,7 @@ export default function PortableTextMarkLink({
     );
   }
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={className}
-    >
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       {children}
     </a>
   );

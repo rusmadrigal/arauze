@@ -45,9 +45,7 @@ export async function GET() {
 
   const raccomandataUrls = (codes || [])
     .map((item) => {
-      const loc = `${baseUrl}/raccomandata/${encodeURIComponent(
-        item.code
-      )}`;
+      const loc = `${baseUrl}/raccomandata/${encodeURIComponent(item.code)}`;
       const lastmodIso = item.lastmod
         ? new Date(item.lastmod).toISOString().split("T")[0]
         : null;
@@ -64,9 +62,7 @@ export async function GET() {
 
   const cmpUrls = (cmps || [])
     .map((item) => {
-      const loc = `${baseUrl}/raccomandata/cmp/${encodeURIComponent(
-        item.slug
-      )}`;
+      const loc = `${baseUrl}/raccomandata/cmp/${encodeURIComponent(item.slug)}`;
       const lastmodIso = item.lastmod
         ? new Date(item.lastmod).toISOString().split("T")[0]
         : null;
@@ -95,6 +91,18 @@ export async function GET() {
     <loc>${baseUrl}/raccomandata/cmp</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- AI / LLM discovery (Markdown text/plain) -->
+  <url>
+    <loc>${baseUrl}/llm.txt</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/llms.txt</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
 
   <!-- Raccomandata codes -->

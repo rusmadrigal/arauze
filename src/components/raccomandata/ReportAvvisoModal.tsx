@@ -9,11 +9,7 @@ type Props = {
   initialCode?: string;
 };
 
-export default function ReportAvvisoModal({
-  open,
-  onClose,
-  initialCode = "",
-}: Props) {
+export default function ReportAvvisoModal({ open, onClose, initialCode = "" }: Props) {
   const [code, setCode] = useState(initialCode);
   const [mittente, setMittente] = useState("");
   const [provincia, setProvincia] = useState("");
@@ -84,8 +80,8 @@ export default function ReportAvvisoModal({
         <div className="text-sm" aria-live="polite">
           <p className="mb-2 font-medium text-gray-900">Grazie! ✅</p>
           <p className="text-gray-600">
-            La tua segnalazione è stata ricevuta e verrà revisionata. Questo aiuta a migliorare il
-            database di Arauze.
+            La tua segnalazione è stata ricevuta e verrà revisionata. Questo aiuta a
+            migliorare il database di Arauze.
           </p>
         </div>
       ) : (
@@ -123,7 +119,9 @@ export default function ReportAvvisoModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Provincia (opz.)</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Provincia (opz.)
+              </label>
               <input
                 value={provincia}
                 onChange={(e) => setProvincia(e.target.value)}

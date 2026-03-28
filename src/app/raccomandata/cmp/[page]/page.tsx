@@ -10,7 +10,7 @@ import CmpDetails from "@/components/cmp/CmpDetails";
 import CmpFaq from "@/components/cmp/CmpFaq";
 
 type PageParams = {
-    page?: string;
+  page?: string;
 };
 
 export const revalidate = 60;
@@ -18,60 +18,56 @@ export const revalidate = 60;
 // --------------------------------------------------
 // Metadata
 // --------------------------------------------------
-export async function generateMetadata(
-    props: { params: Promise<PageParams> }
-): Promise<Metadata> {
-    const { page } = await props.params;
-    const slug = (page ?? "").toLowerCase();
+export async function generateMetadata(props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> {
+  const { page } = await props.params;
+  const slug = (page ?? "").toLowerCase();
 
-    const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
+  const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
 
-    if (!cmp) {
-        return {
-            title: "CMP – Informazioni centro di smistamento",
-            description: "Scheda informativa del centro di meccanizzazione postale.",
-        };
-    }
-
+  if (!cmp) {
     return {
-        title: cmp.metaTitle || `${cmp.name} – ${cmp.subtitle}`,
-        description:
-            cmp.metaDescription ||
-            "Scheda informativa del centro di meccanizzazione postale: significato, tempi di consegna e stato nel tracciamento.",
-        alternates: { canonical: `/raccomandata/cmp/${slug}` },
+      title: "CMP – Informazioni centro di smistamento",
+      description: "Scheda informativa del centro di meccanizzazione postale.",
     };
+  }
+
+  return {
+    title: cmp.metaTitle || `${cmp.name} – ${cmp.subtitle}`,
+    description:
+      cmp.metaDescription ||
+      "Scheda informativa del centro di meccanizzazione postale: significato, tempi di consegna e stato nel tracciamento.",
+    alternates: { canonical: `/raccomandata/cmp/${slug}` },
+  };
 }
 
 // --------------------------------------------------
 // Pagina dinámica CMP
 // --------------------------------------------------
-export default async function CmpPage({
-    params,
-}: {
-    params: Promise<PageParams>;
-}) {
-    const { page } = await params;
-    const slug = (page ?? "").toLowerCase();
+export default async function CmpPage({ params }: { params: Promise<PageParams> }) {
+  const { page } = await params;
+  const slug = (page ?? "").toLowerCase();
 
-    const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
+  const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
 
-    if (!cmp) notFound();
+  if (!cmp) notFound();
 
-    return (
-        <main className="mx-auto max-w-5xl px-4">
-            <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
-                <div className="space-y-8 md:space-y-10">
-                    <TopNav />
+  return (
+    <main className="mx-auto max-w-5xl px-4">
+      <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
+        <div className="space-y-8 md:space-y-10">
+          <TopNav />
 
-                    <CmpHero data={cmp} />
+          <CmpHero data={cmp} />
 
-                    <CmpMapAndMeaning data={cmp} />
+          <CmpMapAndMeaning data={cmp} />
 
-                    <CmpDetails data={cmp} />
+          <CmpDetails data={cmp} />
 
-                    <CmpFaq data={cmp} />
-                </div>
-            </div>
-        </main>
-    );
+          <CmpFaq data={cmp} />
+        </div>
+      </div>
+    </main>
+  );
 }

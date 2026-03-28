@@ -6,10 +6,8 @@ import crypto from "crypto";
 const apiVersion = "2024-05-01";
 
 function getWriteClient(): SanityClient {
-  const projectId =
-    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "zcxgg9ay";
-  const dataset =
-    process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "zcxgg9ay";
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
   const token = process.env.SANITY_WRITE_TOKEN;
   if (!token) {
     throw new Error("SANITY_WRITE_TOKEN is not configured");
@@ -84,8 +82,8 @@ export async function POST(req: Request) {
     // 🆕 Crear nuevo documento si no existe hoy
     const doc = {
       _type: "raccomandataReport",
-      code: String(code), 
-    
+      code: String(code),
+
       mittenteSegnalato: mittente,
       provincia: provincia || undefined,
       dataRicezione: dataRicezione || undefined,

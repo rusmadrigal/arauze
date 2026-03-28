@@ -22,9 +22,7 @@ export default function FAQSection({ data }: { data?: FAQData }) {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#2F66D5]/10 to-[#3A78E0]/10 text-[#2F66D5] ring-1 ring-[#2F66D5]/20">
           <HelpCircle className="h-5 w-5" aria-hidden="true" />
         </div>
-        <h2 className="text-lg md:text-xl font-semibold text-gray-900">
-          {sectionTitle}
-        </h2>
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900">{sectionTitle}</h2>
       </div>
 
       {/* FAQ container */}

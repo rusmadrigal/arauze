@@ -40,7 +40,9 @@ export default function RaccomandataList({ items }: { items: RaccomandataItem[] 
           <tbody>
             {items.map((it) => (
               <tr key={it._id} className="hover:bg-gray-50/70 transition">
-                <td className="px-4 py-3 font-semibold text-base leading-tight">#{it.code}</td>
+                <td className="px-4 py-3 font-semibold text-base leading-tight">
+                  #{it.code}
+                </td>
                 <td className="px-4 py-3">{it.mittente || "—"}</td>
                 <td className="px-4 py-3">
                   <Badge tone={it.priority}>{it.priority || "—"}</Badge>
@@ -67,13 +69,7 @@ export default function RaccomandataList({ items }: { items: RaccomandataItem[] 
   );
 }
 
-function Badge({
-  tone,
-  children,
-}: {
-  tone?: Urgency;
-  children: React.ReactNode;
-}) {
+function Badge({ tone, children }: { tone?: Urgency; children: React.ReactNode }) {
   const map: Record<Urgency, string> = {
     ALTA: "bg-rose-100 text-rose-700",
     BASSA: "bg-amber-100 text-amber-700",

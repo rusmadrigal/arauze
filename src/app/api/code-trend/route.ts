@@ -40,10 +40,7 @@ export async function GET(req: Request) {
     const perDay = new Map<string, number>();
     for (const p of res.points ?? []) {
       const rawDate =
-        p?.date ??
-        p?.createdAt ??
-        p?._createdAt ??
-        new Date().toISOString();
+        p?.date ?? p?.createdAt ?? p?._createdAt ?? new Date().toISOString();
 
       // yyyy-mm-dd seguro
       const formattedDate =
@@ -52,9 +49,7 @@ export async function GET(req: Request) {
           : new Date().toISOString().slice(0, 10);
 
       const inc =
-        p?.count != null && !Number.isNaN(Number(p.count))
-          ? Number(p.count)
-          : 1;
+        p?.count != null && !Number.isNaN(Number(p.count)) ? Number(p.count) : 1;
 
       perDay.set(formattedDate, (perDay.get(formattedDate) ?? 0) + inc);
     }
@@ -71,12 +66,13 @@ export async function GET(req: Request) {
     }
 
     if (debug) {
-      const perDayObject = Array.from(perDay.entries()).reduce<
-        Record<string, number>
-      >((acc, [k, v]) => {
-        acc[k] = v;
-        return acc;
-      }, {});
+      const perDayObject = Array.from(perDay.entries()).reduce<Record<string, number>>(
+        (acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        },
+        {}
+      );
 
       return NextResponse.json(
         {
@@ -93,15 +89,9 @@ export async function GET(req: Request) {
       );
     }
 
-    return NextResponse.json(
-      { ok: true, code, rangeDays, series },
-      { status: 200 }
-    );
+    return NextResponse.json({ ok: true, code, rangeDays, series }, { status: 200 });
   } catch (err) {
     console.error("❌ /api/code-trend error:", err);
-    return NextResponse.json(
-      { ok: false, error: "Errore interno" },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: "Errore interno" }, { status: 500 });
   }
 }

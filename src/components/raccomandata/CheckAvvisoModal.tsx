@@ -45,12 +45,7 @@ function isRecord(x: unknown): x is Record<string, unknown> {
 }
 
 function isOfficialFound(x: unknown): x is OfficialFound {
-  return (
-    isRecord(x) &&
-    x.ok === true &&
-    x.found === true &&
-    typeof x.code === "string"
-  );
+  return isRecord(x) && x.ok === true && x.found === true && typeof x.code === "string";
 }
 
 function pickFirst(obj: unknown, keys: readonly string[]): unknown {
@@ -150,7 +145,7 @@ export default function CheckAvvisoModal({
   const normSourcesList = normalizeSources(rawSources);
   const normSourcesText = normSourcesList.length > 0 ? normSourcesList.join(", ") : "—";
 
-  const rawUpdatedAt = found ? found.updatedAt ?? found._updatedAt ?? null : null;
+  const rawUpdatedAt = found ? (found.updatedAt ?? found._updatedAt ?? null) : null;
   const normUpdatedAtText = rawUpdatedAt
     ? new Date(rawUpdatedAt).toLocaleString("it-IT", {
         year: "numeric",
@@ -244,9 +239,7 @@ export default function CheckAvvisoModal({
                 <div className="flex justify-between gap-4">
                   <span className="text-gray-500">Reports Count</span>
                   <span className="font-medium text-right">
-                    {typeof found.reportsCount === "number"
-                      ? found.reportsCount
-                      : "—"}
+                    {typeof found.reportsCount === "number" ? found.reportsCount : "—"}
                   </span>
                 </div>
 

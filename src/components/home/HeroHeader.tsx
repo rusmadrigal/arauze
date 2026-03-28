@@ -5,7 +5,6 @@ export default function HeroHeader() {
   return (
     <header className="rounded-2xl shadow-card bg-white p-6 md:p-10 pt-12 md:pt-16 pb-5">
       <section className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12">
-        
         {/* Texto principal de la web*/}
 
         <div className="w-full md:pr-2 max-w-3xl">
@@ -14,18 +13,13 @@ export default function HeroHeader() {
              text-[40px] md:text-[44px]
              leading-[1.05] tracking-[-0.02em]"
           >
-            <span className="inline-block md:whitespace-nowrap">
-              Raccomandata Market
-            </span>
-            <span className="inline-block md:whitespace-nowrap">
-              {" "}
-              Tracking - 2026
-            </span>
+            <span className="inline-block md:whitespace-nowrap">Raccomandata Market</span>
+            <span className="inline-block md:whitespace-nowrap"> Tracking - 2026</span>
           </h1>
 
           <p className="mt-4 md:mt-5 text-semibold text-lg md:text-xl leading-[1.35] max-w-[60ch]">
-            Inserisci il codice raccomandata e scopri il mittente e l’urgenza
-            della comunicazione.
+            Inserisci il codice raccomandata e scopri il mittente e l’urgenza della
+            comunicazione.
           </p>
         </div>
 

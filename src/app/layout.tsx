@@ -4,10 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Footer from "@/components/ui/Footer";
 import GlobalScripts from "@/components/scripts/GlobalScripts"; // 👈 nuevo import
-import {
-  getSiteOrigin,
-  shouldNoIndexProductionPreview,
-} from "@/lib/siteUrl";
+import { getSiteOrigin, shouldNoIndexProductionPreview } from "@/lib/siteUrl";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -71,11 +68,7 @@ export const metadata: Metadata = {
     : { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it" className={inter.variable} suppressHydrationWarning>
       <head>
@@ -83,18 +76,12 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="bg-surface text-gray-900 dark:text-gray-600 flex flex-col min-h-dvh transition-colors duration-200">
-
         {/* Scripts globales: GTM, AdSense, etc. */}
 
-        <GlobalScripts
-          gtmId="GTM-WTWX6SPM"
-          adsenseId="ca-pub-6280528663229175"
-        />
-
+        <GlobalScripts gtmId="GTM-WTWX6SPM" adsenseId="ca-pub-6280528663229175" />
 
         {/* Contenedor: cada página define su propio <main> para HTML válido y SEO */}
         <div className="flex-1 py-8">{children}</div>
-
 
         {/* Footer global */}
         <Footer />

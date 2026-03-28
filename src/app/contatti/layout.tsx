@@ -21,10 +21,6 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title, description },
 };
 
-export default function ContattiLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ContattiLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

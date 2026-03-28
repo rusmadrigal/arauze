@@ -79,8 +79,7 @@ export default function StepsRaccomandata({ steps }: Props) {
                           marks: {
                             link: ({ value, children }) => {
                               const href =
-                                value &&
-                                typeof value.href === "string"
+                                value && typeof value.href === "string"
                                   ? value.href
                                   : "#";
                               return (
@@ -98,9 +97,7 @@ export default function StepsRaccomandata({ steps }: Props) {
                     </div>
                   ) : step.description ? (
                     // Fallback string plano
-                    <p className="mt-1 text-sm text-slate-600">
-                      {step.description}
-                    </p>
+                    <p className="mt-1 text-sm text-slate-600">{step.description}</p>
                   ) : null}
 
                   <div className="mt-3 flex flex-wrap gap-2">

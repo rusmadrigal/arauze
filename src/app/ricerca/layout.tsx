@@ -22,10 +22,6 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title, description },
 };
 
-export default function RicercaLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RicercaLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

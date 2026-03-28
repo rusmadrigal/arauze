@@ -22,23 +22,25 @@ import { notFound } from "next/navigation";
 import { sanityClient } from "sanity/lib/client";
 import {
   RACCOMANDATA_BY_CODE,
+  RACCOMANDATA_RELATED_CANDIDATES,
   REPORTS_BY_CODE,
 } from "sanity/lib/queries/raccomandata";
 import type { TypedObject } from "@portabletext/types";
 import AdSenseAd from "@/components/ads/AdSenseAd";
 import RaccomandataTrustPanel from "@/components/raccomandata/RaccomandataTrustPanel";
+import RaccomandataRelatedPages, {
+  type RaccomandataRelatedItem,
+} from "@/components/raccomandata/RaccomandataRelatedPages";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
 
 // -----------------------------
 // UTILITIES
 // -----------------------------
 
 const norm = (v?: string | null): string => (v ?? "").trim();
-
 
 // Convert Portable Text → plain text
 type PortableTextChild = { _type?: string; text?: string };
@@ -62,7 +64,6 @@ function ptToPlainText(input: unknown): string {
 
   return "";
 }
-
 
 // -----------------------------
 // TYPES
@@ -89,7 +90,9 @@ type RaccomandataPageDoc = {
   alertBox?: { enabled?: boolean; title?: string; body?: unknown; icon?: string } | null;
   assistenza?: {
     title?: string | null;
-    cards?: { icon?: string | null; title?: string | null; description?: unknown }[] | null;
+    cards?:
+      | { icon?: string | null; title?: string | null; description?: unknown }[]
+      | null;
   } | null;
   faq?: {
     title?: string | null;
@@ -128,6 +131,33 @@ type UIFeedback = {
   createdAt?: string;
 };
 
+type RelatedCandidate = {
+  code: string;
+  mittente?: string | null;
+  tipologia?: string | null;
+  priority?: Priority | null;
+};
+
+function pickRelatedRaccomandataPages(
+  candidates: RelatedCandidate[],
+  current: { code: string; tipologia?: string | null },
+  limit = 3
+): RaccomandataRelatedItem[] {
+  const cur = norm(current.code).toLowerCase();
+  const list = candidates.filter((c) => {
+    const cc = norm(c.code).toLowerCase();
+    return cc.length > 0 && cc !== cur;
+  });
+  const tip = norm(current.tipologia).toLowerCase();
+  const sameTip = tip ? list.filter((c) => norm(c.tipologia).toLowerCase() === tip) : [];
+  const sameTipCodes = new Set(sameTip.map((c) => norm(c.code).toLowerCase()));
+  const other = list.filter((c) => !sameTipCodes.has(norm(c.code).toLowerCase()));
+  return [...sameTip, ...other].slice(0, limit).map((c) => ({
+    code: norm(c.code),
+    mittente: c.mittente ?? undefined,
+    tipologia: c.tipologia ?? undefined,
+  }));
+}
 
 // -----------------------------
 // NORMALIZERS
@@ -191,31 +221,33 @@ function normalizeDetails(items?: DetailDoc[] | null): UIDetail[] {
 }
 
 function normalizeAssistenza(
-  a?:
-    | {
-      title?: string | null;
-      cards?: {
-        icon?: string | null;
-        title?: string | null;
-        description?: unknown;
-      }[] | null;
-    }
-    | null
+  a?: {
+    title?: string | null;
+    cards?:
+      | {
+          icon?: string | null;
+          title?: string | null;
+          description?: unknown;
+        }[]
+      | null;
+  } | null
 ): AssistenzaData | undefined {
   if (!a) return undefined;
 
   const cards = Array.isArray(a.cards)
     ? a.cards
-      .map((c): { icon?: string; title?: string; description?: string } | null => {
-        const icon = c?.icon ?? undefined;
-        const title = norm(c?.title) || undefined;
-        const description = ptToPlainText(c?.description) || undefined;
+        .map((c): { icon?: string; title?: string; description?: string } | null => {
+          const icon = c?.icon ?? undefined;
+          const title = norm(c?.title) || undefined;
+          const description = ptToPlainText(c?.description) || undefined;
 
-        if (!icon && !title && !description) return null;
+          if (!icon && !title && !description) return null;
 
-        return { icon, title, description };
-      })
-      .filter((c): c is { icon?: string; title?: string; description?: string } => c !== null)
+          return { icon, title, description };
+        })
+        .filter(
+          (c): c is { icon?: string; title?: string; description?: string } => c !== null
+        )
     : undefined;
 
   return {
@@ -224,26 +256,23 @@ function normalizeAssistenza(
   };
 }
 
-
 function normalizeFAQ(
-  f?:
-    | {
-      title?: string | null;
-      items?: { q?: string | null; a?: unknown }[] | null;
-    }
-    | null
+  f?: {
+    title?: string | null;
+    items?: { q?: string | null; a?: unknown }[] | null;
+  } | null
 ): FAQData | undefined {
   if (!f) return undefined;
 
   const items = Array.isArray(f.items)
     ? f.items
-      .map((it): { q?: string; a?: string } | null => {
-        const q = norm(it?.q) || undefined;
-        const a = ptToPlainText(it?.a) || undefined;
-        if (!q && !a) return null;
-        return { q, a };
-      })
-      .filter((it): it is { q?: string; a?: string } => it !== null)
+        .map((it): { q?: string; a?: string } | null => {
+          const q = norm(it?.q) || undefined;
+          const a = ptToPlainText(it?.a) || undefined;
+          if (!q && !a) return null;
+          return { q, a };
+        })
+        .filter((it): it is { q?: string; a?: string } => it !== null)
     : undefined;
 
   return {
@@ -251,7 +280,6 @@ function normalizeFAQ(
     items,
   };
 }
-
 
 function normalizeFeedback(docs: FeedbackDoc[], fallbackCodice: string): UIFeedback[] {
   return docs
@@ -277,7 +305,6 @@ function normalizeFeedback(docs: FeedbackDoc[], fallbackCodice: string): UIFeedb
     .filter((f): f is UIFeedback => f !== null);
 }
 
-
 // -----------------------------
 // METADATA
 // -----------------------------
@@ -299,17 +326,15 @@ export async function generateMetadata({
   const codice = (page?.code ?? code).trim();
 
   const base = codice ? `Raccomandata ${codice}` : "Raccomandata";
-  const title =
-    page?.metaTitle?.trim()
-      ? page.metaTitle
-      : page?.heroTitleSuffix
-        ? `${base} – ${page.heroTitleSuffix}`
-        : base;
+  const title = page?.metaTitle?.trim()
+    ? page.metaTitle
+    : page?.heroTitleSuffix
+      ? `${base} – ${page.heroTitleSuffix}`
+      : base;
 
-  const description =
-    page?.metaDescription?.trim()
-      ? page.metaDescription
-      : page?.heroSubtitle ?? `Dettagli per il codice ${codice}`;
+  const description = page?.metaDescription?.trim()
+    ? page.metaDescription
+    : (page?.heroSubtitle ?? `Dettagli per il codice ${codice}`);
 
   const siteUrl = getSiteOrigin();
   const canonical = `${siteUrl}/raccomandata/${codice.toLowerCase()}`;
@@ -329,7 +354,6 @@ export async function generateMetadata({
     twitter: { card: "summary", title, description },
   };
 }
-
 
 // -----------------------------
 // PAGE COMPONENT
@@ -354,12 +378,22 @@ export default async function RaccomandataPage({
   const codice = (page.code ?? code).trim();
   const codiceLower = codice.toLowerCase();
 
-  const [chartData, reportCount] = await Promise.all([
+  const [chartData, reportCount, relatedCandidates] = await Promise.all([
     getRaccomandataChart(codice),
     sanityClient
       .fetch<number>(REPORTS_BY_CODE, { code: codice }, { cache: "no-store" })
       .then((n) => (typeof n === "number" ? n : 0)),
+    sanityClient.fetch<RelatedCandidate[]>(
+      RACCOMANDATA_RELATED_CANDIDATES,
+      { code: codice },
+      { cache: "no-store" }
+    ),
   ]);
+
+  const relatedPages = pickRelatedRaccomandataPages(relatedCandidates ?? [], {
+    code: codice,
+    tipologia: page.tipologia,
+  });
 
   // -----------------------------
   // FIXED FEEDBACK QUERY
@@ -399,7 +433,6 @@ export default async function RaccomandataPage({
     <main className="mx-auto max-w-5xl px-4">
       <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
         <div className="space-y-8 md:space-y-10">
-
           <TopNav />
 
           <HeroRaccomandata code={codice} pageMeta={pageMeta} />
@@ -423,10 +456,7 @@ export default async function RaccomandataPage({
 
           <AuthorBox data={page.authorBox} />
 
-          <FeedbackRaccomandata
-            feedback={uiFeedback}
-            defaultCode={codice}
-          />
+          <FeedbackRaccomandata feedback={uiFeedback} defaultCode={codice} />
 
           <AdSenseAd adSlot="2025677270" className="my-6" />
 
@@ -434,8 +464,7 @@ export default async function RaccomandataPage({
             <RaccomandataPieChart
               slices={chartData.slices}
               title={
-                chartData.titolo ??
-                "Distribuzione delle categorie per questo codice"
+                chartData.titolo ?? "Distribuzione delle categorie per questo codice"
               }
             />
           ) : null}
@@ -452,6 +481,7 @@ export default async function RaccomandataPage({
 
           <FAQSection data={uiFAQ} />
 
+          <RaccomandataRelatedPages pages={relatedPages} />
         </div>
       </div>
 

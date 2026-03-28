@@ -24,8 +24,8 @@ export default function AdditionalInfoBanner() {
             Hai ricevuto una Raccomandata Market?
           </h3>
           <p className="text-white/90 max-w-2xl mx-auto md:mx-0 text-sm md:text-base leading-relaxed">
-            Scopri subito chi è il mittente e cosa fare per ritirarla in tempo.
-            Evita ritardi e comunicazioni fiscali perse.
+            Scopri subito chi è il mittente e cosa fare per ritirarla in tempo. Evita
+            ritardi e comunicazioni fiscali perse.
           </p>
 
           {/* CTA button */}

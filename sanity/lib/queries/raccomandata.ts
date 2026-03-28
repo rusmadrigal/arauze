@@ -50,6 +50,21 @@ export const RACCOMANDATA_BY_CODE = groq`
 }
 `;
 
+// ✅ Candidati per link interni tra schede (escluso il codice corrente)
+export const RACCOMANDATA_RELATED_CANDIDATES = groq`
+*[
+  _type == "raccomandataPage" &&
+  defined(code) &&
+  lower(string(code)) != lower(string($code))
+]
+| order(coalesce(authorBox.updatedAt, _updatedAt) desc)[0...24]{
+  "code": string(code),
+  mittente,
+  tipologia,
+  priority
+}
+`;
+
 // ✅ Conteo de reportes crowd por código (case-insensitive)
 export const REPORTS_BY_CODE = groq`
 count(*[

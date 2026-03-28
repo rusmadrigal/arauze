@@ -3,24 +3,17 @@
 import Script from "next/script";
 
 interface GlobalScriptsProps {
-    gaId?: string;
-    gtmId?: string;
-    adsenseId?: string;
+  gaId?: string;
+  gtmId?: string;
+  adsenseId?: string;
 }
 
-export default function GlobalScripts({
-
-    gtmId,
-    adsenseId,
-}: GlobalScriptsProps) {
-    return (
-        <>
-            {/* Google Tag Manager */}
-            {gtmId && (
-                <Script
-                    id="gtm-script"
-                    strategy="afterInteractive"
-                >{`
+export default function GlobalScripts({ gtmId, adsenseId }: GlobalScriptsProps) {
+  return (
+    <>
+      {/* Google Tag Manager */}
+      {gtmId && (
+        <Script id="gtm-script" strategy="afterInteractive">{`
           (function(w,d,s,l,i){
             w[l]=w[l]||[];
             w[l].push({ 'gtm.start': new Date().getTime(), event:'gtm.js' });
@@ -31,18 +24,18 @@ export default function GlobalScripts({
             f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','${gtmId}');
         `}</Script>
-            )}
+      )}
 
-            {/* Google AdSense */}
-            {adsenseId && (
-                <Script
-                    id="adsense-script"
-                    async
-                    strategy="afterInteractive"
-                    crossOrigin="anonymous"
-                    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
-                />
-            )}
-        </>
-    );
+      {/* Google AdSense */}
+      {adsenseId && (
+        <Script
+          id="adsense-script"
+          async
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
+        />
+      )}
+    </>
+  );
 }

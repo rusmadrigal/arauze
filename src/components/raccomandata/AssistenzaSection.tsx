@@ -57,22 +57,24 @@ export default function AssistenzaSection({ data }: { data?: AssistenzaData }) {
               <div className="absolute inset-x-0 top-0 h-[4px] bg-gradient-to-r from-[#2F66D5] to-[#3A78E0]" />
 
               <div className="p-6 relative z-10">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl 
+                <div
+                  className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl 
                                 bg-gradient-to-br from-[#2F66D5]/10 to-[#3A78E0]/10 
-                                ring-1 ring-[#2F66D5]/20">
+                                ring-1 ring-[#2F66D5]/20"
+                >
                   <IconComponent className="w-6 h-6 text-[#2F66D5]" />
                 </div>
 
-                <h3 className="font-semibold text-slate-900 mb-1">
-                  {card.title}
-                </h3>
+                <h3 className="font-semibold text-slate-900 mb-1">{card.title}</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   {card.description}
                 </p>
               </div>
 
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 
-                              bg-gradient-to-br from-[#2F66D5]/5 to-[#3A78E0]/5 rounded-2xl" />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 
+                              bg-gradient-to-br from-[#2F66D5]/5 to-[#3A78E0]/5 rounded-2xl"
+              />
             </div>
           );
         })}

@@ -29,12 +29,12 @@ export const metadata: Metadata = {
 };
 
 async function getCmpList(): Promise<CmpItem[]> {
-    const data = await sanityClient.fetch<CmpItem[]>(CMP_LIST_QUERY);
-    return Array.isArray(data) ? data : [];
+  const data = await sanityClient.fetch<CmpItem[]>(CMP_LIST_QUERY);
+  return Array.isArray(data) ? data : [];
 }
 
 export default async function CmpHomePage() {
-    const cmpList = await getCmpList();
+  const cmpList = await getCmpList();
 
-    return <CmpHomeClient initialList={cmpList} />;
+  return <CmpHomeClient initialList={cmpList} />;
 }

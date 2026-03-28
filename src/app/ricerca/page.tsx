@@ -3,9 +3,7 @@ import { MailSearch } from "lucide-react";
 import Link from "next/link";
 import RefineForm from "./components/RefineForm";
 
-export default function RicercaPage({
-  searchParams,
-}: { searchParams?: { q?: string } }) {
+export default function RicercaPage({ searchParams }: { searchParams?: { q?: string } }) {
   const q = (searchParams?.q ?? "").trim();
 
   return (
@@ -26,8 +24,8 @@ export default function RicercaPage({
           </h1>
           <p className="mt-2 text-gray-600">
             Raffina la ricerca: inserisci un{" "}
-            <strong className="font-semibold">codice (3–6 cifre)</strong> oppure
-            un testo descrittivo.
+            <strong className="font-semibold">codice (3–6 cifre)</strong> oppure un testo
+            descrittivo.
           </p>
         </header>
 
@@ -38,8 +36,8 @@ export default function RicercaPage({
 
         {/* Nota/CTA */}
         <div className="mt-6 md:mt-8 text-sm text-gray-500">
-          Suggerimento: se il testo contiene un codice, lo rileviamo
-          automaticamente. Se pensi che un codice dovrebbe esistere,{" "}
+          Suggerimento: se il testo contiene un codice, lo rileviamo automaticamente. Se
+          pensi che un codice dovrebbe esistere,{" "}
           <Link href="/contatti" className="text-[#2F66D5] hover:underline font-medium">
             contattaci
           </Link>
