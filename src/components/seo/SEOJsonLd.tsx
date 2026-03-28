@@ -134,7 +134,12 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     "@id": `${pageUrl}#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "Raccomandata", item: `${siteUrl}/raccomandata` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Codici analizzati",
+        item: `${siteUrl}/raccomandata-market`,
+      },
       { "@type": "ListItem", position: 3, name: `Codice ${code}`, item: pageUrl },
     ],
   } as const;

@@ -24,12 +24,15 @@ export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
                 </div>
 
                 <div className="aspect-[4/3] w-full bg-gray-200 relative">
-                    <Image
-                        src={data.mapImage || ""}
-                        alt={data.mapAlt || ""}
-                        fill
-                        className="object-cover"
-                    />
+                    {data.mapImage ? (
+                        <Image
+                            src={data.mapImage}
+                            alt={data.mapAlt || "Mappa del centro"}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                    ) : null}
                 </div>
 
                 <div className="px-4 py-3">

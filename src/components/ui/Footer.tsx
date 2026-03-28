@@ -47,7 +47,7 @@ export default function Footer() {
                                 width={160}
                                 height={40}
                                 className="h-auto w-auto"
-                                priority
+                                sizes="160px"
                             />
                         </Link>
                         <p className="mt-3 text-sm text-slate-600 max-w-xs leading-relaxed">

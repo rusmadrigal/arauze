@@ -1,6 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Footer from "@/components/ui/Footer";
 import GlobalScripts from "@/components/scripts/GlobalScripts"; // 👈 nuevo import
@@ -9,7 +9,21 @@ import {
   shouldNoIndexProductionPreview,
 } from "@/lib/siteUrl";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  preload: true,
+});
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+};
 
 const siteUrl = getSiteOrigin();
 
@@ -40,6 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "Arauze.com",
     type: "website",
+    locale: "it_IT",
     url: "/",
     title: "Arauze.com – Controlla la tua Raccomandata Online",
     description:
@@ -77,8 +92,8 @@ export default function RootLayout({
         />
 
 
-        {/* Contenido principal */}
-        <main className="flex-1 py-8">{children}</main>
+        {/* Contenedor: cada página define su propio <main> para HTML válido y SEO */}
+        <div className="flex-1 py-8">{children}</div>
 
 
         {/* Footer global */}

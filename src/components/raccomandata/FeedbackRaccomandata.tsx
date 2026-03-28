@@ -15,6 +15,8 @@ type FeedbackItem = {
 
 interface FeedbackRaccomandataProps {
     feedback?: FeedbackItem[];
+    /** Precompila il codice sulla pagina di dettaglio */
+    defaultCode?: string;
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -40,10 +42,11 @@ const CATEGORIES = Object.entries(CATEGORY_LABELS).map(([value, label]) => ({
 
 const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
     feedback = [],
+    defaultCode = "",
 }) => {
     const [nome, setNome] = useState("");
     const [citta, setCitta] = useState("");
-    const [codice, setCodice] = useState("");
+    const [codice, setCodice] = useState(() => defaultCode.trim());
     const [categoria, setCategoria] = useState("");
     const [commento, setCommento] = useState("");
 
@@ -124,12 +127,16 @@ const FeedbackRaccomandata: React.FC<FeedbackRaccomandataProps> = ({
         <section className="mt-10 space-y-6">
             {/* FEEDBACK ALTRI UTENTI */}
             <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-                <h2 className="mb-4 text-lg font-semibold text-slate-900 md:text-xl">
+                <h2 className="text-lg font-semibold text-slate-900 md:text-xl">
                     Feedback di altri utenti
                 </h2>
+                <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                    Segnalazioni pubblicate dopo moderazione. Sono esperienze personali: usale come
+                    indicazione, non come prova ufficiale del contenuto della raccomandata.
+                </p>
 
                 {feedback.length === 0 ? (
-                    <p className="text-sm text-slate-500">
+                    <p className="mt-4 text-sm text-slate-500">
                         Non ci sono ancora feedback pubblici per questo codice.
                     </p>
                 ) : (

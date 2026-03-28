@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function NewsletterCTA() {
   const [email, setEmail] = useState("");
@@ -80,9 +81,9 @@ export default function NewsletterCTA() {
             />
             <span>
               Accetto l’
-              <a href="/privacy" className="underline font-medium">
+              <Link href="/privacy" className="underline font-medium">
                 informativa sulla privacy
-              </a>{" "}
+              </Link>{" "}
               e acconsento al trattamento dei miei dati ai sensi del{" "}
               <span className="font-medium">
                 Regolamento UE 2016/679 (GDPR)

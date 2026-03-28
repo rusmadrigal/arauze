@@ -1,5 +1,6 @@
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
+import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
 
 const components: PortableTextComponents = {
     // 🔹 Bloques de texto (párrafos, headings, etc.)
@@ -15,6 +16,23 @@ const components: PortableTextComponents = {
         //     {children}
         //   </h2>
         // ),
+    },
+
+    marks: {
+        link: ({ value, children }) => {
+            const href =
+                value &&
+                typeof value === "object" &&
+                "href" in value &&
+                typeof (value as { href?: string }).href === "string"
+                    ? (value as { href: string }).href
+                    : "#";
+            return (
+                <PortableTextMarkLink href={href} className="text-blue-600 underline font-medium">
+                    {children}
+                </PortableTextMarkLink>
+            );
+        },
     },
 
     // 🔹 Listas (<ul>, <ol>)

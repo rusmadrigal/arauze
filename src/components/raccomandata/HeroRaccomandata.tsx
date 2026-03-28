@@ -20,16 +20,38 @@ export default function HeroRaccomandata({ code, pageMeta }: Props) {
 
   return (
     <section className="mt-4 md:mt-6 text-center md:text-left">
-      <nav aria-label="breadcrumb" className="text-sm text-gray-400 mb-3 md:mb-4">
-        <Link href="/" className="hover:underline">Home</Link>{" "}
-        / <span className="text-gray-500">Raccomandata Market {code}</span>
+      <nav aria-label="Percorso di navigazione" className="mb-3 md:mb-4">
+        <ol className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-sm text-gray-500 md:justify-start">
+          <li>
+            <Link href="/" className="text-gray-500 hover:text-[#2552AD] hover:underline">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden className="text-gray-300">
+            /
+          </li>
+          <li>
+            <Link
+              href="/raccomandata-market"
+              className="text-gray-500 hover:text-[#2552AD] hover:underline"
+            >
+              Codici analizzati
+            </Link>
+          </li>
+          <li aria-hidden className="text-gray-300">
+            /
+          </li>
+          <li className="font-medium text-gray-800" aria-current="page">
+            Codice {code}
+          </li>
+        </ol>
       </nav>
 
       <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight">
-        Raccomandata Market {code}: {heroTitleSuffix}
+        Raccomandata codice {code}: {heroTitleSuffix}
       </h1>
 
-      <p className="mt-2 text-gray-600 max-w-2xl">{heroSubtitle}</p>
+      <p className="mt-2 text-gray-600 max-w-2xl leading-relaxed">{heroSubtitle}</p>
     </section>
   );
 }

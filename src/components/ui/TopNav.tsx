@@ -35,6 +35,7 @@ export default function TopNav() {
           width={180}
           height={26}
           priority
+          sizes="180px"
           className="select-none"
         />
       </Link>

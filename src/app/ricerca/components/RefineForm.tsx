@@ -1,24 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 export default function RefineForm({ initialQuery }: { initialQuery: string }) {
     const [value, setValue] = useState(initialQuery);
+    const router = useRouter();
 
     function onSubmit(e: React.FormEvent) {
         e.preventDefault();
         const v = value.trim();
         if (!v) {
-            window.location.href = "/ricerca";
+            router.push("/ricerca");
             return;
         }
         const m = v.match(/\b(\d{3,6})\b/);
         if (m?.[1]) {
-            window.location.href = `/raccomandata/${m[1]}`;
+            router.push(`/raccomandata/${m[1]}`);
             return;
         }
-        window.location.href = `/ricerca?q=${encodeURIComponent(v)}`;
+        router.push(`/ricerca?q=${encodeURIComponent(v)}`);
     }
 
     return (

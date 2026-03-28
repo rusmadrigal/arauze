@@ -138,7 +138,7 @@ export default function CmpPreviewSection({
             <div className="mt-8 flex justify-center md:hidden">
                 <Link
                     href={viewAllHref}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-slate-808"
+                    className="inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-slate-800"
                 >
                     Vedi tutti i CMP
                 </Link>

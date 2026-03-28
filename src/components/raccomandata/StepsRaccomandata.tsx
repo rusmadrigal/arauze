@@ -3,6 +3,7 @@ import React from "react";
 import { Search, Mailbox, FileText } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import type { TypedObject } from "@portabletext/types";
+import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
 
 // Usamos TypedObject de @portabletext/types
 type Step = {
@@ -13,15 +14,6 @@ type Step = {
 interface Props {
   steps?: Step[];
 }
-
-// Tipo para el mark "link" de Portable Text
-type PortableLinkMarkProps = {
-  value?: {
-    href?: string | null;
-    [key: string]: unknown;
-  } | null;
-  children: React.ReactNode;
-};
 
 export default function StepsRaccomandata({ steps }: Props) {
   // Fallback (por si el documento aún no define los pasos)
@@ -85,19 +77,19 @@ export default function StepsRaccomandata({ steps }: Props) {
                         value={step.description}
                         components={{
                           marks: {
-                            link: ({ value, children }: PortableLinkMarkProps) => {
+                            link: ({ value, children }) => {
                               const href =
-                                value && typeof value.href === "string"
+                                value &&
+                                typeof value.href === "string"
                                   ? value.href
                                   : "#";
                               return (
-                                <a
+                                <PortableTextMarkLink
                                   href={href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                  className="text-sky-700 underline underline-offset-2 hover:text-sky-900"
                                 >
                                   {children}
-                                </a>
+                                </PortableTextMarkLink>
                               );
                             },
                           },

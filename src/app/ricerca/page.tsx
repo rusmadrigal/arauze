@@ -1,5 +1,6 @@
 import TopNav from "@/components/ui/TopNav";
 import { MailSearch } from "lucide-react";
+import Link from "next/link";
 import RefineForm from "./components/RefineForm";
 
 export default function RicercaPage({
@@ -39,9 +40,10 @@ export default function RicercaPage({
         <div className="mt-6 md:mt-8 text-sm text-gray-500">
           Suggerimento: se il testo contiene un codice, lo rileviamo
           automaticamente. Se pensi che un codice dovrebbe esistere,{" "}
-          <a href="/contatti" className="text-[#2F66D5] hover:underline font-medium">
+          <Link href="/contatti" className="text-[#2F66D5] hover:underline font-medium">
             contattaci
-          </a>.
+          </Link>
+          .
         </div>
       </div>
     </main>

@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteUrl}/` },
   openGraph: {
     type: "website",
+    locale: "it_IT",
     url: `${siteUrl}/`,
     siteName: "Arauze",
     title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",

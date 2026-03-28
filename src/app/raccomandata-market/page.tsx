@@ -77,6 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
         },
         openGraph: {
             type: "website",
+            locale: "it_IT",
             title:
                 data?.metaTitle ??
                 "Raccomandata Market – Elenco Raccomandate Analizzate | Arauze",
@@ -124,7 +125,7 @@ export default async function RaccomandataMarketPage() {
     });
 
     return (
-        <div className="mx-auto max-w-5xl px-4" role="main" aria-label="Elenco Raccomandata Market">
+        <main className="mx-auto max-w-5xl px-4" aria-label="Elenco Raccomandata Market">
             <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
                 <TopNav />
                 <h1 className="text-2xl font-semibold mb-6 mt-10">
@@ -261,7 +262,7 @@ export default async function RaccomandataMarketPage() {
                     }),
                 }}
             />
-        </div>
+        </main>
     );
 }
 

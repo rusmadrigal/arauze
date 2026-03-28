@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import TopNav from "@/components/ui/TopNav";
 
 export default function ContattiPage() {
@@ -51,13 +52,12 @@ export default function ContattiPage() {
                             <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
                                 <dt className="text-sm text-gray-500">Sito Web</dt>
                                 <dd>
-                                    <a
-                                        href="https://www.arauze.com"
+                                    <Link
+                                        href="/"
                                         className="text-blue-600 underline"
-                                        rel="noopener noreferrer"
                                     >
                                         https://www.arauze.com
-                                    </a>
+                                    </Link>
                                 </dd>
                             </div>
                         </dl>
@@ -154,12 +154,12 @@ export default function ContattiPage() {
 
                     {/* Back to top */}
                     <div className="pt-2">
-                        <a
-                            href="#email"
+                        <Link
+                            href="/contatti#email"
                             className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
                         >
                             ↑ Torna su
-                        </a>
+                        </Link>
                     </div>
                 </section>
             </div>

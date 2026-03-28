@@ -23,6 +23,8 @@ export default function AuthorBox({ data }: { data?: AuthorBoxData }) {
   const name = data.name || "Redazione";
   const avatar = data.avatarUrl || "/images/author.jpg";
   const prettyDate = formatItalianDate(data.updatedAt);
+  const remoteAvatar =
+    avatar.startsWith("http") && !avatar.includes("cdn.sanity.io");
 
   return (
     <section className="flex items-center gap-3 mt-6 text-sm text-gray-500">
@@ -31,7 +33,9 @@ export default function AuthorBox({ data }: { data?: AuthorBoxData }) {
         alt={name}
         width={40}
         height={40}
+        unoptimized={remoteAvatar}
         className="rounded-full object-cover border border-gray-200"
+        sizes="40px"
       />
       <div>
         <p className="font-medium text-gray-700">{name}</p>

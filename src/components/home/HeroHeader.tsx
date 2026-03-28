@@ -40,6 +40,7 @@ export default function HeroHeader() {
             width={300}
             height={220}
             priority
+            sizes="(max-width: 768px) 0vw, 300px"
             className="object-contain translate-x-12 -mt-1"
           />
         </div>

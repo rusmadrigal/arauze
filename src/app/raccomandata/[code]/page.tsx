@@ -20,9 +20,14 @@ import SEOJsonLd, {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { sanityClient } from "sanity/lib/client";
-import { RACCOMANDATA_BY_CODE } from "sanity/lib/queries/raccomandata";
+import {
+  RACCOMANDATA_BY_CODE,
+  REPORTS_BY_CODE,
+} from "sanity/lib/queries/raccomandata";
 import type { TypedObject } from "@portabletext/types";
 import AdSenseAd from "@/components/ads/AdSenseAd";
+import RaccomandataTrustPanel from "@/components/raccomandata/RaccomandataTrustPanel";
+import { getSiteOrigin } from "@/lib/siteUrl";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -306,10 +311,22 @@ export async function generateMetadata({
       ? page.metaDescription
       : page?.heroSubtitle ?? `Dettagli per il codice ${codice}`;
 
+  const siteUrl = getSiteOrigin();
+  const canonical = `${siteUrl}/raccomandata/${codice.toLowerCase()}`;
+
   return {
     title,
     description,
-    alternates: { canonical: `/raccomandata/${codice.toLowerCase()}` },
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      locale: "it_IT",
+      url: canonical,
+      siteName: "Arauze.com",
+      title,
+      description,
+    },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -337,7 +354,12 @@ export default async function RaccomandataPage({
   const codice = (page.code ?? code).trim();
   const codiceLower = codice.toLowerCase();
 
-  const chartData = await getRaccomandataChart(codice);
+  const [chartData, reportCount] = await Promise.all([
+    getRaccomandataChart(codice),
+    sanityClient
+      .fetch<number>(REPORTS_BY_CODE, { code: codice }, { cache: "no-store" })
+      .then((n) => (typeof n === "number" ? n : 0)),
+  ]);
 
   // -----------------------------
   // FIXED FEEDBACK QUERY
@@ -382,6 +404,13 @@ export default async function RaccomandataPage({
 
           <HeroRaccomandata code={codice} pageMeta={pageMeta} />
 
+          <RaccomandataTrustPanel
+            updatedAt={page._updatedAt}
+            createdAt={page._createdAt}
+            reportCount={reportCount}
+            feedbackCount={uiFeedback.length}
+          />
+
           <InfoBoxRaccomandata
             code={codice}
             mittente={page.mittente ?? undefined}
@@ -394,7 +423,10 @@ export default async function RaccomandataPage({
 
           <AuthorBox data={page.authorBox} />
 
-          <FeedbackRaccomandata feedback={uiFeedback} />
+          <FeedbackRaccomandata
+            feedback={uiFeedback}
+            defaultCode={codice}
+          />
 
           <AdSenseAd adSlot="2025677270" className="my-6" />
 
@@ -423,7 +455,16 @@ export default async function RaccomandataPage({
         </div>
       </div>
 
-      <SEOJsonLd page={pageMeta as SeoRaccomandataPage} code={codice} />
+      <SEOJsonLd
+        page={
+          {
+            ...pageMeta,
+            _createdAt: page._createdAt,
+            _updatedAt: page._updatedAt,
+          } as SeoRaccomandataPage
+        }
+        code={codice}
+      />
     </main>
   );
 }

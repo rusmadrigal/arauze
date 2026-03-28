@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import TopNav from "@/components/ui/TopNav";
 
 export default function PrivacyPage() {
@@ -51,12 +52,12 @@ export default function PrivacyPage() {
                             ["#contatti", "Contatti"],
                         ].map(([href, label]) => (
                             <li key={href}>
-                                <a
-                                    href={href}
+                                <Link
+                                    href={`/privacy${href}`}
                                     className="inline-flex items-center rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 hover:border-gray-300 hover:text-gray-900"
                                 >
                                     {label}
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>
@@ -179,9 +180,9 @@ export default function PrivacyPage() {
                             <div>
                                 <dt className="text-sm text-gray-500">Sito</dt>
                                 <dd>
-                                    <a href="https://www.arauze.com" className="text-blue-600 underline">
+                                    <Link href="/" className="text-blue-600 underline">
                                         www.arauze.com
-                                    </a>
+                                    </Link>
                                 </dd>
                             </div>
                         </dl>
@@ -189,12 +190,12 @@ export default function PrivacyPage() {
 
                     {/* Back to top */}
                     <div className="pt-2">
-                        <a
-                            href="#intro"
+                        <Link
+                            href="/privacy#intro"
                             className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
                         >
                             ↑ Torna su
-                        </a>
+                        </Link>
                     </div>
                 </section>
             </div>

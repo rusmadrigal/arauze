@@ -58,6 +58,8 @@ export default function RaccomandataMarketInfoCard() {
                         alt="Raccomandata Market Illustration"
                         width={380}
                         height={380}
+                        sizes="(max-width: 768px) 100vw, 380px"
+                        loading="lazy"
                         className="select-none"
                     />
                 </div>

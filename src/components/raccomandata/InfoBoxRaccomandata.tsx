@@ -47,11 +47,18 @@ function PingDot({ level }: { level: Exclude<Urgency, "NONE"> }) {
   );
 }
 
+const PLACEHOLDER_MITTENTE =
+  "Non indicato in scheda — verifica mittente sull'avviso di ritiro o in posta";
+const PLACEHOLDER_TIPOLOGIA =
+  "Comunicazione postale tracciata (dettaglio sul piego / avviso)";
+const PLACEHOLDER_STATO =
+  "Dipende dal tuo avviso — controlla scadenze e sede di ritiro";
+
 export default function InfoBoxRaccomandata({
-  code = "697",
-  mittente = "Agenzia delle Entrate (probabile)",
-  tipologia = "Raccomandata Market",
-  stato = "In attesa di ritiro",
+  code = "",
+  mittente,
+  tipologia,
+  stato,
   urgency = "NONE",
   priority, // ← viene de Sanity
 }: Props) {
@@ -61,10 +68,19 @@ export default function InfoBoxRaccomandata({
   const level: Urgency = priority ?? urgency ?? "NONE";
 
   const keyInfo = [
-    { label: "Codice", value: code },
-    { label: "Mittente", value: mittente },
-    { label: "Tipologia", value: tipologia },
-    { label: "Stato", value: stato },
+    { label: "Codice", value: code || "—" },
+    {
+      label: "Mittente (indicativo)",
+      value: (mittente ?? "").trim() || PLACEHOLDER_MITTENTE,
+    },
+    {
+      label: "Tipologia",
+      value: (tipologia ?? "").trim() || PLACEHOLDER_TIPOLOGIA,
+    },
+    {
+      label: "Stato (orientativo)",
+      value: (stato ?? "").trim() || PLACEHOLDER_STATO,
+    },
   ];
 
   const priorityLabel =

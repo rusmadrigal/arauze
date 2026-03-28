@@ -5,6 +5,7 @@ import type { TypedObject } from "@portabletext/types";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "sanity/lib/client";
 import Image from "next/image";
+import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
 
 const builder = createImageUrlBuilder(sanityClient);
 
@@ -21,17 +22,6 @@ type Detail = {
 interface Props {
   details?: Detail[];
 }
-
-// Tipo para el mark "link" de Portable Text
-type PortableLinkMarkProps = {
-  value?:
-  | {
-    href?: string | null;
-    [key: string]: unknown;
-  }
-  | null;
-  children: React.ReactNode;
-};
 
 // Tipo para imágenes dentro de Portable Text
 type PortableImageValue = {
@@ -69,19 +59,18 @@ const portableComponents: PortableTextComponents = {
 
   // 🧩 Links
   marks: {
-    link: ({ value, children }: PortableLinkMarkProps) => {
+    link: ({ value, children }) => {
       const href =
-        value?.href && typeof value.href === "string" ? value.href : "#";
-
+        value &&
+        typeof value === "object" &&
+        "href" in value &&
+        typeof (value as { href?: string }).href === "string"
+          ? (value as { href: string }).href
+          : "#";
       return (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline underline-offset-2 hover:text-blue-700"
-        >
+        <PortableTextMarkLink href={href}>
           {children}
-        </a>
+        </PortableTextMarkLink>
       );
     },
   },
