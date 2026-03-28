@@ -31,10 +31,9 @@ export default function TrendMiniChart({ code }: Props) {
     let active = true;
     async function load() {
       try {
-        const res = await fetch(
-          `/api/code-trend?code=${encodeURIComponent(code)}`,
-          { cache: "no-store" }
-        );
+        const res = await fetch(`/api/code-trend?code=${encodeURIComponent(code)}`, {
+          cache: "no-store",
+        });
         const json: ApiResponse = await res.json();
         if (!active) return;
         if (json.ok && json.series?.length) {

@@ -4,11 +4,7 @@ import {
   SUGGEST_RACCOMANDATA_BY_CODE,
   SUGGEST_RACCOMANDATA_TEXT,
 } from "@/lib/queries/search";
-import {
-  isCodeSlug,
-  normalizeQuery,
-  toGroqPattern,
-} from "@/lib/search/parseQuery";
+import { isCodeSlug, normalizeQuery, toGroqPattern } from "@/lib/search/parseQuery";
 
 export const runtime = "nodejs";
 

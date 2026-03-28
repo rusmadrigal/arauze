@@ -13,9 +13,7 @@ import FeedbackRaccomandata from "@/components/raccomandata/FeedbackRaccomandata
 import RaccomandataPieChart from "@/components/raccomandata/RaccomandataPieChart";
 import { getRaccomandataChart } from "@/lib/sanity/raccomandataChart";
 
-import SEOJsonLd, {
-  type RaccomandataPage as SeoRaccomandataPage,
-} from "@/components/seo/SEOJsonLd";
+import SEOJsonLd from "@/components/seo/SEOJsonLd";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -285,6 +283,23 @@ function normalizeFAQ(
   };
 }
 
+function stepsForJsonLd(steps: UIStep[]) {
+  return steps.map((s) => ({
+    title: s.title,
+    description:
+      typeof s.description === "string"
+        ? s.description.trim()
+        : ptToPlainText(s.description),
+  }));
+}
+
+function detailsForJsonLd(details: UIDetail[]) {
+  return details.map((d) => ({
+    title: d.title,
+    body: typeof d.body === "string" ? d.body.trim() : ptToPlainText(d.body),
+  }));
+}
+
 function normalizeFeedback(docs: FeedbackDoc[], fallbackCodice: string): UIFeedback[] {
   return docs
     .map((doc): UIFeedback | null => {
@@ -488,14 +503,33 @@ export default async function RaccomandataPage({
       </div>
 
       <SEOJsonLd
-        page={
-          {
-            ...pageMeta,
-            _createdAt: page._createdAt,
-            _updatedAt: page._updatedAt,
-          } as SeoRaccomandataPage
-        }
-        code={codice}
+        input={{
+          code: codice,
+          metaTitle: pageMeta.metaTitle,
+          metaDescription: pageMeta.metaDescription,
+          heroTitleSuffix: pageMeta.heroTitleSuffix,
+          heroSubtitle: pageMeta.heroSubtitle,
+          mittente: pageMeta.mittente,
+          tipologia: pageMeta.tipologia,
+          stato: pageMeta.stato,
+          _createdAt: page._createdAt ?? undefined,
+          _updatedAt: page._updatedAt ?? undefined,
+          author: page.authorBox?.name
+            ? {
+                name: page.authorBox.name,
+                image: page.authorBox.avatarUrl ?? undefined,
+              }
+            : undefined,
+          steps: stepsForJsonLd(uiSteps),
+          faq:
+            uiFAQ?.items
+              ?.map((i) => ({
+                q: (i.q ?? "").trim(),
+                a: (i.a ?? "").trim(),
+              }))
+              .filter((i) => i.q && i.a) ?? [],
+          details: detailsForJsonLd(uiDetails),
+        }}
       />
     </main>
   );
