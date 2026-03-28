@@ -119,8 +119,9 @@ export default function RaccomandataTrustPanel({
             <span className="text-slate-800">
               invii anonimi dal modulo in fondo alla pagina
             </span>
-            . Non sostituisce l&apos;avviso di ritiro, il piego o le comunicazioni
-            ufficiali del mittente: verifica sempre su documenti e canali istituzionali.
+            . Non sostituisce l&apos;avviso di mancata consegna, il piego, la
+            raccomandata o le comunicazioni ufficiali del mittente: verifica sempre su
+            documenti cartacei, su poste.it (se applicabile) e sui canali istituzionali.
           </p>
         </div>
       </div>

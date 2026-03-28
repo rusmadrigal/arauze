@@ -13,7 +13,7 @@ function RelatedCard({ code, mittente, tipologia }: RaccomandataRelatedItem) {
   const description =
     (mittente && mittente.trim()) ||
     (tipologia && tipologia.trim()) ||
-    "Scheda con passi, FAQ e dettagli sul codice.";
+    "Scheda con passi orientativi, FAQ e verifiche consigliate (Italia).";
 
   return (
     <li className="min-w-0">
@@ -68,8 +68,8 @@ export default function RaccomandataRelatedPages({ pages }: Props) {
         Altre raccomandate correlate
       </h2>
       <p className="mt-1.5 text-sm text-slate-600 md:text-[15px]">
-        Schede dello stesso sito: utili per confrontare mittenti, urgenza e passi da
-        seguire.
+        Altre schede Arauze sulle raccomandate tracciate in Italia: confronto tra codici e
+        passi consigliati (sempre da incrociare con avviso e Poste Italiane).
       </p>
       <ul className="mt-4 grid list-none grid-cols-1 gap-3 p-0 sm:gap-4 md:grid-cols-3">
         {pages.map((p) => (

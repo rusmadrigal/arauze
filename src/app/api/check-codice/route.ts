@@ -58,7 +58,7 @@ export async function GET(req: Request) {
           found: false,
           code,
           suggestion:
-            "Nessun dato ufficiale trovato. Invia una segnalazione per aiutarci ad aggiornare il database.",
+            "Scheda non ancora presente nel nostro archivio editoriale. Puoi inviare una segnalazione (mittente, provincia, foto dell’avviso) per aiutarci ad aggiornare le informazioni in linea con le raccomandate Poste Italiane.",
           reportsCount: finalReports,
         },
         { status: 200 }

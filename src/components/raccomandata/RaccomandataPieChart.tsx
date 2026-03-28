@@ -77,12 +77,18 @@ export default function RaccomandataPieChart({ slices, title }: Props) {
     <section className="mt-6 rounded-xl bg-white p-4 shadow-sm border border-slate-200">
       {title && <h3 className="mb-4 text-sm font-semibold text-slate-800">{title}</h3>}
 
-      {/* contenedor responsivo */}
+      {/* min-w-0: evita flex con width 0; initialDimension evita warning Recharts (-1×-1) su SSR/hydration */}
       <div
         ref={containerRef}
-        className="w-full h-[280px] sm:h-[300px] flex items-center justify-center"
+        className="flex h-[280px] w-full min-w-0 items-center justify-center sm:h-[300px]"
       >
-        <ResponsiveContainer>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minHeight={260}
+          minWidth={0}
+          initialDimension={{ width: 360, height: 280 }}
+        >
           <PieChart>
             <Pie
               data={data}

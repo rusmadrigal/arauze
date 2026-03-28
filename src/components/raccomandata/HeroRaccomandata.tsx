@@ -1,5 +1,6 @@
 // src/components/raccomandata/HeroRaccomandata.tsx
 import Link from "next/link";
+import { RACCOMANDATA_HERO_SUBTITLE_DEFAULT } from "@/lib/raccomandata/italianPublicCopy";
 
 type RaccomandataPageMeta = {
   code: string;
@@ -13,10 +14,9 @@ type Props = {
 };
 
 export default function HeroRaccomandata({ code, pageMeta }: Props) {
-  const heroTitleSuffix = pageMeta.heroTitleSuffix ?? "Guida Completa e Cosa Fare";
-  const heroSubtitle =
-    pageMeta.heroSubtitle ??
-    "Scopri cosa significa il codice, chi può essere il mittente e come comportarti passo per passo per ritirare la tua raccomandata in tempo.";
+  const heroTitleSuffix =
+    pageMeta.heroTitleSuffix ?? "Guida pratica e verifiche consigliate (Italia)";
+  const heroSubtitle = pageMeta.heroSubtitle ?? RACCOMANDATA_HERO_SUBTITLE_DEFAULT;
 
   return (
     <section className="mt-4 md:mt-6 text-center md:text-left">

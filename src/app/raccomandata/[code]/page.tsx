@@ -32,6 +32,10 @@ import RaccomandataRelatedPages, {
   type RaccomandataRelatedItem,
 } from "@/components/raccomandata/RaccomandataRelatedPages";
 import { getSiteOrigin } from "@/lib/siteUrl";
+import {
+  raccomandataMetaDescriptionFallback,
+  RACCOMANDATA_CHART_TITLE_FALLBACK,
+} from "@/lib/raccomandata/italianPublicCopy";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -334,7 +338,7 @@ export async function generateMetadata({
 
   const description = page?.metaDescription?.trim()
     ? page.metaDescription
-    : (page?.heroSubtitle ?? `Dettagli per il codice ${codice}`);
+    : (page?.heroSubtitle ?? raccomandataMetaDescriptionFallback(codice));
 
   const siteUrl = getSiteOrigin();
   const canonical = `${siteUrl}/raccomandata/${codice.toLowerCase()}`;
@@ -463,9 +467,7 @@ export default async function RaccomandataPage({
           {chartData?.slices?.length ? (
             <RaccomandataPieChart
               slices={chartData.slices}
-              title={
-                chartData.titolo ?? "Distribuzione delle categorie per questo codice"
-              }
+              title={chartData.titolo ?? RACCOMANDATA_CHART_TITLE_FALLBACK}
             />
           ) : null}
 

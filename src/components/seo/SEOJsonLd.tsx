@@ -3,6 +3,7 @@
 import React from "react";
 import Script from "next/script";
 import { getPublicSiteOrigin } from "@/lib/siteUrl";
+import { raccomandataMetaDescriptionFallback } from "@/lib/raccomandata/italianPublicCopy";
 
 type Step = { title?: string | null; description?: string | null };
 type FAQItem = { q?: string | null; a?: string | null };
@@ -38,7 +39,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
   const siteUrl = getPublicSiteOrigin();
   const pageUrl = `${siteUrl}/raccomandata/${encodeURIComponent(code)}`;
 
-  // Metas limpias
+  // Meta pulite
   const rawTitleSuffix = clean(page?.heroTitleSuffix);
   const rawMetaTitle = clean(page?.metaTitle);
   const rawHeroSubtitle = clean(page?.heroSubtitle);
@@ -51,7 +52,9 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       : `Raccomandata ${code}`);
 
   const seoDescription =
-    rawMetaDescription || rawHeroSubtitle || `Dettagli per il codice ${code}`;
+    rawMetaDescription ||
+    rawHeroSubtitle ||
+    raccomandataMetaDescriptionFallback(code);
 
   // HowTo
   const howToSteps = arr<Step>(page?.steps)
@@ -71,7 +74,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       acceptedAnswer: { "@type": "Answer", text: clean(item?.a) },
     }));
 
-  // Details -> ItemList opcional
+  // Details → ItemList opzionale
   const details = arr<Detail>(page?.details).filter(
     (d) => hasText(d?.title) || hasText(d?.body)
   );
@@ -92,7 +95,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
         }
       : undefined;
 
-  // Términos relacionados al CONTENIDO (los movemos al WebPage.about)
+  // Termini legati al contenuto (WebPage.about)
   const pageDefinedTerms = [
     { "@type": "DefinedTerm", name: `Raccomandata ${code}`, termCode: code },
     hasText(page?.mittente)
@@ -111,7 +114,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
       ? {
           "@type": "HowTo",
           "@id": `${pageUrl}#howto`,
-          name: `Cosa fare con la raccomandata ${code}`,
+          name: `Cosa fare con la raccomandata (codice ${code}, Italia)`,
           step: howToSteps,
         }
       : null,
@@ -121,7 +124,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     detailsList ?? null,
   ].filter(Boolean);
 
-  // 1) WebPage (con ABOUT aquí)
+  // 1) WebPage (about sul CreativeWork)
   const webPage = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -134,7 +137,7 @@ function buildJsonLd(page: RaccomandataPage | null | undefined, code: string) {
     isPartOf: { "@id": `${siteUrl}#website` },
     ...(hasText(page?._createdAt) ? { datePublished: clean(page?._createdAt) } : {}),
     ...(hasText(page?._updatedAt) ? { dateModified: clean(page?._updatedAt) } : {}),
-    about: pageDefinedTerms, // 👈 ahora el about vive en WebPage (CreativeWork)
+    about: pageDefinedTerms,
     mainEntity: {
       "@type": "WebApplication",
       "@id": `${pageUrl}#app`,

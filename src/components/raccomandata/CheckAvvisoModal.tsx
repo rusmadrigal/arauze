@@ -92,7 +92,7 @@ function normalizeSources(raw: unknown): string[] {
   return [];
 }
 
-/* =============== Componente principal =============== */
+/* =============== Modale verifica avviso =============== */
 
 export default function CheckAvvisoModal({
   open,
@@ -135,7 +135,7 @@ export default function CheckAvvisoModal({
       ? (res as OfficialNotFound).code
       : code;
 
-  /* ---------- Normalizados ---------- */
+  /* ---------- Normalizzazione risposta ---------- */
   const found = isOfficialFound(res) ? res : null;
 
   const rawConfidence = found ? pickFirst(found, ["confidence", "score"]) : undefined;
@@ -183,7 +183,7 @@ export default function CheckAvvisoModal({
 
           {err && <p className="text-sm text-rose-600">{err}</p>}
 
-          {/* Caso: no se encuentra */}
+          {/* Codice non in anagrafica */}
           {res && res.ok && "found" in res && res.found === false && (
             <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
               <div className="font-semibold mb-1">
@@ -202,7 +202,7 @@ export default function CheckAvvisoModal({
             </div>
           )}
 
-          {/* Caso: encontrado */}
+          {/* Codice trovato */}
           {found && (
             <div className="mt-3 rounded-lg border border-gray-200 p-3 text-sm text-gray-800">
               <div className="font-semibold text-gray-900 mb-2">
@@ -226,7 +226,7 @@ export default function CheckAvvisoModal({
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Confidence (0–10)</span>
+                  <span className="text-gray-500">Affidabilità indicativa (0–10)</span>
                   <span className="font-medium text-right">
                     {normConfidence !== null
                       ? new Intl.NumberFormat("it-IT", {
@@ -237,26 +237,26 @@ export default function CheckAvvisoModal({
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Reports Count</span>
+                  <span className="text-gray-500">Segnalazioni raccolte</span>
                   <span className="font-medium text-right">
                     {typeof found.reportsCount === "number" ? found.reportsCount : "—"}
                   </span>
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Sources</span>
+                  <span className="text-gray-500">Fonti</span>
                   <span className="font-medium text-right">{normSourcesText}</span>
                 </div>
 
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Updated At</span>
+                  <span className="text-gray-500">Aggiornamento dato</span>
                   <span className="font-medium text-right">{normUpdatedAtText}</span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Caso: error */}
+          {/* Errore API */}
           {res && !res.ok && (
             <p className="text-sm text-rose-600 mt-2">
               {"error" in res ? (res as ErrorResponse).error : "Errore sconosciuto"}

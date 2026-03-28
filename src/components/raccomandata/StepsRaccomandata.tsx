@@ -4,8 +4,8 @@ import { Search, Mailbox, FileText } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import type { TypedObject } from "@portabletext/types";
 import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
+import { RACCOMANDATA_DEFAULT_STEPS } from "@/lib/raccomandata/italianPublicCopy";
 
-// Usamos TypedObject de @portabletext/types
 type Step = {
   title: string;
   description?: string | TypedObject[];
@@ -16,31 +16,17 @@ interface Props {
 }
 
 export default function StepsRaccomandata({ steps }: Props) {
-  // Fallback (por si el documento aún no define los pasos)
-  const defaultSteps: Step[] = [
-    {
-      title: "Identificare il Mittente",
-      description:
-        "Controlla attentamente l’avviso di giacenza e il codice riportato. Il mittente può essere un ente pubblico come l’Agenzia delle Entrate o l’INPS.",
-    },
-    {
-      title: "Ritirare la Raccomandata",
-      description:
-        "Recati presso l’ufficio postale indicato nell’avviso entro 30 giorni per evitare che venga restituita al mittente.",
-    },
-    {
-      title: "Leggere il Contenuto",
-      description:
-        "Una volta ritirata, verifica la natura della comunicazione per capire se richiede una risposta o un pagamento.",
-    },
-  ];
+  const defaultSteps: Step[] = RACCOMANDATA_DEFAULT_STEPS.map((s) => ({
+    title: s.title,
+    description: s.description,
+  }));
 
   const visibleSteps = steps?.length ? steps : defaultSteps;
 
   return (
     <section className="mt-10">
       <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-        Cosa Fare Passo per Passo
+        Cosa fare passo dopo passo (Italia)
       </h2>
 
       <ol className="relative ms-4 space-y-4 before:absolute before:inset-y-0 before:-start-4 before:w-px before:bg-gradient-to-b before:from-slate-200 before:via-slate-200 before:to-transparent">

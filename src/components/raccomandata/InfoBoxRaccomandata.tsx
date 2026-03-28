@@ -12,8 +12,8 @@ interface Props {
   mittente?: string;
   tipologia?: string;
   stato?: string;
-  urgency?: Urgency; // ← seguirá funcionando si ya la usabas
-  priority?: Urgency; // ← preferimos esta si viene de Sanity
+  urgency?: Urgency;
+  priority?: Urgency; // da Sanity (campo priority)
 }
 
 const PRIORITY_STYLES: Record<
@@ -56,7 +56,8 @@ const PLACEHOLDER_MITTENTE =
   "Non indicato in scheda — verifica mittente sull'avviso di ritiro o in posta";
 const PLACEHOLDER_TIPOLOGIA =
   "Comunicazione postale tracciata (dettaglio sul piego / avviso)";
-const PLACEHOLDER_STATO = "Dipende dal tuo avviso — controlla scadenze e sede di ritiro";
+const PLACEHOLDER_STATO =
+  "Dipende dal tipo di raccomandata e dall’avviso: controlla date, ufficio e poste.it o il piego";
 
 export default function InfoBoxRaccomandata({
   code = "",
@@ -68,7 +69,6 @@ export default function InfoBoxRaccomandata({
 }: Props) {
   const [openCheck, setOpenCheck] = useState(false);
 
-  // Preferimos `priority` (Sanity). Si no viene, cae a `urgency` legacy.
   const level: Urgency = priority ?? urgency ?? "NONE";
 
   const keyInfo = [
@@ -96,7 +96,7 @@ export default function InfoBoxRaccomandata({
           ? "Urgenza Bassa"
           : null;
 
-  // Badge styles según nivel
+  // Stili badge in base al livello
   const badgeClass =
     level !== "NONE"
       ? PRIORITY_STYLES[level as Exclude<Urgency, "NONE">].badge
@@ -106,7 +106,7 @@ export default function InfoBoxRaccomandata({
     <section className="text-sm">
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-[#2F66D5]/20
-                   bg-gradient-to-r from-[#2F66D5] to-[#2552AD] text-white
+                   bg-linear-to-r from-[#2F66D5] to-[#2552AD] text-white
                    px-5 py-6 sm:px-6 md:px-8 md:py-7
                    shadow-[0_4px_20px_-4px_rgba(0,0,0,0.25)]"
       >
@@ -115,7 +115,7 @@ export default function InfoBoxRaccomandata({
           <CheckCircle2 className="h-20 w-20 text-white" aria-hidden="true" />
         </div>
 
-        {/* Indicador de prioridad */}
+        {/* Indicatore priorità */}
         {priorityLabel && (
           <div className="absolute right-4 top-4 flex items-center gap-2">
             <PingDot level={level as Exclude<Urgency, "NONE">} />
@@ -127,7 +127,7 @@ export default function InfoBoxRaccomandata({
           </div>
         )}
 
-        {/* Título */}
+        {/* Titolo */}
         <h2 className="flex items-center gap-2 text-base sm:text-lg md:text-xl font-semibold mb-4 leading-tight">
           <svg
             className="h-5 w-5 shrink-0 text-white/90"
@@ -146,7 +146,7 @@ export default function InfoBoxRaccomandata({
           Informazioni Chiave — Codice {code}
         </h2>
 
-        {/* Lista de datos clave */}
+        {/* Dati principali */}
         <ul className="divide-y divide-white/15 rounded-xl bg-white/5 ring-1 ring-white/10">
           {keyInfo.map((item, i) => (
             <li
@@ -172,7 +172,7 @@ export default function InfoBoxRaccomandata({
             aria-haspopup="dialog"
             aria-controls="check-avviso-modal"
           >
-            Hai ricevuto un avviso?
+            Hai ricevuto un avviso di mancata consegna?
           </button>
         </div>
 
