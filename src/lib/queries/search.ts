@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 export const EXISTS_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
-  string(code) == string($code)
+  lower(string(code)) == lower(string($code))
 ][0]{
   code, mittente, heroTitleSuffix
 }
@@ -23,12 +23,12 @@ export const SEARCH_RACCOMANDATA = groq`
 }
 `;
 
-/** Suggerimenti home: codice numerico parziale (wildcard su string(code)). */
+/** Suggerimenti home: codice parziale (wildcard su string(code), case-insensitive). */
 export const SUGGEST_RACCOMANDATA_BY_CODE = groq`
 *[
   _type == "raccomandataPage" &&
   defined(code) &&
-  string(code) match $codePattern
+  lower(string(code)) match $codePattern
 ] | order(length(string(code)) asc, code asc) [0...8]{
   code,
   mittente,

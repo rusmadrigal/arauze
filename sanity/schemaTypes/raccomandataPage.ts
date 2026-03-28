@@ -73,11 +73,13 @@ export default defineType({
       name: "code",
       title: "Code (Codice)",
       type: "string",
+      description:
+        "Identificativo nella URL (/raccomandata/…): lettere, numeri, trattino o underscore (3–32). Le maiuscole sono accettate; sul sito l’URL è normalizzata in minuscolo.",
       validation: (r) =>
         r
           .required()
-          .regex(/^[a-z0-9]{3,10}$/, {
-            name: "3–10 lettere o numeri minuscoli (a–z, 0–9)",
+          .regex(/^[a-zA-Z0-9_-]{3,32}$/, {
+            name: "3–32 caratteri: lettere, numeri, - o _ (niente spazi)",
           }),
     }),
     defineField({

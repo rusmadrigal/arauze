@@ -4,7 +4,11 @@ import {
   SUGGEST_RACCOMANDATA_BY_CODE,
   SUGGEST_RACCOMANDATA_TEXT,
 } from "@/lib/queries/search";
-import { normalizeQuery, toGroqPattern } from "@/lib/search/parseQuery";
+import {
+  isCodeSlug,
+  normalizeQuery,
+  toGroqPattern,
+} from "@/lib/search/parseQuery";
 
 export const runtime = "nodejs";
 
@@ -26,7 +30,13 @@ export async function GET(req: Request) {
     let results: SuggestItem[];
 
     if (/^\d{1,6}$/.test(raw)) {
-      const codePattern = `*${raw}*`;
+      const codePattern = `*${raw.toLowerCase()}*`;
+      results =
+        (await sanityClient.fetch<SuggestItem[]>(SUGGEST_RACCOMANDATA_BY_CODE, {
+          codePattern,
+        })) ?? [];
+    } else if (isCodeSlug(raw)) {
+      const codePattern = `*${raw.trim().toLowerCase()}*`;
       results =
         (await sanityClient.fetch<SuggestItem[]>(SUGGEST_RACCOMANDATA_BY_CODE, {
           codePattern,

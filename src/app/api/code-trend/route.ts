@@ -14,9 +14,8 @@ export async function GET(req: Request) {
 
     const debug = searchParams.get("debug") === "1";
 
-    // 👉 ahora permitimos letras y números, por ejemplo: 697, rke, rke123
-    // ajustá el rango {2,10} si querés ser más o menos estricto
-    if (!/^[a-z0-9]{2,10}$/.test(code)) {
+    // Stesso pattern slug delle schede raccomandataPage (dopo lower)
+    if (!/^[a-z0-9_-]{3,32}$/.test(code)) {
       return NextResponse.json(
         { ok: false, error: "Codice non valido", code },
         { status: 400 }

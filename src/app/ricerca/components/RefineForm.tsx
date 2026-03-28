@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { isCodeSlug } from "@/lib/search/parseQuery";
 import { Search } from "lucide-react";
 
 export default function RefineForm({ initialQuery }: { initialQuery: string }) {
@@ -17,7 +18,11 @@ export default function RefineForm({ initialQuery }: { initialQuery: string }) {
     }
     const m = v.match(/\b(\d{3,6})\b/);
     if (m?.[1]) {
-      router.push(`/raccomandata/${m[1]}`);
+      router.push(`/raccomandata/${encodeURIComponent(m[1])}`);
+      return;
+    }
+    if (isCodeSlug(v)) {
+      router.push(`/raccomandata/${encodeURIComponent(v)}`);
       return;
     }
     router.push(`/ricerca?q=${encodeURIComponent(v)}`);

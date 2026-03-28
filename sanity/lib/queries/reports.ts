@@ -2,10 +2,7 @@ export const REPORTS_SERIES_BY_CODE = `
 {
   "points": *[
     _type == "raccomandataReport" &&
-    (
-      string(code) == $code ||
-      code == $code
-    )
+    lower(string(code)) == $code
   ] | order(coalesce(_createdAt, createdAt) asc) {
     "date": select(
       defined(_createdAt) => string(_createdAt)[0..9],

@@ -1,8 +1,18 @@
+/** Stesso pattern del campo `code` in Sanity (raccomandataPage), per URL slug. */
+const CODE_SLUG_RE = /^[a-zA-Z0-9_-]{3,32}$/;
+
+export function isCodeSlug(raw: string): boolean {
+  return CODE_SLUG_RE.test(raw.trim());
+}
+
 // Limpia ruido del dominio y extrae código si existe.
 export function extractCode(raw: string): string | null {
   if (!raw) return null;
-  const m = raw.match(/\b(\d{3,6})\b/);
-  return m ? m[1] : null;
+  const t = raw.trim();
+  const m = t.match(/\b(\d{3,6})\b/);
+  if (m) return m[1];
+  if (isCodeSlug(t)) return t.toLowerCase();
+  return null;
 }
 
 const STOPWORDS = [

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { isCodeSlug } from "@/lib/search/parseQuery";
 import { useCallback, useEffect, useId, useRef, useState, useTransition } from "react";
 import { ChevronRight, Hash, Loader2 } from "lucide-react";
 
@@ -157,7 +158,8 @@ export default function SearchForm() {
         const data = await res.json();
 
         if (!data?.ok) {
-          if (/^\d{3,6}$/.test(v)) return router.push(`/raccomandata/${v}`);
+          if (/^\d{3,6}$/.test(v) || isCodeSlug(v))
+            return router.push(`/raccomandata/${encodeURIComponent(v)}`);
           return router.push(`/ricerca?q=${encodeURIComponent(v)}`);
         }
 
@@ -171,7 +173,8 @@ export default function SearchForm() {
 
         return router.push(`/ricerca?q=${encodeURIComponent(v)}`);
       } catch {
-        if (/^\d{3,6}$/.test(v)) return router.push(`/raccomandata/${v}`);
+        if (/^\d{3,6}$/.test(v) || isCodeSlug(v))
+          return router.push(`/raccomandata/${encodeURIComponent(v)}`);
         return router.push(`/ricerca?q=${encodeURIComponent(v)}`);
       }
     });

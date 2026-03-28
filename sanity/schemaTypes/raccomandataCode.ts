@@ -9,9 +9,14 @@ export default defineType({
       name: "code",
       title: "Codice",
       type: "string",
-      description: "Solo numeri (3–6 cifre), es. 697",
+      description:
+        "Stesso formato delle schede: lettere, numeri, - o _ (3–32). Es. 697, rke-01",
       validation: (r) =>
-        r.required().regex(/^[A-Za-z0-9]{3,6}$/, { name: "3–6 lettere o numeri" }),
+        r
+          .required()
+          .regex(/^[a-zA-Z0-9_-]{3,32}$/, {
+            name: "3–32 caratteri: lettere, numeri, - o _",
+          }),
     }),
 
     defineField({
