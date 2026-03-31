@@ -8,7 +8,7 @@ export type RaccomandataRelatedItem = {
 };
 
 function RelatedCard({ code, mittente, tipologia }: RaccomandataRelatedItem) {
-  const href = `/raccomandata/${encodeURIComponent(code.trim())}`;
+  const href = `/raccomandata/${encodeURIComponent(code.trim().toLowerCase())}`;
   const title = `Raccomandata ${code.trim()}`;
   const description =
     (mittente && mittente.trim()) ||

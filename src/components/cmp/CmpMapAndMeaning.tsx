@@ -29,6 +29,7 @@ export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
               src={data.mapImage}
               alt={data.mapAlt || "Mappa del centro"}
               fill
+              priority
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

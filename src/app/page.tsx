@@ -7,7 +7,8 @@ import TopNav from "../components/ui/TopNav";
 import HeroHeader from "../components/home/HeroHeader";
 import SearchForm from "../components/home/SearchForm";
 import ComeFunziona from "../components/home/ComeFunziona";
-import UltimeAnalizzateDynamic from "../components/home/UltimeAnalizzateDynamic";
+import UltimeRaccomandateAnalizzate from "../components/home/UltimeAnalizzate";
+import { getUltimeAnalizzateForHome } from "@/lib/home/getUltimeAnalizzate";
 import TextBlockHome from "../components/home/TextBlockHome";
 import FaqsHome from "../components/home/FaqsHome";
 import NewsletterCTA from "../components/ui/NewsletterCTA";
@@ -45,8 +46,13 @@ export const metadata: Metadata = {
 
 // --- Fetch CMP desde Sanity ---
 async function getCmpList(): Promise<CmpItem[]> {
-  const data = await sanityClient.fetch<CmpItem[]>(CMP_LIST_QUERY);
-  return Array.isArray(data) ? data : [];
+  try {
+    const data = await sanityClient.fetch<CmpItem[]>(CMP_LIST_QUERY);
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error("[home] getCmpList:", err);
+    return [];
+  }
 }
 
 // --- Schema JSON-LD ---
@@ -92,7 +98,10 @@ function SEOJsonLd() {
 
 // --- Página principal ---
 export default async function HomePage() {
-  const cmpList = await getCmpList();
+  const [cmpList, ultimeItems] = await Promise.all([
+    getCmpList(),
+    getUltimeAnalizzateForHome(),
+  ]);
 
   return (
     <>
@@ -103,7 +112,7 @@ export default async function HomePage() {
           <HeroHeader />
           <SearchForm />
           <ComeFunziona />
-          <UltimeAnalizzateDynamic />
+          <UltimeRaccomandateAnalizzate items={ultimeItems} />
           <TextBlockHome />
 
           <CmpPreviewSection

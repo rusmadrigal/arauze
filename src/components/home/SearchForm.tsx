@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { isCodeSlug } from "@/lib/search/parseQuery";
-import { useCallback, useEffect, useId, useRef, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useTransition,
+  startTransition,
+} from "react";
 import { ChevronRight, Hash, Loader2 } from "lucide-react";
 
 /** Attesa prima della richiesta: meno chiamate mentre si digita. */
@@ -99,13 +107,14 @@ export default function SearchForm() {
           };
           if (ac.signal.aborted) return;
           if (data?.ok && Array.isArray(data.results)) {
-            setResults(data.results);
+            const next = data.results;
+            startTransition(() => setResults(next));
           } else {
-            setResults([]);
+            startTransition(() => setResults([]));
           }
         } catch (e) {
           if (e instanceof Error && e.name === "AbortError") return;
-          setResults([]);
+          startTransition(() => setResults([]));
         } finally {
           if (!ac.signal.aborted) setLoading(false);
         }

@@ -45,7 +45,10 @@ export async function GET() {
 
   const raccomandataUrls = (codes || [])
     .map((item) => {
-      const loc = `${baseUrl}/raccomandata/${encodeURIComponent(item.code)}`;
+      const slug = String(item.code ?? "")
+        .trim()
+        .toLowerCase();
+      const loc = `${baseUrl}/raccomandata/${encodeURIComponent(slug)}`;
       const lastmodIso = item.lastmod
         ? new Date(item.lastmod).toISOString().split("T")[0]
         : null;
@@ -62,7 +65,10 @@ export async function GET() {
 
   const cmpUrls = (cmps || [])
     .map((item) => {
-      const loc = `${baseUrl}/raccomandata/cmp/${encodeURIComponent(item.slug)}`;
+      const slug = String(item.slug ?? "")
+        .trim()
+        .toLowerCase();
+      const loc = `${baseUrl}/raccomandata/cmp/${encodeURIComponent(slug)}`;
       const lastmodIso = item.lastmod
         ? new Date(item.lastmod).toISOString().split("T")[0]
         : null;
@@ -91,6 +97,30 @@ export async function GET() {
     <loc>${baseUrl}/raccomandata/cmp</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Hub codici analizzati -->
+  <url>
+    <loc>${baseUrl}/raccomandata-market</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Pagine legali / trust -->
+  <url>
+    <loc>${baseUrl}/termini</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/contatti</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.35</priority>
   </url>
 
   <!-- AI / LLM discovery (Markdown text/plain) -->

@@ -87,6 +87,23 @@ export const ULTIME_ANALIZZATE_PAGES = groq`
 }
 `;
 
+// ✅ Feedback approvati per codice (lowercase)
+export const RACCOMANDATA_FEEDBACK_APPROVED_BY_CODE = groq`
+*[
+  _type == "raccomandataFeedback" &&
+  approved == true &&
+  lower(codice) == $codiceLower
+] | order(createdAt desc){
+  _id,
+  nome,
+  citta,
+  codice,
+  categoria,
+  commento,
+  createdAt
+}
+`;
+
 // ✅ Datos del gráfico PIE por código (raccomandataChart) – case-insensitive
 export const RACCOMANDATA_CHART_BY_CODE = groq`
 *[

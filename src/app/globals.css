@@ -412,3 +412,47 @@ textarea::placeholder {
   font-size: 0.85rem;
   color: #1f2933;
 }
+
+/* Pulsazione latente — badge prossimo festivo (home); desktop: alone shadow */
+@keyframes holiday-badge-latent {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(2, 132, 199, 0.2),
+      0 1px 2px 0 rgb(15 23 42 / 0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 0 12px rgba(2, 132, 199, 0),
+      0 1px 3px 0 rgb(15 23 42 / 0.06);
+  }
+}
+
+/* Mobile: solo opacità (meno repaint / GPU-friendly su schermi piccoli) */
+@keyframes holiday-badge-latent-mobile {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.93;
+  }
+}
+
+.holiday-badge-latent {
+  animation: holiday-badge-latent 2.8s ease-in-out infinite;
+}
+
+@media (max-width: 639.98px) {
+  .holiday-badge-latent {
+    animation: holiday-badge-latent-mobile 2.8s ease-in-out infinite;
+    box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holiday-badge-latent {
+    animation: none;
+    box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  }
+}

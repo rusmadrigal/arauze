@@ -34,7 +34,10 @@ export function buildRaccomandataJsonLd(
   input: RaccomandataJsonLdInput
 ): Record<string, unknown> {
   const { code, siteUrl } = input;
-  const pageUrl = `${siteUrl}/raccomandata/${encodeURIComponent(code)}`;
+  /** Allineato a canonical e middleware: solo slug URL in minuscolo. */
+  const displayCode = clean(code);
+  const codeSlug = displayCode.toLowerCase();
+  const pageUrl = `${siteUrl}/raccomandata/${encodeURIComponent(codeSlug)}`;
 
   const rawTitleSuffix = clean(input.heroTitleSuffix);
   const rawMetaTitle = clean(input.metaTitle);
@@ -44,11 +47,13 @@ export function buildRaccomandataJsonLd(
   const seoTitle =
     rawMetaTitle ||
     (rawTitleSuffix
-      ? `Raccomandata ${code} – ${rawTitleSuffix}`
-      : `Raccomandata ${code}`);
+      ? `Raccomandata ${displayCode} – ${rawTitleSuffix}`
+      : `Raccomandata ${displayCode}`);
 
   const seoDescription =
-    rawMetaDescription || rawHeroSubtitle || raccomandataMetaDescriptionFallback(code);
+    rawMetaDescription ||
+    rawHeroSubtitle ||
+    raccomandataMetaDescriptionFallback(displayCode || codeSlug);
 
   const orgId = `${siteUrl}#org`;
   const websiteId = `${siteUrl}#website`;
@@ -110,7 +115,11 @@ export function buildRaccomandataJsonLd(
       : null;
 
   const pageDefinedTerms: unknown[] = [
-    { "@type": "DefinedTerm", name: `Raccomandata ${code}`, termCode: code },
+    {
+      "@type": "DefinedTerm",
+      name: `Raccomandata ${displayCode || codeSlug}`,
+      termCode: codeSlug,
+    },
   ];
   if (hasText(input.mittente)) {
     pageDefinedTerms.push({
@@ -141,7 +150,7 @@ export function buildRaccomandataJsonLd(
       };
 
   const keywords = [
-    code,
+    displayCode || codeSlug,
     clean(input.mittente),
     clean(input.tipologia),
     clean(input.stato),
@@ -172,7 +181,7 @@ export function buildRaccomandataJsonLd(
   graph.push({
     "@type": ["WebApplication", "SoftwareApplication"],
     "@id": lookupId,
-    name: `Arauze – consultazione codice raccomandata ${code}`,
+    name: `Arauze – consultazione codice raccomandata ${displayCode || codeSlug}`,
     alternateName: "Arauze Raccomandata Market Identifier",
     applicationCategory: "ReferenceApplication",
     operatingSystem: "Web",
@@ -214,7 +223,7 @@ export function buildRaccomandataJsonLd(
         name: "Codici analizzati",
         item: `${siteUrl}/raccomandata-market`,
       },
-      { "@type": "ListItem", position: 3, name: `Codice ${code}`, item: pageUrl },
+      { "@type": "ListItem", position: 3, name: `Codice ${displayCode || codeSlug}`, item: pageUrl },
     ],
   });
 
@@ -222,7 +231,7 @@ export function buildRaccomandataJsonLd(
     graph.push({
       "@type": "HowTo",
       "@id": `${pageUrl}#howto`,
-      name: `Cosa fare con la raccomandata (codice ${code}, Italia)`,
+      name: `Cosa fare con la raccomandata (codice ${displayCode || codeSlug}, Italia)`,
       step: howToSteps,
       isPartOf: { "@id": webpageId },
     });

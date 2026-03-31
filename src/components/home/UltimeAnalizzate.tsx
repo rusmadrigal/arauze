@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
+import TrendMiniChartLazy from "@/components/raccomandata/TrendMiniChartLazy";
 import Link from "next/link";
 
 export type Urgency = "ALTA" | "MEDIA" | "BASSA" | "RITIRATA";
@@ -72,7 +72,7 @@ export default function UltimeRaccomandateAnalizzate({
                   {/* Mini chart */}
                   <td className="px-4 py-3 align-middle">
                     <div className="h-10 w-28">
-                      <TrendMiniChart code={it.code} />
+                      <TrendMiniChartLazy code={it.code} />
                     </div>
                   </td>
 

@@ -36,7 +36,8 @@ export default function TopNav() {
           height={26}
           priority
           sizes="180px"
-          className="select-none"
+          className="select-none h-auto w-[180px]"
+          style={{ height: "auto" }}
         />
       </Link>
 

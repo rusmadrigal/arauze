@@ -1,5 +1,5 @@
 // src/app/raccomandata/[code]/page.tsx
-import React from "react";
+import nextDynamic from "next/dynamic";
 import TopNav from "@/components/ui/TopNav";
 import HeroRaccomandata from "@/components/raccomandata/HeroRaccomandata";
 import InfoBoxRaccomandata from "@/components/raccomandata/InfoBoxRaccomandata";
@@ -10,19 +10,18 @@ import AlertBox from "@/components/raccomandata/AlertBox";
 import AssistenzaSection from "@/components/raccomandata/AssistenzaSection";
 import FAQSection from "@/components/raccomandata/FAQSection";
 import FeedbackRaccomandata from "@/components/raccomandata/FeedbackRaccomandata";
-import RaccomandataPieChart from "@/components/raccomandata/RaccomandataPieChart";
 import { getRaccomandataChart } from "@/lib/sanity/raccomandataChart";
+import { getRaccomandataPageByCode } from "@/lib/sanity/getRaccomandataPage";
+import {
+  getApprovedFeedbackByCode,
+  getRelatedCandidatesByCode,
+  getReportCountByCode,
+} from "@/lib/sanity/raccomandataRouteCache";
 
 import SEOJsonLd from "@/components/seo/SEOJsonLd";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { sanityClient } from "sanity/lib/client";
-import {
-  RACCOMANDATA_BY_CODE,
-  RACCOMANDATA_RELATED_CANDIDATES,
-  REPORTS_BY_CODE,
-} from "sanity/lib/queries/raccomandata";
 import type { TypedObject } from "@portabletext/types";
 import AdSenseAd from "@/components/ads/AdSenseAd";
 import RaccomandataTrustPanel from "@/components/raccomandata/RaccomandataTrustPanel";
@@ -35,8 +34,20 @@ import {
   RACCOMANDATA_CHART_TITLE_FALLBACK,
 } from "@/lib/raccomandata/italianPublicCopy";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+/** Allinea a `RACCOMANDATA_PAGE_REVALIDATE_SEC` in `@/lib/sanity/revalidate` (valore letterale richiesto da Next). */
+export const revalidate = 300;
+
+const RaccomandataPieChart = nextDynamic(
+  () => import("@/components/raccomandata/RaccomandataPieChart"),
+  {
+    loading: () => (
+      <div
+        className="rac-surface rac-surface-pad h-[300px] w-full animate-pulse rounded-lg bg-gray-100"
+        aria-hidden
+      />
+    ),
+  }
+);
 
 // -----------------------------
 // UTILITIES
@@ -336,11 +347,7 @@ export async function generateMetadata({
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
-  const page = await sanityClient.fetch<RaccomandataPageDoc>(
-    RACCOMANDATA_BY_CODE,
-    { code },
-    { cache: "no-store", next: { revalidate: 0 } }
-  );
+  const page = (await getRaccomandataPageByCode(code)) as RaccomandataPageDoc | null;
 
   const codice = (page?.code ?? code).trim();
 
@@ -386,11 +393,7 @@ export default async function RaccomandataPage({
   const { code: raw } = await params;
   const code = (raw ?? "").trim();
 
-  const page = await sanityClient.fetch<RaccomandataPageDoc>(
-    RACCOMANDATA_BY_CODE,
-    { code },
-    { cache: "no-store", next: { revalidate: 0 } }
-  );
+  const page = (await getRaccomandataPageByCode(code)) as RaccomandataPageDoc | null;
 
   if (!page) notFound();
 
@@ -399,42 +402,21 @@ export default async function RaccomandataPage({
 
   const [chartData, reportCount, relatedCandidates] = await Promise.all([
     getRaccomandataChart(codice),
-    sanityClient
-      .fetch<number>(REPORTS_BY_CODE, { code: codice }, { cache: "no-store" })
-      .then((n) => (typeof n === "number" ? n : 0)),
-    sanityClient.fetch<RelatedCandidate[]>(
-      RACCOMANDATA_RELATED_CANDIDATES,
-      { code: codice },
-      { cache: "no-store" }
-    ),
+    getReportCountByCode(codice),
+    getRelatedCandidatesByCode(codice),
   ]);
 
-  const relatedPages = pickRelatedRaccomandataPages(relatedCandidates ?? [], {
-    code: codice,
-    tipologia: page.tipologia,
-  });
-
-  // -----------------------------
-  // FIXED FEEDBACK QUERY
-  // EXACT MATCH ONLY
-  // -----------------------------
-  const feedbackDocs = await sanityClient.fetch<FeedbackDoc[]>(
-    `*[
-      _type == "raccomandataFeedback" &&
-      approved == true &&
-      lower(codice) == $codiceLower
-    ] | order(createdAt desc){
-      _id,
-      nome,
-      citta,
-      codice,
-      categoria,
-      commento,
-      createdAt
-    }`,
-    { codiceLower },
-    { cache: "no-store", next: { revalidate: 0 } }
+  const relatedPages = pickRelatedRaccomandataPages(
+    (relatedCandidates ?? []) as RelatedCandidate[],
+    {
+      code: codice,
+      tipologia: page.tipologia,
+    }
   );
+
+  const feedbackDocs = (await getApprovedFeedbackByCode(
+    codiceLower
+  )) as FeedbackDoc[];
 
   const uiFeedback = normalizeFeedback(feedbackDocs ?? [], codice);
 

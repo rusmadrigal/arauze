@@ -1,13 +1,13 @@
-"use client";
 import Image from "next/image";
+import NextHolidayBadge from "@/components/home/NextHolidayBadge";
 
-export default function HeroHeader() {
+export default async function HeroHeader() {
   return (
     <header className="rounded-2xl shadow-card bg-white p-6 md:p-10 pt-12 md:pt-16 pb-5">
       <section className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12">
         {/* Texto principal de la web*/}
 
-        <div className="w-full md:pr-2 max-w-3xl">
+        <div className="w-full min-w-0 md:pr-2 max-w-3xl">
           <h1
             className="font-semibold text-slate-700
              text-[40px] md:text-[44px]
@@ -17,10 +17,9 @@ export default function HeroHeader() {
             <span className="inline-block md:whitespace-nowrap"> Tracking - 2026</span>
           </h1>
 
-          <p className="mt-4 md:mt-5 text-semibold text-lg md:text-xl leading-[1.35] max-w-[60ch]">
-            Inserisci il codice raccomandata e scopri il mittente e l’urgenza della
-            comunicazione.
-          </p>
+          <div className="mt-3 w-full min-w-0 md:mt-4">
+            <NextHolidayBadge />
+          </div>
         </div>
 
         {/* Imagen ilustrativa */}
@@ -35,7 +34,8 @@ export default function HeroHeader() {
             height={220}
             priority
             sizes="(max-width: 768px) 0vw, 300px"
-            className="object-contain translate-x-12 -mt-1"
+            className="h-auto w-[300px] object-contain translate-x-12 -mt-1"
+            style={{ height: "auto" }}
           />
         </div>
       </section>

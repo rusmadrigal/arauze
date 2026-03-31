@@ -26,12 +26,12 @@ export default function GlobalScripts({ gtmId, adsenseId }: GlobalScriptsProps) 
         `}</Script>
       )}
 
-      {/* Google AdSense */}
+      {/* Google AdSense — lazyOnload: meno contesa con LCP/INP (GTM resta afterInteractive) */}
       {adsenseId && (
         <Script
           id="adsense-script"
           async
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           crossOrigin="anonymous"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
         />

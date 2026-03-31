@@ -58,6 +58,7 @@ export default function AdSenseAd({
       <div
         className={className}
         style={{
+          minHeight: 280,
           padding: "12px 16px",
           borderRadius: "8px",
           border: "1px dashed rgba(148, 163, 184, 0.6)",
@@ -74,11 +75,11 @@ export default function AdSenseAd({
 
   // ✅ Dominio real + prod → bloque AdSense
   return (
-    <div className={className}>
+    <div className={className} style={{ minHeight: 280 }}>
       <ins
         key={`${adSlot}-${pathname}`} // 👈 fuerza remount del ins al cambiar de página
         className="adsbygoogle"
-        style={{ display: "block", ...style }}
+        style={{ display: "block", minHeight: 250, ...style }}
         data-ad-client="ca-pub-6280528663229175"
         data-ad-slot={adSlot}
         data-ad-format={adFormat}

@@ -7,7 +7,7 @@ import Script from "next/script";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
+import TrendMiniChartLazy from "@/components/raccomandata/TrendMiniChartLazy";
 import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
 import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
 import type { PortableTextBlock } from "@portabletext/types";
@@ -170,7 +170,7 @@ export default async function RaccomandataMarketPage() {
                   </td>
 
                   <td className="px-4 py-3">
-                    <TrendMiniChart code={it.code} />
+                    <TrendMiniChartLazy code={it.code} />
                   </td>
 
                   <td className="px-4 py-3 text-right">
