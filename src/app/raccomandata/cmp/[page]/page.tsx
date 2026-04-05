@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { sanityClient } from "sanity/lib/client";
 import { GET_CMP_PAGE } from "sanity/lib/queries/cmp";
 
+import CmpJsonLd from "@/components/seo/CmpJsonLd";
+import { getSiteOrigin } from "@/lib/siteUrl";
 import TopNav from "@/components/ui/TopNav";
 import CmpHero from "@/components/cmp/CmpHero";
 import CmpMapAndMeaning from "@/components/cmp/CmpMapAndMeaning";
@@ -12,6 +14,25 @@ import CmpFaq from "@/components/cmp/CmpFaq";
 type PageParams = {
   page?: string;
 };
+
+type PortableTextChild = { _type?: string; text?: string };
+type PortableTextBlock = { _type?: string; children?: PortableTextChild[] };
+
+function ptToPlainText(input: unknown): string {
+  if (!input) return "";
+  if (typeof input === "string") return input.trim();
+  if (Array.isArray(input)) {
+    const blocks = input as PortableTextBlock[];
+    return blocks
+      .map((block) => {
+        if (block?._type !== "block" || !Array.isArray(block.children)) return "";
+        return block.children.map((c) => c.text || "").join("");
+      })
+      .join("\n")
+      .trim();
+  }
+  return "";
+}
 
 export const revalidate = 60;
 
@@ -25,6 +46,7 @@ export async function generateMetadata(props: {
   const slug = (page ?? "").toLowerCase();
 
   const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
+  const siteUrl = getSiteOrigin();
 
   if (!cmp) {
     return {
@@ -38,7 +60,7 @@ export async function generateMetadata(props: {
     description:
       cmp.metaDescription ||
       "Scheda informativa del centro di meccanizzazione postale: significato, tempi di consegna e stato nel tracciamento.",
-    alternates: { canonical: `/raccomandata/cmp/${slug}` },
+    alternates: { canonical: `${siteUrl}/raccomandata/cmp/${slug}` },
   };
 }
 
@@ -52,6 +74,14 @@ export default async function CmpPage({ params }: { params: Promise<PageParams> 
   const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
 
   if (!cmp) notFound();
+
+  const faqForJsonLd =
+    cmp.faqItems
+      ?.map((item: { q?: string; a?: unknown }) => ({
+        q: (item.q ?? "").trim(),
+        a: ptToPlainText(item.a),
+      }))
+      .filter((item: { q: string; a: string }) => item.q && item.a) ?? [];
 
   return (
     <main className="mx-auto max-w-5xl px-4">
@@ -68,6 +98,21 @@ export default async function CmpPage({ params }: { params: Promise<PageParams> 
           <CmpFaq data={cmp} />
         </div>
       </div>
+
+      <CmpJsonLd
+        input={{
+          slug,
+          name: cmp.name,
+          subtitle: cmp.subtitle ?? undefined,
+          metaTitle: cmp.metaTitle ?? undefined,
+          metaDescription: cmp.metaDescription ?? undefined,
+          city: cmp.city ?? undefined,
+          province: cmp.province ?? undefined,
+          region: cmp.region ?? undefined,
+          addressPlain: ptToPlainText(cmp.address) || undefined,
+          faq: faqForJsonLd,
+        }}
+      />
     </main>
   );
 }

@@ -8,6 +8,10 @@ export const GET_CMP_PAGE = `
     subtitle,
     typeLabel,
 
+    city,
+    province,
+    region,
+
     addressTitle,
     address,
 

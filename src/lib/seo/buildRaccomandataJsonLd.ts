@@ -34,7 +34,9 @@ export function buildRaccomandataJsonLd(
   input: RaccomandataJsonLdInput
 ): Record<string, unknown> {
   const { code, siteUrl } = input;
-  const pageUrl = `${siteUrl}/raccomandata/${encodeURIComponent(code)}`;
+  /** Misma convención que `generateMetadata` (canonical en minúsculas). */
+  const codeInPath = clean(code).toLowerCase();
+  const pageUrl = `${siteUrl}/raccomandata/${encodeURIComponent(codeInPath)}`;
 
   const rawTitleSuffix = clean(input.heroTitleSuffix);
   const rawMetaTitle = clean(input.metaTitle);
