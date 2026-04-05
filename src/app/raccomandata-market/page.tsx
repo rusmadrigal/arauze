@@ -12,6 +12,7 @@ import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfo
 import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
 import type { PortableTextBlock } from "@portabletext/types";
 import RaccomandataVsAttiTable from "@/components/raccomandata/RaccomandataVsAttiTable";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 // -------------------
@@ -71,9 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       data?.metaDescription ??
       "Consulta l’elenco aggiornato delle raccomandate analizzate da Arauze.",
-    alternates: {
-      canonical,
-    },
+    alternates: alternatesItalianCanonical(canonical),
     openGraph: {
       type: "website",
       locale: "it_IT",

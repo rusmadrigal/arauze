@@ -4,6 +4,7 @@ import { sanityClient } from "sanity/lib/client";
 import { CMP_LIST_QUERY } from "sanity/lib/queries/cmpList";
 import CmpHomeClient from "@/components/cmp/CmpHomeClient";
 import type { CmpItem } from "@/components/cmp/types";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 export const revalidate = 60;
@@ -16,7 +17,7 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: `${siteUrl}/raccomandata/cmp` },
+  alternates: alternatesItalianCanonical(`${siteUrl}/raccomandata/cmp`),
   openGraph: {
     type: "website",
     locale: "it_IT",

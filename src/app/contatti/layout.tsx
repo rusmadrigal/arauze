@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 const base = getSiteOrigin();
@@ -9,7 +10,7 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: `${base}/contatti` },
+  alternates: alternatesItalianCanonical(`${base}/contatti`),
   openGraph: {
     type: "website",
     url: `${base}/contatti`,

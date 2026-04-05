@@ -13,6 +13,7 @@ import FaqsHome from "../components/home/FaqsHome";
 import NewsletterCTA from "../components/ui/NewsletterCTA";
 import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
 import CmpPreviewSection from "@/components/cmp/CmpPreviewSection";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 export const revalidate = 60;
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   title: "Raccomandata Market Tracking 2026 – Consulta e Monitora Codici CMP",
   description:
     "Scopri chi ha inviato la tua raccomandata, come interpretare il codice CMP e se è necessaria un’azione immediata.",
-  alternates: { canonical: `${siteUrl}/` },
+  alternates: alternatesItalianCanonical(`${siteUrl}/`),
   openGraph: {
     type: "website",
     locale: "it_IT",

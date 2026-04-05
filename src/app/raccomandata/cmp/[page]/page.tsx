@@ -4,12 +4,15 @@ import { sanityClient } from "sanity/lib/client";
 import { GET_CMP_PAGE } from "sanity/lib/queries/cmp";
 
 import CmpJsonLd from "@/components/seo/CmpJsonLd";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 import TopNav from "@/components/ui/TopNav";
 import CmpHero from "@/components/cmp/CmpHero";
 import CmpMapAndMeaning from "@/components/cmp/CmpMapAndMeaning";
 import CmpDetails from "@/components/cmp/CmpDetails";
 import CmpFaq from "@/components/cmp/CmpFaq";
+import CmpFrequentCodes from "@/components/cmp/CmpFrequentCodes";
+import { getPublishedRaccomandataCodeSet } from "@/lib/sanity/publishedRaccomandataCodes";
 
 type PageParams = {
   page?: string;
@@ -48,10 +51,13 @@ export async function generateMetadata(props: {
   const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
   const siteUrl = getSiteOrigin();
 
+  const canonical = `${siteUrl}/raccomandata/cmp/${slug}`;
+
   if (!cmp) {
     return {
       title: "CMP – Informazioni centro di smistamento",
       description: "Scheda informativa del centro di meccanizzazione postale.",
+      alternates: alternatesItalianCanonical(canonical),
     };
   }
 
@@ -60,7 +66,7 @@ export async function generateMetadata(props: {
     description:
       cmp.metaDescription ||
       "Scheda informativa del centro di meccanizzazione postale: significato, tempi di consegna e stato nel tracciamento.",
-    alternates: { canonical: `${siteUrl}/raccomandata/cmp/${slug}` },
+    alternates: alternatesItalianCanonical(canonical),
   };
 }
 
@@ -74,6 +80,8 @@ export default async function CmpPage({ params }: { params: Promise<PageParams> 
   const cmp = await sanityClient.fetch(GET_CMP_PAGE, { slug });
 
   if (!cmp) notFound();
+
+  const publishedRaccomandataCodes = await getPublishedRaccomandataCodeSet();
 
   const faqForJsonLd =
     cmp.faqItems
@@ -92,6 +100,12 @@ export default async function CmpPage({ params }: { params: Promise<PageParams> 
           <CmpHero data={cmp} />
 
           <CmpMapAndMeaning data={cmp} />
+
+          <CmpFrequentCodes
+            title={cmp.frequentCodesTitle}
+            codes={cmp.frequentCodes}
+            publishedCodes={publishedRaccomandataCodes}
+          />
 
           <CmpDetails data={cmp} />
 

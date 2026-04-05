@@ -14,6 +14,7 @@ import RaccomandataPieChart from "@/components/raccomandata/RaccomandataPieChart
 import { getRaccomandataChart } from "@/lib/sanity/raccomandataChart";
 
 import SEOJsonLd from "@/components/seo/SEOJsonLd";
+import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -361,7 +362,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: alternatesItalianCanonical(canonical),
     openGraph: {
       type: "article",
       locale: "it_IT",

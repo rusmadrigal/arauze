@@ -30,6 +30,9 @@ export const GET_CMP_PAGE = `
     commonIssuesTitle,
     commonIssuesList,
 
+    frequentCodesTitle,
+    frequentCodes,
+
     statusTableTitle,
     statusRows,
 

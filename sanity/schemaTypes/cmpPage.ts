@@ -158,6 +158,34 @@ export const cmpPage = defineType({
       of: [{ type: "string" }],
     }),
 
+    // Codici raccomandata con scheda (link automatico se la landing esiste)
+    defineField({
+      name: "frequentCodesTitle",
+      title: "Titolo sezione codici frequenti",
+      type: "string",
+      initialValue: "Codici frequenti",
+      description:
+        "Es. “Codici frequenti” o “Raccomandate collegate a questo CMP”.",
+    }),
+    defineField({
+      name: "frequentCodes",
+      title: "Codici raccomandata (numerici)",
+      type: "array",
+      of: [
+        {
+          type: "string",
+          title: "Codice",
+          validation: (Rule) =>
+            Rule.required().regex(/^\d+$/, {
+              name: "solo cifre",
+              invert: false,
+            }),
+        },
+      ],
+      description:
+        "Solo numeri (es. 619). Il link a /raccomandata/[codice] appare solo se la scheda è pubblicata.",
+    }),
+
     // 🔹 FAQ (risposta con rich text)
     defineField({
       name: "faqTitle",
