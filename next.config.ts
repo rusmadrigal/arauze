@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
   },
 
   // -------------------------
+  // Sitemap: URL canónica /sitemap.xml → handler sin conflicto con metadata
+  // (app/sitemap.xml/route rompe Turbopack: ComponentMod.handler is not a function)
+  // -------------------------
+  async rewrites() {
+    return [
+      { source: "/sitemap.xml", destination: "/api/sitemap" },
+    ];
+  },
+
+  // -------------------------
   // 🔁 Redirects SEO
   // -------------------------
   async redirects() {
