@@ -4,7 +4,7 @@ import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import type { TypedObject } from "@portabletext/types";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "sanity/lib/client";
-import Image from "next/image";
+import ImageLightbox from "@/components/ui/ImageLightbox";
 import PortableTextMarkLink from "@/components/shared/PortableTextMarkLink";
 
 const builder = createImageUrlBuilder(sanityClient);
@@ -86,17 +86,20 @@ const portableComponents: PortableTextComponents = {
 
       if (!img?.asset?._ref) return null;
 
-      const src = urlFor(img as Record<string, unknown>).url();
+      const built = urlFor(img as Record<string, unknown>);
+      const src = built.width(960).quality(85).url();
+      const fullSrc = built.width(1920).quality(88).url();
       if (!src) return null;
 
       return (
         <figure className="my-5">
-          <Image
+          <ImageLightbox
             src={src}
+            fullSrc={fullSrc}
             alt={img.alt || ""}
             width={800}
             height={500}
-            className="rounded-lg shadow-sm border border-gray-200"
+            className="rounded-lg border border-gray-200 shadow-sm"
             sizes="(max-width: 768px) 100vw, 700px"
           />
           {img.caption && (

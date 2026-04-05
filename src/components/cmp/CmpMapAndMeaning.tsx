@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageLightbox from "@/components/ui/ImageLightbox";
 import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
 import type { PortableTextBlock } from "@portabletext/types";
 
@@ -23,12 +23,12 @@ export default function CmpMapAndMeaning({ data }: CmpMapAndMeaningProps) {
           {data.typeLabel}
         </div>
 
-        <div className="aspect-[4/3] w-full bg-gray-200 relative">
+        <div className="relative aspect-[4/3] w-full bg-gray-200">
           {data.mapImage ? (
-            <Image
+            <ImageLightbox
+              fill
               src={data.mapImage}
               alt={data.mapAlt || "Mappa del centro"}
-              fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

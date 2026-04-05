@@ -25,32 +25,35 @@ export default function CmpFrequentCodes({ title, codes, publishedCodes }: Props
 
   const heading = (title ?? "").trim() || "Codici frequenti";
 
+  const chipBase =
+    "inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm sm:min-h-10 sm:px-3.5 sm:py-1.5";
+
   return (
     <section
-      className="rounded-xl border border-gray-100 bg-white px-5 py-4 shadow-sm"
+      className="rounded-xl border border-gray-100 bg-white px-4 py-4 shadow-sm sm:px-5 sm:py-4"
       aria-labelledby="cmp-frequent-codes-heading"
     >
       <h2
         id="cmp-frequent-codes-heading"
-        className="text-base font-semibold text-gray-900"
+        className="text-[1.05rem] font-semibold leading-snug text-gray-900 sm:text-base"
       >
         {heading}
       </h2>
-      <ul className="mt-4 flex flex-wrap gap-2">
+      <ul className="mt-3 flex flex-wrap gap-2.5 sm:mt-4 sm:gap-2">
         {list.map((code, i) => {
           const hasLanding = publishedCodes.has(code);
           return (
-            <li key={`${code}-${i}`}>
+            <li key={`${code}-${i}`} className="max-w-full">
               {hasLanding ? (
                 <Link
                   href={`/raccomandata/${code}`}
-                  className="inline-flex items-center rounded-full border border-[#2F66D5]/30 bg-[#2F66D5]/8 px-3 py-1 text-sm font-semibold text-[#2552AD] transition hover:border-[#2F66D5]/50 hover:bg-[#2F66D5]/15"
+                  className={`${chipBase} border border-[#2F66D5]/35 bg-[#2F66D5]/8 font-semibold text-[#2552AD] transition-colors active:bg-[#2F66D5]/20 hover:border-[#2F66D5]/55 hover:bg-[#2F66D5]/14`}
                 >
                   Raccomandata {code}
                 </Link>
               ) : (
                 <span
-                  className="inline-flex cursor-default items-center rounded-full border border-dashed border-gray-300 bg-gray-50 px-3 py-1 text-sm font-medium text-gray-600"
+                  className={`${chipBase} cursor-default border border-dashed border-gray-300 bg-gray-50 font-medium text-gray-600`}
                   title="Scheda non ancora pubblicata: il link apparirà quando sarà disponibile."
                 >
                   Codice {code}
