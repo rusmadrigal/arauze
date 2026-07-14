@@ -20,8 +20,6 @@ export default function TopNav() {
     { label: "Market", href: "/raccomandata-market" },
     { label: "CMP", href: "/raccomandata/cmp" },
     { label: "RKE", href: "/raccomandata/rke" },
-    { label: "Termini", href: "/termini" },
-    { label: "Contatti", href: "/contatti" },
   ];
 
   return (
