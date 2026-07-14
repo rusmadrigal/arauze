@@ -118,12 +118,19 @@ export default async function CodiceTributoPage({
   const title = page.title ?? "Codice tributo";
   const heroSubtitle =
     page.heroSubtitle ?? "Guida editoriale ai codici tributo e ai controlli in F24.";
+  const pageSlug = (page.slug ?? normalized).trim().toLowerCase();
+  const pageKind = page.kind ?? (page.code ? "code" : "guide");
   const sections = (page.sections ?? []).map((section) => ({
     title: section.title ?? "",
     paragraphs: section.body ?? section.paragraphs ?? [],
   }));
   const highlights = page.highlights ?? [];
-  const faqItems = page.faq ?? [];
+  const faqItems = (page.faq ?? [])
+    .map((item) => ({
+      q: (item.q ?? "").trim(),
+      a: (item.a ?? "").trim(),
+    }))
+    .filter((item) => item.q && item.a);
 
   return (
     <main className="mx-auto max-w-5xl px-4">
@@ -242,13 +249,13 @@ export default async function CodiceTributoPage({
 
       <CodiceTributoJsonLd
         input={{
-          slug: page.slug,
+          slug: pageSlug,
           title,
           metaTitle: page.metaTitle ?? title,
           metaDescription: page.metaDescription ?? heroSubtitle,
           heroSubtitle,
           code: page.code,
-          kind: page.kind,
+          kind: pageKind,
           faq: faqItems,
         }}
       />
