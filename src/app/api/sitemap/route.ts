@@ -151,7 +151,11 @@ export async function GET() {
     "/privacy",
     "/termini",
     "/codice-tributo",
+    "/codice-tributo/f24",
     "/avviso-di-giacenza",
+    "/avviso-di-giacenza/decoder",
+    "/avviso-di-cortesia",
+    "/multe",
   ] as const;
   const staticEntries: SitemapEntry[] = staticPaths.map((path) => ({
     loc: `${base}${path}`,

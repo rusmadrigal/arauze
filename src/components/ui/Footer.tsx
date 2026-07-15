@@ -67,6 +67,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/avviso-di-cortesia"
+                  className="text-slate-600 hover:text-[#2552AD] transition"
+                >
+                  Avviso di cortesia
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/codice-tributo"
                   className="text-slate-600 hover:text-[#2552AD] transition"
                 >
@@ -79,6 +87,22 @@ export default function Footer() {
                   className="text-slate-600 hover:text-[#2552AD] transition"
                 >
                   Raccomandata Market
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/multe"
+                  className="text-slate-600 hover:text-[#2552AD] transition"
+                >
+                  Multe e atti giudiziari
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/codice-tributo/f24"
+                  className="text-slate-600 hover:text-[#2552AD] transition"
+                >
+                  F24
                 </Link>
               </li>
               <li>

@@ -33,6 +33,24 @@ export default function AvvisoGiacenzaInfoCard() {
           >
             Vai al hub Avviso di giacenza
           </Link>
+          <Link
+            href="/avviso-di-giacenza/decoder"
+            className="ml-4 text-sm font-medium text-slate-600 hover:underline md:text-base"
+          >
+            Apri il decoder
+          </Link>
+          <Link
+            href="/avviso-di-cortesia"
+            className="ml-4 text-sm font-medium text-slate-600 hover:underline md:text-base"
+          >
+            Avviso di cortesia
+          </Link>
+          <Link
+            href="/multe"
+            className="ml-4 text-sm font-medium text-slate-600 hover:underline md:text-base"
+          >
+            Multe e atti
+          </Link>
         </div>
         <div className="rounded-2xl bg-slate-50 p-5 text-sm leading-relaxed text-slate-700">
           <p className="font-semibold text-slate-900">Dentro trovi</p>

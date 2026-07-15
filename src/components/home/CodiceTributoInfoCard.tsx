@@ -33,6 +33,12 @@ export default function CodiceTributoInfoCard() {
           >
             Vai al hub Codice tributo
           </Link>
+          <Link
+            href="/codice-tributo/f24"
+            className="ml-4 text-sm font-medium text-slate-600 hover:underline md:text-base"
+          >
+            Apri la guida F24
+          </Link>
         </div>
         <div className="rounded-2xl bg-slate-50 p-5 text-sm leading-relaxed text-slate-700">
           <p className="font-semibold text-slate-900">Cosa trovi dentro</p>

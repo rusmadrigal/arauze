@@ -9,6 +9,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import TrendMiniChart from "@/components/raccomandata/TrendMiniChart";
 import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
+import EditorialTrustStrip from "@/components/seo/EditorialTrustStrip";
 import PortableTextRenderer from "@/components/shared/PortableTextRenderer";
 import type { PortableTextBlock } from "@portabletext/types";
 import RaccomandataVsAttiTable from "@/components/raccomandata/RaccomandataVsAttiTable";
@@ -161,6 +162,24 @@ export default async function RaccomandataMarketPage() {
         <h1 className="text-2xl font-semibold mb-6 mt-10">
           Raccomandata Market Italia 2026
         </h1>
+
+        <EditorialTrustStrip
+          title="Criteri della scheda"
+          items={[
+            {
+              title: "Messaggio utile",
+              text: "Ogni voce deve aiutare a capire il mittente e il contesto, non solo il numero.",
+            },
+            {
+              title: "Ordine strategico",
+              text: "Le schede più importanti salgono prima, così l'utente trova subito il caso giusto.",
+            },
+            {
+              title: "Percorso successivo",
+              text: "La pagina collega sempre al cluster o al dettaglio più utile da aprire dopo.",
+            },
+          ]}
+        />
 
         {/* ⭐ FIX SCROLL MOBILE */}
         <div className="overflow-x-auto overflow-y-hidden rounded-xl border border-gray-200">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import TopNav from "@/components/ui/TopNav";
 import PageBreadcrumbs from "@/components/seo/PageBreadcrumbs";
+import EditorialTrustStrip from "@/components/seo/EditorialTrustStrip";
 import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
@@ -147,6 +148,24 @@ export default function AvvisoGiacenzaPage() {
             </p>
           </section>
 
+          <EditorialTrustStrip
+            title="Criteri di lettura"
+            items={[
+              {
+                title: "Parti dal codice",
+                text: "Le schede più utili sono quelle che risolvono l'intenzione subito, senza giri inutili.",
+              },
+              {
+                title: "Valuta il contesto",
+                text: "Mittente, colore e termine di ritiro cambiano molto la lettura dell'avviso.",
+              },
+              {
+                title: "Usa il contenuto giusto",
+                text: "Ogni hub rimanda al cluster più pertinente per ridurre il tempo di ricerca.",
+              },
+            ]}
+          />
+
           <section className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <InfoCard
               title="Prime verifiche"
@@ -231,16 +250,21 @@ export default function AvvisoGiacenzaPage() {
             <h2 className="text-2xl font-semibold text-slate-900">
               Esplora anche
             </h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               <LinkCard
-                href="/raccomandata-market"
-                title="Raccomandata Market"
-                text="Elenco delle schede analizzate e dei codici più utili per capire il mittente."
+                href="/avviso-di-giacenza/decoder"
+                title="Decoder avviso"
+                text="Usa il tool interattivo per capire in pochi secondi il cluster più probabile."
               />
               <LinkCard
-                href="/codice-tributo"
-                title="Codice tributo"
-                text="Hub pratico per i codici fiscali e le guide F24 più richieste."
+                href="/avviso-di-cortesia"
+                title="Avviso di cortesia"
+                text="Il cluster più vicino quando il messaggio è informativo ma non ancora una giacenza."
+              />
+              <LinkCard
+                href="/multe"
+                title="Multe e atti"
+                text="Il cluster da aprire se il contenuto sembra più delicato o urgente."
               />
               <LinkCard
                 href="/raccomandata/cmp"

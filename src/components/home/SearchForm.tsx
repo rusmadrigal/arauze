@@ -211,7 +211,7 @@ export default function SearchForm() {
   }
 
   return (
-    <div ref={containerRef} className="relative mt-3">
+    <div ref={containerRef} id="search-codice" className="relative mt-3">
       <form onSubmit={handleSubmit} className="relative">
         <input
           ref={inputRef}

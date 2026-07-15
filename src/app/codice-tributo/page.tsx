@@ -3,6 +3,7 @@ import Link from "next/link";
 import { sanityClient } from "sanity/lib/client";
 import { CODICE_TRIBUTO_LIST } from "sanity/lib/queries/codiceTributo";
 import TopNav from "@/components/ui/TopNav";
+import EditorialTrustStrip from "@/components/seo/EditorialTrustStrip";
 import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 import { CODICE_TRIBUTO_SEEDS } from "@/lib/seo/keywordSeeds";
@@ -95,6 +96,24 @@ export default async function CodiceTributoHomePage() {
             cedolare secca, ravvedimento operoso e imposta di bollo.
           </p>
         </div>
+
+        <EditorialTrustStrip
+          title="Come leggere un codice tributo"
+          items={[
+            {
+              title: "Parti dal tributo",
+              text: "Prima identifichi il tipo di imposta, poi il codice giusto da usare.",
+            },
+            {
+              title: "Usa le guide",
+              text: "Ogni scheda rimanda a una spiegazione concreta, non a un elenco sterile di sigle.",
+            },
+            {
+              title: "Evita errori",
+              text: "Il percorso è pensato per ridurre i dubbi prima di compilare o pagare l'F24.",
+            },
+          ]}
+        />
 
         <section className="mt-10 space-y-6">
           <div className="grid gap-4 md:grid-cols-2">

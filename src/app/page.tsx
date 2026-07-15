@@ -15,6 +15,7 @@ import AvvisoGiacenzaInfoCard from "@/components/home/AvvisoGiacenzaInfoCard";
 import RaccomandataMarketInfoCard from "@/components/home/RaccomandataMarketInfoCard";
 import CodiceTributoInfoCard from "@/components/home/CodiceTributoInfoCard";
 import CmpPreviewSection from "@/components/cmp/CmpPreviewSection";
+import EditorialTrustStrip from "@/components/seo/EditorialTrustStrip";
 import { alternatesItalianCanonical } from "@/lib/seo/hreflang";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
@@ -112,7 +113,10 @@ export default async function HomePage() {
         <div className="rounded-2xl shadow-card bg-white p-6 md:p-10">
           <TopNav />
           <HeroHeader />
-          <SearchForm />
+          <section className="mt-4">
+            <SearchForm />
+          </section>
+          <EditorialTrustStrip />
           <ComeFunziona />
           <UltimeAnalizzateDynamic />
           <TextBlockHome />

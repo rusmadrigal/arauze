@@ -17,7 +17,7 @@ export default function RaccomandataMarketInfoCard() {
         {/* LEFT */}
         <div className="space-y-5">
           <h2 className="text-3xl font-semibold text-slate-900 leading-tight">
-            Come funziona Arauze
+            Metodo editoriale
           </h2>
 
           <ul className="space-y-3 text-slate-800">
@@ -28,12 +28,12 @@ export default function RaccomandataMarketInfoCard() {
 
             <li className="flex items-start gap-3">
               <Check className="mt-0.5 h-5 w-5 text-blue-600" />
-              <span>Basato su dati pubblici e segnalazioni degli utenti</span>
+              <span>Basato su dati pubblici e schede editoriali</span>
             </li>
 
             <li className="flex items-start gap-3">
               <Check className="mt-0.5 h-5 w-5 text-blue-600" />
-              <span>12.000+ consultazioni nel 2025</span>
+              <span>Indica sempre il passaggio successivo più utile</span>
             </li>
 
             <li className="flex items-start gap-3">
@@ -47,6 +47,12 @@ export default function RaccomandataMarketInfoCard() {
             className="text-sm font-medium text-blue-600 hover:underline md:text-base"
           >
             Raccomandata Market
+          </Link>
+          <Link
+            href="/avviso-di-giacenza"
+            className="ml-4 text-sm font-medium text-slate-600 hover:underline md:text-base"
+          >
+            Avviso di giacenza
           </Link>
         </div>
 
